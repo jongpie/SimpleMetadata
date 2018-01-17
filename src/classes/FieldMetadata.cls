@@ -91,7 +91,7 @@ public class FieldMetadata {
         return this.sobjectField;
     }
 
-    public string serialize() {
+    public String serialize() {
         return JSON.serialize(this);
     }
 
