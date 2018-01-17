@@ -100,9 +100,9 @@ public class FieldMetadata {
     public class PicklistEntryMetadata {
 
         // Aura-enabled member variables
+        @AuraEnabled public Boolean isDefaultValue {get;private set;}
         @AuraEnabled public String label           {get;private set;}
         @AuraEnabled public String value           {get;private set;}
-        @AuraEnabled public Boolean isDefaultValue {get;private set;}
 
         // Private variables - marked as transient so they aren't included during JSON.serialize()
         private transient Schema.PicklistEntry picklistEntry;
