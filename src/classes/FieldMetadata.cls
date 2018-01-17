@@ -36,7 +36,6 @@ public class FieldMetadata {
     public FieldMetadata(String sobjectName, String fieldName) {
         this.sobjectName     = sobjectName;
         this.name            = fieldName;
-        this.picklistOptions = new List<PicklistEntryMetadata>();
 
         this.defaultValue        = this.getDescribe().getDefaultValue();
         this.displayType         = this.getDescribe().getType().name();
@@ -77,11 +76,12 @@ public class FieldMetadata {
     }
 
     private void setPicklistOptions() {
-        Schema.DisplayType fieldDisplayType = this.fieldDescribe.getType();
-        if(fieldDisplayType != Schema.DisplayType.Picklist && fieldDisplayType != Schema.DisplayType.MultiPicklist) return;
+        this.picklistOptions = new List<PicklistEntryMetadata>();
+
+        if(this.getDescribe().getPickListValues().isEmpty()) return;
 
         this.picklistOptions.add(new PicklistEntryMetadata()); // Empty picklist value
-        for(Schema.PicklistEntry picklistEntry : this.fieldDescribe.getPickListValues()) {
+        for(Schema.PicklistEntry picklistEntry : this.getDescribe().getPickListValues()) {
             this.picklistOptions.add(new PicklistEntryMetadata(picklistEntry));
         }
     }
