@@ -25,6 +25,7 @@ public class SObjectMetadata {
 
     // Non-aura enabled member variables
     public Schema.DescribeSObjectResult sobjectDescribe {get;private set;}
+    public Schema.SObjectType sobjectType               {get;private set;}
 
     public SObjectMetadata(Schema.SObjectType sobjectType) {
         this(sobjectType.getDescribe().getName());
@@ -32,7 +33,9 @@ public class SObjectMetadata {
 
     public SObjectMetadata(String sobjectName) {
         this.name            = sobjectName;
-        this.sobjectDescribe = Schema.getGlobalDescribe().get(sobjectName).getDescribe();
+
+        this.sobjectType     = Schema.getGlobalDescribe().get(sobjectName);
+        this.sobjectDescribe = this.sobjectType.getDescribe();
 
         this.isAccessible    = this.sobjectDescribe.isAccessible();
         this.isCreateable    = this.sobjectDescribe.isCreateable();
