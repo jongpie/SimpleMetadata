@@ -4,7 +4,7 @@
 *************************************************************************************************/
 public class SObjectMetadata {
 
-    // Aura enabled member variables
+    // Aura-enabled member variables
     @AuraEnabled public Boolean hasSubtypes                  {get;private set;}
     @AuraEnabled public Boolean isAccessible                 {get;private set;}
     @AuraEnabled public Boolean isCreateable                 {get;private set;}
@@ -117,7 +117,7 @@ public class SObjectMetadata {
 
     public class RecordTypeMetadata {
 
-        // Aura enabled member variables
+        // Aura-enabled member variables
         @AuraEnabled public Boolean isActive                   {get;private set;}
         @AuraEnabled public Boolean isAvailable                {get;private set;}
         @AuraEnabled public Boolean isDefaultRecordTypeMapping {get;private set;}
