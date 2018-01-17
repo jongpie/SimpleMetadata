@@ -4,7 +4,7 @@
 *************************************************************************************************/
 public class FieldMetadata {
 
-    // Aura enabled member variables
+    // Aura-enabled member variables
     @AuraEnabled public Boolean isAccessible                         {get;private set;}
     @AuraEnabled public Boolean isCalculated                         {get;private set;}
     @AuraEnabled public Boolean isCreateable                         {get;private set;}
@@ -23,44 +23,57 @@ public class FieldMetadata {
     @AuraEnabled public String displayType                           {get;private set;}
     @AuraEnabled public String inlineHelpText                        {get;private set;}
     @AuraEnabled public String label                                 {get;private set;}
+    @AuraEnabled public String localName                             {get;private set;}
     @AuraEnabled public String name                                  {get;private set;}
     @AuraEnabled public String relationshipName                      {get;private set;}
     @AuraEnabled public List<SObjectMetadata> relationshipReferences {get;private set;}
     @AuraEnabled public String sobjectName                           {get;private set;}
 
-    // Non-aura enabled member variables
-    public Schema.DescribeFieldResult fieldDescribe {get;private set;}
-    public Schema.SObjectField sobjectField         {get;private set;}
+    // Private variables - marked as transient so they aren't included during JSON.serialize()
+    private transient Schema.DescribeFieldResult fieldDescribe;
+    private transient Schema.SObjectField sobjectField;
 
     public FieldMetadata(String sobjectName, String fieldName) {
         this.sobjectName     = sobjectName;
         this.name            = fieldName;
         this.picklistOptions = new List<PicklistEntryMetadata>();
 
-        this.sobjectField  = Schema.getGlobalDescribe().get(sobjectName).getDescribe().fields.getMap().get(fieldName);
-        this.fieldDescribe = this.sobjectField.getDescribe();
-
-        this.defaultValue        = this.fieldDescribe.getDefaultValue();
-        this.displayType         = this.fieldDescribe.getType().name();
-        this.inlineHelpText      = this.fieldDescribe.getInlineHelpText();
-        this.isAccessible        = this.fieldDescribe.isAccessible();
-        this.isCalculated        = this.fieldDescribe.isCalculated();
-        this.isCreateable        = this.fieldDescribe.isCreateable();
-        this.isCustom            = this.fieldDescribe.isCustom();
-        this.isDefaultedOnCreate = this.fieldDescribe.isDefaultedOnCreate();
-        this.isFilterable        = this.fieldDescribe.isFilterable();
-        this.isGroupable         = this.fieldDescribe.isGroupable();
-        this.isNameField         = this.fieldDescribe.isNameField();
-        this.isNillable          = this.fieldDescribe.isNillable();
-        this.isRequired          = this.fieldDescribe.isNillable() == false; // If a field is NOT nillable, then it's required
-        this.isSortable          = this.fieldDescribe.isSortable();
-        this.isUpdateable        = this.fieldDescribe.isUpdateable();
-        this.label               = this.fieldDescribe.getLabel();
-        this.maxLength           = this.fieldDescribe.getLength();
-        this.relationshipName    = this.fieldDescribe.getRelationshipName();
+        this.defaultValue        = this.getDescribe().getDefaultValue();
+        this.displayType         = this.getDescribe().getType().name();
+        this.inlineHelpText      = this.getDescribe().getInlineHelpText();
+        this.isAccessible        = this.getDescribe().isAccessible();
+        this.isCalculated        = this.getDescribe().isCalculated();
+        this.isCreateable        = this.getDescribe().isCreateable();
+        this.isCustom            = this.getDescribe().isCustom();
+        this.isDefaultedOnCreate = this.getDescribe().isDefaultedOnCreate();
+        this.isFilterable        = this.getDescribe().isFilterable();
+        this.isGroupable         = this.getDescribe().isGroupable();
+        this.isNameField         = this.getDescribe().isNameField();
+        this.isNillable          = this.getDescribe().isNillable();
+        this.isRequired          = this.getDescribe().isNillable() == false; // If a field is NOT nillable, then it's required
+        this.isSortable          = this.getDescribe().isSortable();
+        this.isUpdateable        = this.getDescribe().isUpdateable();
+        this.label               = this.getDescribe().getLabel();
+        this.localName           = this.getDescribe().getLocalName();
+        this.maxLength           = this.getDescribe().getLength();
+        this.relationshipName    = this.getDescribe().getRelationshipName();
 
         this.setPicklistOptions();
         this.setRelationshipReferences();
+    }
+
+    public Schema.DescribeFieldResult getDescribe() {
+        // If a JSON object is deserialized into an instance of this class, private variables are null, so set them when needed
+        if(this.fieldDescribe == null) this.fieldDescribe = this.getSObjectField().getDescribe();
+
+        return this.fieldDescribe;
+    }
+
+    public Schema.SObjectField getSObjectField() {
+        // If a JSON object is deserialized into an instance of this class, private variables are null, so set them when needed
+        if(this.sobjectField == null) this.sobjectField = Schema.getGlobalDescribe().get(this.sobjectName).getDescribe().fields.getMap().get(this.name);
+
+        return this.sobjectField;
     }
 
     private void setPicklistOptions() {
@@ -82,19 +95,21 @@ public class FieldMetadata {
 
     public class PicklistEntryMetadata {
 
+        // Aura-enabled member variables
         @AuraEnabled public String label           {get;private set;}
         @AuraEnabled public String value           {get;private set;}
         @AuraEnabled public Boolean isDefaultValue {get;private set;}
 
-        private Schema.PicklistEntry picklistEntry;
+        // Private variables - marked as transient so they aren't included during JSON.serialize()
+        private transient Schema.PicklistEntry picklistEntry;
 
-        public PicklistEntryMetadata() {
+        private PicklistEntryMetadata() {
             this.label          = '--None--';
             this.value          = '';
             this.isDefaultValue = false;
         }
 
-        public PicklistEntryMetadata(Schema.PicklistEntry picklistEntry) {
+        private PicklistEntryMetadata(Schema.PicklistEntry picklistEntry) {
             this.picklistEntry  = picklistEntry;
 
             this.label          = picklistEntry.getLabel();
