@@ -75,6 +75,10 @@ public class FieldMetadata {
         return this.sobjectField;
     }
 
+    public string serialize() {
+        return JSON.serialize(this);
+    }
+
     private void setPicklistOptions() {
         this.picklistOptions = new List<PicklistEntryMetadata>();
 

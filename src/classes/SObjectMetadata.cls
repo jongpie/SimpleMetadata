@@ -76,6 +76,10 @@ public class SObjectMetadata {
         return this.sobjectType;
     }
 
+    public string serialize() {
+        return JSON.serialize(this);
+    }
+
     private void setFields() {
         this.fieldNames = new List<String>();
         for(Schema.SObjectField field : this.getDescribe().fields.getMap().values()) {
