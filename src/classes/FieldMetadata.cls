@@ -1,5 +1,10 @@
+/*************************************************************************************************
+* This file is part of the Simple Metadata project, released under the MIT License.              *
+* See LICENSE file or go to https://github.com/jongpie/SimpleMetadata for full license details.  *
+*************************************************************************************************/
 public class FieldMetadata {
 
+    // Aura enabled member variables
     @AuraEnabled public Boolean isAccessible                         {get;private set;}
     @AuraEnabled public Boolean isCalculated                         {get;private set;}
     @AuraEnabled public Boolean isCreateable                         {get;private set;}
@@ -23,6 +28,7 @@ public class FieldMetadata {
     @AuraEnabled public List<SObjectMetadata> relationshipReferences {get;private set;}
     @AuraEnabled public String sobjectName                           {get;private set;}
 
+    // Non-aura enabled member variables
     public Schema.DescribeFieldResult fieldDescribe {get;private set;}
 
     public FieldMetadata(String sobjectName, String fieldName) {
