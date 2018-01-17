@@ -5,8 +5,12 @@
 public class FieldMetadata {
 
     // Aura-enabled member variables
+    @AuraEnabled public Integer byteLength                           {get;private set;}
+    @AuraEnabled public Integer digits                               {get;private set;}
     @AuraEnabled public Boolean isAccessible                         {get;private set;}
+    @AuraEnabled public Boolean isAutoNumber                         {get;private set;}
     @AuraEnabled public Boolean isCalculated                         {get;private set;}
+    @AuraEnabled public Boolean isCaseSensitive                      {get;private set;}
     @AuraEnabled public Boolean isCreateable                         {get;private set;}
     @AuraEnabled public Boolean isCustom                             {get;private set;}
     @AuraEnabled public Boolean isDefaultedOnCreate                  {get;private set;}
@@ -25,8 +29,12 @@ public class FieldMetadata {
     @AuraEnabled public String label                                 {get;private set;}
     @AuraEnabled public String localName                             {get;private set;}
     @AuraEnabled public String name                                  {get;private set;}
+    @AuraEnabled public Integer precision                            {get;private set;}
     @AuraEnabled public String relationshipName                      {get;private set;}
+    @AuraEnabled public Integer relationshipOrder                    {get;private set;}
     @AuraEnabled public List<SObjectMetadata> relationshipReferences {get;private set;}
+    @AuraEnabled public Integer scale                                {get;private set;}
+    @AuraEnabled public String soapType                              {get;private set;}
     @AuraEnabled public String sobjectName                           {get;private set;}
 
     // Private variables - marked as transient so they aren't included during JSON.serialize()
@@ -37,11 +45,15 @@ public class FieldMetadata {
         this.sobjectName     = sobjectName;
         this.name            = fieldName;
 
+        this.byteLength          = this.getDescribe().getByteLength();
         this.defaultValue        = this.getDescribe().getDefaultValue();
+        this.digits              = this.getDescribe().getDigits();
         this.displayType         = this.getDescribe().getType().name();
         this.inlineHelpText      = this.getDescribe().getInlineHelpText();
         this.isAccessible        = this.getDescribe().isAccessible();
+        this.isAutoNumber        = this.getDescribe().isAutoNumber();
         this.isCalculated        = this.getDescribe().isCalculated();
+        this.isCaseSensitive     = this.getDescribe().isCaseSensitive();
         this.isCreateable        = this.getDescribe().isCreateable();
         this.isCustom            = this.getDescribe().isCustom();
         this.isDefaultedOnCreate = this.getDescribe().isDefaultedOnCreate();
@@ -55,7 +67,11 @@ public class FieldMetadata {
         this.label               = this.getDescribe().getLabel();
         this.localName           = this.getDescribe().getLocalName();
         this.maxLength           = this.getDescribe().getLength();
+        this.precision           = this.getDescribe().getPrecision();
         this.relationshipName    = this.getDescribe().getRelationshipName();
+        this.relationshipOrder   = this.getDescribe().getRelationshipOrder();
+        this.scale               = this.getDescribe().getScale();
+        this.soapType            = this.getDescribe().getSOAPType().name();
 
         this.setPicklistOptions();
         this.setRelationshipReferences();
