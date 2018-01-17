@@ -12,7 +12,7 @@ A lightweight library of Apex classes for Salesforce that provide easy access to
     `new SObjectMetadata('Account')`
 
     By passing the SObject Type in the constructor
-    `new SObjectMetadata(Schema.Account.SobjectType)`
+    `new SObjectMetadata(Schema.Account.SObjectType)`
 
 ## FieldMetadata.cls
 * Contains metadata information for the specified field. There is 1 way to create an instance of FieldMetadata
