@@ -5,65 +5,92 @@
 public class SObjectMetadata {
 
     // Aura enabled member variables
-    @AuraEnabled public Boolean isAccessible    {get;private set;}
-    @AuraEnabled public Boolean isCreateable    {get;private set;}
-    @AuraEnabled public Boolean isCustom        {get;private set;}
-    @AuraEnabled public Boolean isCustomSetting {get;private set;}
-    @AuraEnabled public Boolean isDeletable     {get;private set;}
-    @AuraEnabled public Boolean isMergeable     {get;private set;}
-    @AuraEnabled public Boolean isQueryable     {get;private set;}
-    @AuraEnabled public Boolean isSearchable    {get;private set;}
-    @AuraEnabled public Boolean isUndeletable   {get;private set;}
-    @AuraEnabled public Boolean isUpdateable    {get;private set;}
-    @AuraEnabled public String keyPrefix        {get;private set;}
-    @AuraEnabled public String label            {get;private set;}
-    @AuraEnabled public String labelPlural      {get;private set;}
-    @AuraEnabled public String localName        {get;private set;}
-    @AuraEnabled public String name             {get;private set;}
-    @AuraEnabled public String nameField        {get;private set;}
-    @AuraEnabled public String tabIcon          {get;private set;}
+    @AuraEnabled public Boolean hasSubtypes                  {get;private set;}
+    @AuraEnabled public Boolean isAccessible                 {get;private set;}
+    @AuraEnabled public Boolean isCreateable                 {get;private set;}
+    @AuraEnabled public Boolean isCustom                     {get;private set;}
+    @AuraEnabled public Boolean isCustomSetting              {get;private set;}
+    @AuraEnabled public Boolean isDeletable                  {get;private set;}
+    @AuraEnabled public Boolean isFeedEnabled                {get;private set;}
+    @AuraEnabled public Boolean isMruEnabled                 {get;private set;}
+    @AuraEnabled public Boolean isMergeable                  {get;private set;}
+    @AuraEnabled public Boolean isQueryable                  {get;private set;}
+    @AuraEnabled public Boolean isSearchable                 {get;private set;}
+    @AuraEnabled public Boolean isUndeletable                {get;private set;}
+    @AuraEnabled public Boolean isUpdateable                 {get;private set;}
+    @AuraEnabled public List<String> fieldNames              {get;private set;}
+    @AuraEnabled public String keyPrefix                     {get;private set;}
+    @AuraEnabled public String label                         {get;private set;}
+    @AuraEnabled public String labelPlural                   {get;private set;}
+    @AuraEnabled public String localName                     {get;private set;}
+    @AuraEnabled public String name                          {get;private set;}
+    @AuraEnabled public String nameField                     {get;private set;}
+    @AuraEnabled public List<RecordTypeMetadata> recordTypes {get;private set;}
+    @AuraEnabled public String tabIcon                       {get;private set;}
 
-    // Non-aura enabled member variables
-    public Schema.DescribeSObjectResult sobjectDescribe {get;private set;}
-    public Schema.SObjectType sobjectType               {get;private set;}
+    // Private variables - marked as transient so they aren't included during JSON.serialize()
+    private transient Schema.DescribeSObjectResult sobjectDescribe;
+    private transient Schema.SObjectType sobjectType;
 
     public SObjectMetadata(Schema.SObjectType sobjectType) {
         this(sobjectType.getDescribe().getName());
     }
 
     public SObjectMetadata(String sobjectName) {
-        this.name            = sobjectName;
+        this.name = sobjectName;
 
-        this.sobjectType     = Schema.getGlobalDescribe().get(sobjectName);
-        this.sobjectDescribe = this.sobjectType.getDescribe();
+        this.hasSubtypes     = this.getDescribe().getHasSubtypes();
+        this.isAccessible    = this.getDescribe().isAccessible();
+        this.isCreateable    = this.getDescribe().isCreateable();
+        this.isCustom        = this.getDescribe().isCustom();
+        this.isCustomSetting = this.getDescribe().isCustomSetting();
+        this.isDeletable     = this.getDescribe().isDeletable();
+        this.isFeedEnabled   = this.getDescribe().isFeedEnabled();
+        this.isMruEnabled    = this.getDescribe().isMruEnabled();
+        this.isMergeable     = this.getDescribe().isMergeable();
+        this.isQueryable     = this.getDescribe().isQueryable();
+        this.isSearchable    = this.getDescribe().isSearchable();
+        this.isUndeletable   = this.getDescribe().isUndeletable();
+        this.isUpdateable    = this.getDescribe().isUpdateable();
+        this.keyPrefix       = this.getDescribe().getKeyPrefix();
+        this.label           = this.getDescribe().getLabel();
+        this.labelPlural     = this.getDescribe().getLabelPlural();
+        this.localName       = this.getDescribe().getLocalName();
 
-        this.isAccessible    = this.sobjectDescribe.isAccessible();
-        this.isCreateable    = this.sobjectDescribe.isCreateable();
-        this.isCustom        = this.sobjectDescribe.isCustom();
-        this.isCustomSetting = this.sobjectDescribe.isCustomSetting();
-        this.isDeletable     = this.sobjectDescribe.isDeletable();
-        this.isMergeable     = this.sobjectDescribe.isMergeable();
-        this.isQueryable     = this.sobjectDescribe.isQueryable();
-        this.isSearchable    = this.sobjectDescribe.isSearchable();
-        this.isUndeletable   = this.sobjectDescribe.isUndeletable();
-        this.isUpdateable    = this.sobjectDescribe.isUpdateable();
-        this.keyPrefix       = this.sobjectDescribe.getKeyPrefix();
-        this.label           = this.sobjectDescribe.getLabel();
-        this.labelPlural     = this.sobjectDescribe.getLabelPlural();
-        this.localName       = this.sobjectDescribe.getLocalName();
-
-        this.setNameField();
+        this.setFields();
+        this.setRecordTypes();
         this.setTabIcon();
     }
 
-    private void setNameField() {
-        for(Schema.SObjectField field : this.sobjectDescribe.fields.getMap().values()) {
+    public Schema.DescribeSObjectResult getDescribe() {
+        // If a JSON object is deserialized into an instance of this class, private variables are null, so set them when needed
+        if(this.sobjectDescribe == null) this.sobjectDescribe = this.getSObjectType().getDescribe();
+
+        return this.sobjectDescribe;
+    }
+
+    public Schema.SObjectType getSObjectType() {
+        // If a JSON object is deserialized into an instance of this class, private variables are null, so set them when needed
+        if(this.sobjectType == null) this.sobjectType = Schema.getGlobalDescribe().get(this.name);
+
+        return this.sobjectType;
+    }
+
+    private void setFields() {
+        this.fieldNames = new List<String>();
+        for(Schema.SObjectField field : this.getDescribe().fields.getMap().values()) {
             Schema.DescribeFieldResult fieldDescribe = field.getDescribe();
 
-            if(!fieldDescribe.isNameField()) continue;
+            if(fieldDescribe.isNameField()) this.nameField = fieldDescribe.getName();
 
-            this.nameField = fieldDescribe.getName();
-            break;
+            this.fieldNames.add(fieldDescribe.getName());
+        }
+    }
+
+    private void setRecordTypes() {
+        this.recordTypes = new List<RecordTypeMetadata>();
+        for(Schema.RecordTypeInfo recordTypeInfo : this.getDescribe().getRecordTypeInfos()) {
+            this.recordTypes.add(new RecordTypeMetadata(recordTypeInfo));
         }
     }
 
@@ -83,9 +110,35 @@ public class SObjectMetadata {
                 }
             }
         }
-        // Hardcoded exceptions - Salesforce doesn't return SVGs for the objects, so hardcoding is necessary
+        // Hardcoded exceptions - Salesforce doesn't return SVGs for these objects, so hardcoding is necessary
         if(this.tabIcon == null && this.name == 'Asset') this.tabIcon = 'standard:maintenance_asset';
         if(this.tabIcon == null && this.name == 'AssetRelationship') this.tabIcon = 'standard:asset_relationship';
+    }
+
+    public class RecordTypeMetadata {
+
+        // Aura enabled member variables
+        @AuraEnabled public Boolean isActive                   {get;private set;}
+        @AuraEnabled public Boolean isAvailable                {get;private set;}
+        @AuraEnabled public Boolean isDefaultRecordTypeMapping {get;private set;}
+        @AuraEnabled public Boolean isMaster                   {get;private set;}
+        @AuraEnabled public Id recordTypeId                    {get;private set;}
+        @AuraEnabled public String name                        {get;private set;}
+
+        // Private variables - marked as transient so they aren't included during JSON.serialize()
+        private transient Schema.RecordTypeInfo recordTypeInfo {get;private set;}
+
+        private RecordTypeMetadata(Schema.RecordTypeInfo recordTypeInfo) {
+            this.recordTypeInfo = recordTypeInfo;
+
+            this.isActive                   = this.recordTypeInfo.isActive();
+            this.isAvailable                = this.recordTypeInfo.isAvailable();
+            this.isDefaultRecordTypeMapping = this.recordTypeInfo.isDefaultRecordTypeMapping();
+            this.isMaster                   = this.recordTypeInfo.isMaster();
+            this.name                       = this.recordTypeInfo.getName();
+            this.recordTypeId               = this.recordTypeInfo.getRecordTypeId();
+        }
+
     }
 
 }
