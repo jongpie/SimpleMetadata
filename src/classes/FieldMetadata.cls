@@ -13,13 +13,13 @@ public class FieldMetadata {
     @AuraEnabled public Boolean isFilterable                         {get;private set;}
     @AuraEnabled public Boolean isGroupable                          {get;private set;}
     @AuraEnabled public Boolean isNameField                          {get;private set;}
+    @AuraEnabled public Boolean isNillable                           {get;private set;}
+    @AuraEnabled public Boolean isRequired                           {get;private set;}
     @AuraEnabled public Boolean isSortable                           {get;private set;}
     @AuraEnabled public Boolean isUpdateable                         {get;private set;}
-    @AuraEnabled public Boolean required                             {get;private set;}
     @AuraEnabled public Integer maxLength                            {get;private set;}
     @AuraEnabled public List<PicklistEntryMetadata> picklistOptions  {get;private set;}
     @AuraEnabled public Object defaultValue                          {get;private set;}
-    //@AuraEnabled public SObjectMetadata sobjectMetadata              {get;private set;}
     @AuraEnabled public String displayType                           {get;private set;}
     @AuraEnabled public String inlineHelpText                        {get;private set;}
     @AuraEnabled public String label                                 {get;private set;}
@@ -30,14 +30,15 @@ public class FieldMetadata {
 
     // Non-aura enabled member variables
     public Schema.DescribeFieldResult fieldDescribe {get;private set;}
+    public Schema.SObjectField sobjectField         {get;private set;}
 
     public FieldMetadata(String sobjectName, String fieldName) {
         this.sobjectName     = sobjectName;
         this.name            = fieldName;
-        //this.sobjectMetadata = new SObjectMetadata(sobjectName);
         this.picklistOptions = new List<PicklistEntryMetadata>();
 
-        this.fieldDescribe = Schema.getGlobalDescribe().get(sobjectName).getDescribe().fields.getMap().get(fieldName).getDescribe();
+        this.sobjectField  = Schema.getGlobalDescribe().get(sobjectName).getDescribe().fields.getMap().get(fieldName);
+        this.fieldDescribe = this.sobjectField.getDescribe();
 
         this.defaultValue        = this.fieldDescribe.getDefaultValue();
         this.displayType         = this.fieldDescribe.getType().name();
@@ -50,12 +51,13 @@ public class FieldMetadata {
         this.isFilterable        = this.fieldDescribe.isFilterable();
         this.isGroupable         = this.fieldDescribe.isGroupable();
         this.isNameField         = this.fieldDescribe.isNameField();
+        this.isNillable          = this.fieldDescribe.isNillable();
+        this.isRequired          = this.fieldDescribe.isNillable() == false; // If a field is NOT nillable, then it's required
         this.isSortable          = this.fieldDescribe.isSortable();
         this.isUpdateable        = this.fieldDescribe.isUpdateable();
         this.label               = this.fieldDescribe.getLabel();
         this.maxLength           = this.fieldDescribe.getLength();
         this.relationshipName    = this.fieldDescribe.getRelationshipName();
-        this.required            = this.fieldDescribe.isNillable() == false; // If a field is NOT nillable, then it's required
 
         this.setPicklistOptions();
         this.setRelationshipReferences();
