@@ -31,7 +31,7 @@ A lightweight library of Apex classes for Salesforce that provide easy access to
             if(new SObjectMetadata('MyCustomObject__c').isDeletable == false) return;
 
             //Otherwise, delete the record
-            myRecord myRecord.MyCustomField__c;
+            delete myRecord.MyCustomField__c;
         }
 
     }
