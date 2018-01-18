@@ -95,7 +95,7 @@ public class SObjectMetadata {
 
     private void setNamespace() {
         Integer localNameIndex = this.name.replace('__c', '').indexOf('__');
-        this.namespace = localNameIndex < 0 ? '' : this.name.substring(0, localNameIndex);
+        this.namespace = localNameIndex < 0 ? null : this.name.substring(0, localNameIndex);
     }
 
     private void setRecordTypes() {
