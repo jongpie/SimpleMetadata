@@ -52,12 +52,12 @@ public with sharing class FieldSetMetadata {
     public class FieldSetMemberMetadata {
 
         // Aura-enabled member variables
-        @AuraEnabled public Boolean isDBRequired        {get; private set;}
-        @AuraEnabled public Boolean isRequired          {get; private set;}
-        @AuraEnabled public FieldMetadata fieldMetadata {get; private set;}
         @AuraEnabled public String displayType          {get; private set;}
+        @AuraEnabled public FieldMetadata fieldMetadata {get; private set;}
         @AuraEnabled public String fieldName            {get; private set;}
         @AuraEnabled public String fieldPath            {get; private set;}
+        @AuraEnabled public Boolean isDBRequired        {get; private set;}
+        @AuraEnabled public Boolean isRequired          {get; private set;}
         @AuraEnabled public String label                {get; private set;}
         @AuraEnabled public String sobjectName          {get; private set;}
 
