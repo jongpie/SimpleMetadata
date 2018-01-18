@@ -55,11 +55,11 @@ public with sharing class FieldSetMetadata {
         @AuraEnabled public Boolean isDBRequired        {get; private set;}
         @AuraEnabled public Boolean isRequired          {get; private set;}
         @AuraEnabled public FieldMetadata fieldMetadata {get; private set;}
-        @AuraEnabled public String fieldPath            {get; private set;}
+        @AuraEnabled public String displayType          {get; private set;}
         @AuraEnabled public String fieldName            {get; private set;}
+        @AuraEnabled public String fieldPath            {get; private set;}
         @AuraEnabled public String label                {get; private set;}
         @AuraEnabled public String sobjectName          {get; private set;}
-        @AuraEnabled public String displayType          {get; private set;}
 
         // Private variables - marked as transient so they aren't included during JSON.serialize()
         private transient Schema.FieldSetMember fieldSetMember;
@@ -71,11 +71,11 @@ public with sharing class FieldSetMetadata {
 
             this.fieldMetadata = new FieldMetadata(sobjectName, fieldName);
 
+            this.displayType  = this.fieldSetMember.getType().name();
             this.fieldPath    = this.fieldSetMember.getFieldPath();
             this.isDBRequired = this.fieldSetMember.getDBRequired();
             this.isRequired   = this.fieldSetMember.getRequired();
             this.label        = this.fieldSetMember.getLabel();
-            this.displayType  = this.fieldSetMember.getType().name();
         }
 
     }
