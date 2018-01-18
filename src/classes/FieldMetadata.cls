@@ -5,38 +5,38 @@
 public class FieldMetadata {
 
     // Aura-enabled member variables
-    @AuraEnabled public Integer byteLength                           {get;private set;}
-    @AuraEnabled public Integer digits                               {get;private set;}
-    @AuraEnabled public Boolean isAccessible                         {get;private set;}
-    @AuraEnabled public Boolean isAutoNumber                         {get;private set;}
-    @AuraEnabled public Boolean isCalculated                         {get;private set;}
-    @AuraEnabled public Boolean isCaseSensitive                      {get;private set;}
-    @AuraEnabled public Boolean isCreateable                         {get;private set;}
-    @AuraEnabled public Boolean isCustom                             {get;private set;}
-    @AuraEnabled public Boolean isDefaultedOnCreate                  {get;private set;}
-    @AuraEnabled public Boolean isFilterable                         {get;private set;}
-    @AuraEnabled public Boolean isGroupable                          {get;private set;}
-    @AuraEnabled public Boolean isNameField                          {get;private set;}
-    @AuraEnabled public Boolean isNillable                           {get;private set;}
-    @AuraEnabled public Boolean isRequired                           {get;private set;}
-    @AuraEnabled public Boolean isSortable                           {get;private set;}
-    @AuraEnabled public Boolean isUpdateable                         {get;private set;}
-    @AuraEnabled public Integer maxLength                            {get;private set;}
-    @AuraEnabled public List<PicklistEntryMetadata> picklistOptions  {get;private set;}
-    @AuraEnabled public Object defaultValue                          {get;private set;}
-    @AuraEnabled public String displayType                           {get;private set;}
-    @AuraEnabled public String inlineHelpText                        {get;private set;}
-    @AuraEnabled public String label                                 {get;private set;}
-    @AuraEnabled public String localName                             {get;private set;}
-    @AuraEnabled public String name                                  {get;private set;}
-    @AuraEnabled public String namespace                             {get;private set;}
-    @AuraEnabled public Integer precision                            {get;private set;}
-    @AuraEnabled public String relationshipName                      {get;private set;}
-    @AuraEnabled public Integer relationshipOrder                    {get;private set;}
-    @AuraEnabled public List<SObjectMetadata> relationshipReferences {get;private set;}
-    @AuraEnabled public Integer scale                                {get;private set;}
-    @AuraEnabled public String soapType                              {get;private set;}
-    @AuraEnabled public String sobjectName                           {get;private set;}
+    @AuraEnabled public Integer byteLength                           {get; private set;}
+    @AuraEnabled public Integer digits                               {get; private set;}
+    @AuraEnabled public Boolean isAccessible                         {get; private set;}
+    @AuraEnabled public Boolean isAutoNumber                         {get; private set;}
+    @AuraEnabled public Boolean isCalculated                         {get; private set;}
+    @AuraEnabled public Boolean isCaseSensitive                      {get; private set;}
+    @AuraEnabled public Boolean isCreateable                         {get; private set;}
+    @AuraEnabled public Boolean isCustom                             {get; private set;}
+    @AuraEnabled public Boolean isDefaultedOnCreate                  {get; private set;}
+    @AuraEnabled public Boolean isFilterable                         {get; private set;}
+    @AuraEnabled public Boolean isGroupable                          {get; private set;}
+    @AuraEnabled public Boolean isNameField                          {get; private set;}
+    @AuraEnabled public Boolean isNillable                           {get; private set;}
+    @AuraEnabled public Boolean isRequired                           {get; private set;}
+    @AuraEnabled public Boolean isSortable                           {get; private set;}
+    @AuraEnabled public Boolean isUpdateable                         {get; private set;}
+    @AuraEnabled public Integer maxLength                            {get; private set;}
+    @AuraEnabled public List<PicklistEntryMetadata> picklistOptions  {get; private set;}
+    @AuraEnabled public Object defaultValue                          {get; private set;}
+    @AuraEnabled public String displayType                           {get; private set;}
+    @AuraEnabled public String inlineHelpText                        {get; private set;}
+    @AuraEnabled public String label                                 {get; private set;}
+    @AuraEnabled public String localName                             {get; private set;}
+    @AuraEnabled public String name                                  {get; private set;}
+    @AuraEnabled public String namespace                             {get; private set;}
+    @AuraEnabled public Integer precision                            {get; private set;}
+    @AuraEnabled public String relationshipName                      {get; private set;}
+    @AuraEnabled public Integer relationshipOrder                    {get; private set;}
+    @AuraEnabled public List<SObjectMetadata> relationshipReferences {get; private set;}
+    @AuraEnabled public Integer scale                                {get; private set;}
+    @AuraEnabled public String soapType                              {get; private set;}
+    @AuraEnabled public String sobjectName                           {get; private set;}
 
     // Private variables - marked as transient so they aren't included during JSON.serialize()
     private transient Schema.DescribeFieldResult fieldDescribe;
@@ -123,9 +123,9 @@ public class FieldMetadata {
     public class PicklistEntryMetadata {
 
         // Aura-enabled member variables
-        @AuraEnabled public Boolean isDefaultValue {get;private set;}
-        @AuraEnabled public String label           {get;private set;}
-        @AuraEnabled public String value           {get;private set;}
+        @AuraEnabled public Boolean isDefaultValue {get; private set;}
+        @AuraEnabled public String label           {get; private set;}
+        @AuraEnabled public String value           {get; private set;}
 
         // Private variables - marked as transient so they aren't included during JSON.serialize()
         private transient Schema.PicklistEntry picklistEntry;

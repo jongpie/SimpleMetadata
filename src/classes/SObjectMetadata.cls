@@ -5,29 +5,29 @@
 public class SObjectMetadata {
 
     // Aura-enabled member variables
-    @AuraEnabled public Boolean hasSubtypes                  {get;private set;}
-    @AuraEnabled public Boolean isAccessible                 {get;private set;}
-    @AuraEnabled public Boolean isCreateable                 {get;private set;}
-    @AuraEnabled public Boolean isCustom                     {get;private set;}
-    @AuraEnabled public Boolean isCustomSetting              {get;private set;}
-    @AuraEnabled public Boolean isDeletable                  {get;private set;}
-    @AuraEnabled public Boolean isFeedEnabled                {get;private set;}
-    @AuraEnabled public Boolean isMruEnabled                 {get;private set;}
-    @AuraEnabled public Boolean isMergeable                  {get;private set;}
-    @AuraEnabled public Boolean isQueryable                  {get;private set;}
-    @AuraEnabled public Boolean isSearchable                 {get;private set;}
-    @AuraEnabled public Boolean isUndeletable                {get;private set;}
-    @AuraEnabled public Boolean isUpdateable                 {get;private set;}
-    @AuraEnabled public List<String> fieldNames              {get;private set;}
-    @AuraEnabled public String keyPrefix                     {get;private set;}
-    @AuraEnabled public String label                         {get;private set;}
-    @AuraEnabled public String labelPlural                   {get;private set;}
-    @AuraEnabled public String localName                     {get;private set;}
-    @AuraEnabled public String name                          {get;private set;}
-    @AuraEnabled public String nameField                     {get;private set;}
-    @AuraEnabled public String nameSpace                     {get;private set;}
-    @AuraEnabled public List<RecordTypeMetadata> recordTypes {get;private set;}
-    @AuraEnabled public String tabIcon                       {get;private set;}
+    @AuraEnabled public Boolean hasSubtypes                  {get; private set;}
+    @AuraEnabled public Boolean isAccessible                 {get; private set;}
+    @AuraEnabled public Boolean isCreateable                 {get; private set;}
+    @AuraEnabled public Boolean isCustom                     {get; private set;}
+    @AuraEnabled public Boolean isCustomSetting              {get; private set;}
+    @AuraEnabled public Boolean isDeletable                  {get; private set;}
+    @AuraEnabled public Boolean isFeedEnabled                {get; private set;}
+    @AuraEnabled public Boolean isMruEnabled                 {get; private set;}
+    @AuraEnabled public Boolean isMergeable                  {get; private set;}
+    @AuraEnabled public Boolean isQueryable                  {get; private set;}
+    @AuraEnabled public Boolean isSearchable                 {get; private set;}
+    @AuraEnabled public Boolean isUndeletable                {get; private set;}
+    @AuraEnabled public Boolean isUpdateable                 {get; private set;}
+    @AuraEnabled public List<String> fieldNames              {get; private set;}
+    @AuraEnabled public String keyPrefix                     {get; private set;}
+    @AuraEnabled public String label                         {get; private set;}
+    @AuraEnabled public String labelPlural                   {get; private set;}
+    @AuraEnabled public String localName                     {get; private set;}
+    @AuraEnabled public String name                          {get; private set;}
+    @AuraEnabled public String nameField                     {get; private set;}
+    @AuraEnabled public String nameSpace                     {get; private set;}
+    @AuraEnabled public List<RecordTypeMetadata> recordTypes {get; private set;}
+    @AuraEnabled public String tabIcon                       {get; private set;}
 
     // Private variables - marked as transient so they aren't included during JSON.serialize()
     private transient Schema.DescribeSObjectResult sobjectDescribe;
@@ -129,15 +129,15 @@ public class SObjectMetadata {
     public class RecordTypeMetadata {
 
         // Aura-enabled member variables
-        @AuraEnabled public Boolean isActive                   {get;private set;}
-        @AuraEnabled public Boolean isAvailable                {get;private set;}
-        @AuraEnabled public Boolean isDefaultRecordTypeMapping {get;private set;}
-        @AuraEnabled public Boolean isMaster                   {get;private set;}
-        @AuraEnabled public Id recordTypeId                    {get;private set;}
-        @AuraEnabled public String name                        {get;private set;}
+        @AuraEnabled public Boolean isActive                   {get; private set;}
+        @AuraEnabled public Boolean isAvailable                {get; private set;}
+        @AuraEnabled public Boolean isDefaultRecordTypeMapping {get; private set;}
+        @AuraEnabled public Boolean isMaster                   {get; private set;}
+        @AuraEnabled public Id recordTypeId                    {get; private set;}
+        @AuraEnabled public String name                        {get; private set;}
 
         // Private variables - marked as transient so they aren't included during JSON.serialize()
-        private transient Schema.RecordTypeInfo recordTypeInfo {get;private set;}
+        private transient Schema.RecordTypeInfo recordTypeInfo {get; private set;}
 
         private RecordTypeMetadata(Schema.RecordTypeInfo recordTypeInfo) {
             this.recordTypeInfo = recordTypeInfo;
