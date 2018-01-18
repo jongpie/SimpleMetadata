@@ -40,7 +40,6 @@ public with sharing class FieldSetMetadata {
         return JSON.serialize(this);
     }
 
-
     private void setFields() {
         for(Schema.FieldSetMember fieldSetMember : fieldSet.getFields()) {
             String fieldName = fieldSetMember.getFieldPath();
