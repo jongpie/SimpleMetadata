@@ -29,6 +29,7 @@ public class FieldMetadata {
     @AuraEnabled public String label                                 {get;private set;}
     @AuraEnabled public String localName                             {get;private set;}
     @AuraEnabled public String name                                  {get;private set;}
+    @AuraEnabled public String namespace                             {get;private set;}
     @AuraEnabled public Integer precision                            {get;private set;}
     @AuraEnabled public String relationshipName                      {get;private set;}
     @AuraEnabled public Integer relationshipOrder                    {get;private set;}
@@ -73,6 +74,7 @@ public class FieldMetadata {
         this.scale               = this.getDescribe().getScale();
         this.soapType            = this.getDescribe().getSOAPType().name();
 
+        this.setNamespace();
         this.setPicklistOptions();
         this.setRelationshipReferences();
     }
@@ -93,6 +95,11 @@ public class FieldMetadata {
 
     public String serialize() {
         return JSON.serialize(this);
+    }
+
+    private void setNamespace() {
+        Integer localNameIndex = this.name.replace('__c', '').indexOf('__');
+        this.namespace = localNameIndex < 0 ? '' : this.name.substring(0, localNameIndex);
     }
 
     private void setPicklistOptions() {

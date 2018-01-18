@@ -25,6 +25,7 @@ public class SObjectMetadata {
     @AuraEnabled public String localName                     {get;private set;}
     @AuraEnabled public String name                          {get;private set;}
     @AuraEnabled public String nameField                     {get;private set;}
+    @AuraEnabled public String nameSpace                     {get;private set;}
     @AuraEnabled public List<RecordTypeMetadata> recordTypes {get;private set;}
     @AuraEnabled public String tabIcon                       {get;private set;}
 
@@ -58,6 +59,7 @@ public class SObjectMetadata {
         this.localName       = this.getDescribe().getLocalName();
 
         this.setFields();
+        this.setNamespace();
         this.setRecordTypes();
         this.setTabIcon();
     }
@@ -89,6 +91,11 @@ public class SObjectMetadata {
 
             this.fieldNames.add(fieldDescribe.getName());
         }
+    }
+
+    private void setNamespace() {
+        Integer localNameIndex = this.name.replace('__c', '').indexOf('__');
+        this.namespace = localNameIndex < 0 ? '' : this.name.substring(0, localNameIndex);
     }
 
     private void setRecordTypes() {
