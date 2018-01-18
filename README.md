@@ -1,5 +1,6 @@
 # Simple Metadata Lightning Components
 A lightweight library of Apex classes for Salesforce that provide easy access to metadata information for frontend and backend developers
+<br />
 <a href="https://githubsfdeploy.herokuapp.com" target="_blank">
   <img alt="Deploy to Salesforce"
        src="https://raw.githubusercontent.com/afawcett/githubsfdeploy/master/deploy.png">
