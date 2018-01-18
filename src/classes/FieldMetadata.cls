@@ -42,6 +42,10 @@ public class FieldMetadata {
     private transient Schema.DescribeFieldResult fieldDescribe;
     private transient Schema.SObjectField sobjectField;
 
+    public FieldMetadata(Schema.SObjectType sobjectType, Schema.SObjectField sobjectField) {
+        this(sobjectType.getDescribe().getName(), sobjectField.getDescribe().getName());
+    }
+
     public FieldMetadata(String sobjectName, String fieldName) {
         this.sobjectName     = sobjectName;
         this.name            = fieldName;

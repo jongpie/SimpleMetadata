@@ -38,11 +38,16 @@ A lightweight library of Apex classes for Salesforce that provide easy access to
     ```
 
 ## FieldMetadata.cls
-* Contains metadata information for the specified field. There is 1 way to create an instance of FieldMetadata
+* Contains metadata information for the specified field. There are 2 ways to create an instance of FieldMetadata
 
     By passing the SObject's API name and the field's API name as strings in the constructor
     ```
     new FieldMetadata('Account', 'Type')
+    ```
+
+    By passing the SObject Type and the SObject Field in the constructor
+    ```
+    new FieldMetadata(Schema.Account.SObjectType, Schema.Account.Type)
     ```
 
     ### Sample Usage
