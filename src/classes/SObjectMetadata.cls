@@ -78,7 +78,7 @@ public class SObjectMetadata {
         return this.sobjectType;
     }
 
-    public String serialize() {
+    public override String toString() {
         return JSON.serialize(this);
     }
 

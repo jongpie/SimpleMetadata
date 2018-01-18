@@ -36,7 +36,7 @@ public with sharing class FieldSetMetadata {
         return this.fieldSet;
     }
 
-    public String serialize() {
+    public override String toString() {
         return JSON.serialize(this);
     }
 
