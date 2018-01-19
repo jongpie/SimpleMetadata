@@ -10,12 +10,12 @@ A lightweight library of Apex classes for Salesforce that provide easy access to
 ## SObjectMetadata.cls
 * Contains metadata information for the specified SObject. There are 2 ways to create an instance of SObjectMetadata
 
-    By passing the SObject's API name as a string in the constructor
+    1. By passing the SObject's API name as a string in the constructor
     ```
     new SObjectMetadata('Account')
     ```
 
-    By passing the SObject Type in the constructor
+    2. By passing the SObject Type in the constructor
     ```
     new SObjectMetadata(Schema.Account.SObjectType)`
     ```
@@ -31,7 +31,7 @@ A lightweight library of Apex classes for Salesforce that provide easy access to
             if(new SObjectMetadata('MyCustomObject__c').isDeletable == false) return;
 
             //Otherwise, delete the record
-            myRecord myRecord.MyCustomField__c;
+            delete myRecord.MyCustomField__c;
         }
 
     }
@@ -40,12 +40,12 @@ A lightweight library of Apex classes for Salesforce that provide easy access to
 ## FieldMetadata.cls
 * Contains metadata information for the specified field. There are 2 ways to create an instance of FieldMetadata
 
-    By passing the SObject's API name and the field's API name as strings in the constructor
+    1. By passing the SObject's API name and the field's API name as strings in the constructor
     ```
     new FieldMetadata('Account', 'Type')
     ```
 
-    By passing the SObject Type and the SObject Field in the constructor
+    2. By passing the SObject Type and the SObject Field in the constructor
     ```
     new FieldMetadata(Schema.Account.SObjectType, Schema.Account.Type)
     ```
@@ -65,4 +65,17 @@ A lightweight library of Apex classes for Salesforce that provide easy access to
         }
 
     }
+    ```
+
+## FieldSetMetadata.cls
+* Contains metadata information for the specified field set, as well as the field set's SObject and the field metadata for each field set member. There are 2 ways to create an instance of FieldMetadata
+
+    1. By passing the SObject's API name and the field set's API name as strings in the constructor
+    ```
+    new FieldSetMetadata('Lead', 'MyFieldSet')
+    ```
+
+    2. By passing the FieldSet in the constructor
+    ```
+    new FieldSetMetadata(SObjectType.Lead.FieldSets.MyFieldSet);
     ```
