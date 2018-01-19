@@ -26,7 +26,7 @@ public virtual class SObjectMetadata {
     @AuraEnabled public String localName                     {get; private set;}
     @AuraEnabled public String name                          {get; private set;}
     @AuraEnabled public String nameField                     {get; private set;}
-    @AuraEnabled public String nameSpace                     {get; private set;}
+    @AuraEnabled public String namespace                     {get; private set;}
     @AuraEnabled public List<RecordTypeMetadata> recordTypes {get; private set;}
     @AuraEnabled public String tabIcon                       {get; private set;}
 
