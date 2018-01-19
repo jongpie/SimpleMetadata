@@ -8,7 +8,7 @@ public virtual class EnvironmentMetadata {
 
     static {
         SObjectMetadata organizationMetadata = new SObjectMetadata(Schema.Organization.SObjectType);
-        String query = 'SELECT ' + String.join(organizationMetadata.fieldNames, ', ')
+        String query = 'SELECT ' + String.join(organizationMetadata.allFieldNames, ', ')
             + ' FROM Organization';
 
         organization = (Organization)Database.query(query);

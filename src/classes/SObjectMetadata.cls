@@ -18,7 +18,7 @@ public virtual class SObjectMetadata {
     @AuraEnabled public Boolean isSearchable                 {get; private set;}
     @AuraEnabled public Boolean isUndeletable                {get; private set;}
     @AuraEnabled public Boolean isUpdateable                 {get; private set;}
-    @AuraEnabled public List<String> fieldNames              {get; private set;}
+    @AuraEnabled public Fields fields                        {get; private set;}
     @AuraEnabled public List<String> fieldSetNames           {get; private set;}
     @AuraEnabled public String keyPrefix                     {get; private set;}
     @AuraEnabled public String label                         {get; private set;}
@@ -85,13 +85,24 @@ public virtual class SObjectMetadata {
     }
 
     private void setFields() {
-        this.fieldNames = new List<String>();
+        this.fields = new FIelds();
+        this.fields.allFieldNames        = new List<String>();
+        this.fields.accessibleFieldNames = new List<String>();
+        this.fields.createableFieldNames = new List<String>();
+        this.fields.requiredFieldNames   = new List<String>();
+        this.fields.updateableFieldNames = new List<String>();
+
         for(Schema.SObjectField field : this.getDescribe().fields.getMap().values()) {
             Schema.DescribeFieldResult fieldDescribe = field.getDescribe();
+            String fieldName = fieldDescribe.getName();
 
             if(fieldDescribe.isNameField()) this.nameField = fieldDescribe.getName();
 
-            this.fieldNames.add(fieldDescribe.getName());
+            this.fields.allFieldNames.add(fieldName);
+            if(fieldDescribe.isAccessible()) this.fields.accessibleFieldNames.add(fieldName);
+            if(fieldDescribe.isCreateable()) this.fields.createableFieldNames.add(fieldName);
+            if(fieldDescribe.isNillable() == false && fieldDescribe.isCreateable()) this.fields.requiredFieldNames.add(fieldName);
+            if(fieldDescribe.isUpdateable()) this.fields.updateableFieldNames.add(fieldName);
         }
     }
 
@@ -133,6 +144,14 @@ public virtual class SObjectMetadata {
         // Hardcoded exceptions - Salesforce doesn't return SVGs for these objects, so hardcoding is necessary
         if(this.tabIcon == null && this.name == 'Asset') this.tabIcon = 'standard:maintenance_asset';
         if(this.tabIcon == null && this.name == 'AssetRelationship') this.tabIcon = 'standard:asset_relationship';
+    }
+
+    public virtual class Fields {
+        @AuraEnabled public List<String> accessibleFieldNames {get; private set;}
+        @AuraEnabled public List<String> allFieldNames        {get; private set;}
+        @AuraEnabled public List<String> createableFieldNames {get; private set;}
+        @AuraEnabled public List<String> requiredFieldNames   {get; private set;}
+        @AuraEnabled public List<String> updateableFieldNames {get; private set;}
     }
 
     public virtual class RecordTypeMetadata {
