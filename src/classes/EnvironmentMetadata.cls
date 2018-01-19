@@ -17,6 +17,8 @@ public virtual class EnvironmentMetadata {
     // Aura-enabled member variables
     @AuraEnabled public String baseURL                       {get; private set;}
     @AuraEnabled public String instanceName                  {get; private set;}
+    @AuraEnabled public Boolean isChatterEnabled             {get; private set;}
+    @AuraEnabled public Boolean isKnowledgeEnabled           {get; private set;}
     @AuraEnabled public Boolean isMultiCurrencyEnabled       {get; private set;}
     @AuraEnabled public Boolean isPersonAccountEnabled       {get; private set;}
     @AuraEnabled public Boolean isProduction                 {get; private set;}
@@ -35,6 +37,8 @@ public virtual class EnvironmentMetadata {
 
         this.baseURL                      = URL.getSalesforceBaseUrl().toExternalForm();
         this.instanceName                 = organization.InstanceName;
+        this.isChatterEnabled             = this.sobjectTypes.containsKey('FeedItem');
+        this.isKnowledgeEnabled           = this.sobjectTypes.containsKey('KnowledgeArticle');
         this.isMultiCurrencyEnabled       = this.sobjectTypes.containsKey('CurrencyType');
         this.isPersonAccountEnabled       = this.sobjectTypes.get('Account').getDescribe().fields.getMap().containsKey('IsPersonAccount');
         this.isProduction                 = organization.IsSandbox == false;
