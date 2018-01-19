@@ -14,6 +14,7 @@ public virtual class EnvironmentMetadata {
         organization = (Organization)Database.query(query);
     }
 
+    // Aura-enabled member variables
     @AuraEnabled public String baseURL                        {get; private set;}
     @AuraEnabled public String instanceName                   {get; private set;}
     @AuraEnabled public Boolean isMultiCurrencyEnabled        {get; private set;}
@@ -22,9 +23,11 @@ public virtual class EnvironmentMetadata {
     @AuraEnabled public Boolean isSandbox                     {get; private set;}
     @AuraEnabled public Boolean isTerritoryManagementEnabled  {get; private set;}
     @AuraEnabled public String name                           {get; private set;}
+    @AuraEnabled public Id organizationId                     {get; private set;}
     @AuraEnabled public String organizationType               {get; private set;}
     @AuraEnabled public List<String> sobjectTypeNames         {get; private set;}
 
+    // Private variables - marked as transient so they aren't included during JSON.serialize()
     private transient Map<String, Schema.SObjectType> sobjectTypes;
 
     public EnvironmentMetadata() {
@@ -34,10 +37,11 @@ public virtual class EnvironmentMetadata {
         this.instanceName                 = organization.InstanceName;
         this.isMultiCurrencyEnabled       = this.sobjectTypes.containsKey('CurrencyType');
         this.isPersonAccountEnabled       = this.sobjectTypes.get('Account').getDescribe().fields.getMap().containsKey('IsPersonAccount');
-        this.isProduction                 = !organization.IsSandbox;
+        this.isProduction                 = organization.IsSandbox == false;
         this.isSandbox                    = organization.IsSandbox;
         this.isTerritoryManagementEnabled = this.sobjectTypes.containsKey('Territory');
         this.name                         = organization.Name;
+        this.organizationId               = organization.Id;
         this.organizationType             = organization.OrganizationType;
         this.sobjectTypeNames             = new List<String>(this.sobjectTypes.keySet());
     }
