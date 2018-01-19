@@ -1,8 +1,8 @@
 /*************************************************************************************************
-* This file is part of the SimpleMetadata project, released under the MIT License.              *
+* This file is part of the SimpleMetadata project, released under the MIT License.               *
 * See LICENSE file or go to https://github.com/jongpie/SimpleMetadata for full license details.  *
 *************************************************************************************************/
-public class SObjectMetadata {
+public virtual class SObjectMetadata {
 
     // Aura-enabled member variables
     @AuraEnabled public Boolean hasSubtypes                  {get; private set;}
@@ -19,13 +19,14 @@ public class SObjectMetadata {
     @AuraEnabled public Boolean isUndeletable                {get; private set;}
     @AuraEnabled public Boolean isUpdateable                 {get; private set;}
     @AuraEnabled public List<String> fieldNames              {get; private set;}
+    @AuraEnabled public List<String> fieldSetNames           {get; private set;}
     @AuraEnabled public String keyPrefix                     {get; private set;}
     @AuraEnabled public String label                         {get; private set;}
     @AuraEnabled public String labelPlural                   {get; private set;}
     @AuraEnabled public String localName                     {get; private set;}
     @AuraEnabled public String name                          {get; private set;}
     @AuraEnabled public String nameField                     {get; private set;}
-    @AuraEnabled public String nameSpace                     {get; private set;}
+    @AuraEnabled public String namespace                     {get; private set;}
     @AuraEnabled public List<RecordTypeMetadata> recordTypes {get; private set;}
     @AuraEnabled public String tabIcon                       {get; private set;}
 
@@ -59,6 +60,7 @@ public class SObjectMetadata {
         this.localName       = this.getDescribe().getLocalName();
 
         this.setFields();
+        this.setFieldSets();
         this.setNamespace();
         this.setRecordTypes();
         this.setTabIcon();
@@ -78,7 +80,7 @@ public class SObjectMetadata {
         return this.sobjectType;
     }
 
-    public String serialize() {
+    public override String toString() {
         return JSON.serialize(this);
     }
 
@@ -90,6 +92,13 @@ public class SObjectMetadata {
             if(fieldDescribe.isNameField()) this.nameField = fieldDescribe.getName();
 
             this.fieldNames.add(fieldDescribe.getName());
+        }
+    }
+
+    private void setFieldSets() {
+        this.fieldSetNames = new List<String>();
+        for(Schema.FieldSet fieldSet : this.getDescribe().fieldSets.getMap().values()) {
+            this.fieldSetNames.add(fieldSet.getName());
         }
     }
 
@@ -126,7 +135,7 @@ public class SObjectMetadata {
         if(this.tabIcon == null && this.name == 'AssetRelationship') this.tabIcon = 'standard:asset_relationship';
     }
 
-    public class RecordTypeMetadata {
+    public virtual class RecordTypeMetadata {
 
         // Aura-enabled member variables
         @AuraEnabled public Boolean isActive                   {get; private set;}

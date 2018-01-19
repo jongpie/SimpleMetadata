@@ -1,12 +1,15 @@
 /*************************************************************************************************
-* This file is part of the SimpleMetadata project, released under the MIT License.              *
+* This file is part of the SimpleMetadata project, released under the MIT License.               *
 * See LICENSE file or go to https://github.com/jongpie/SimpleMetadata for full license details.  *
 *************************************************************************************************/
-public class FieldMetadata {
+public virtual class FieldMetadata {
 
     // Aura-enabled member variables
     @AuraEnabled public Integer byteLength                           {get; private set;}
+    @AuraEnabled public Object defaultValue                          {get; private set;}
     @AuraEnabled public Integer digits                               {get; private set;}
+    @AuraEnabled public String displayType                           {get; private set;}
+    @AuraEnabled public String inlineHelpText                        {get; private set;}
     @AuraEnabled public Boolean isAccessible                         {get; private set;}
     @AuraEnabled public Boolean isAutoNumber                         {get; private set;}
     @AuraEnabled public Boolean isCalculated                         {get; private set;}
@@ -21,15 +24,12 @@ public class FieldMetadata {
     @AuraEnabled public Boolean isRequired                           {get; private set;}
     @AuraEnabled public Boolean isSortable                           {get; private set;}
     @AuraEnabled public Boolean isUpdateable                         {get; private set;}
-    @AuraEnabled public Integer maxLength                            {get; private set;}
-    @AuraEnabled public List<PicklistEntryMetadata> picklistOptions  {get; private set;}
-    @AuraEnabled public Object defaultValue                          {get; private set;}
-    @AuraEnabled public String displayType                           {get; private set;}
-    @AuraEnabled public String inlineHelpText                        {get; private set;}
     @AuraEnabled public String label                                 {get; private set;}
     @AuraEnabled public String localName                             {get; private set;}
+    @AuraEnabled public Integer maxLength                            {get; private set;}
     @AuraEnabled public String name                                  {get; private set;}
     @AuraEnabled public String namespace                             {get; private set;}
+    @AuraEnabled public List<PicklistEntryMetadata> picklistOptions  {get; private set;}
     @AuraEnabled public Integer precision                            {get; private set;}
     @AuraEnabled public String relationshipName                      {get; private set;}
     @AuraEnabled public Integer relationshipOrder                    {get; private set;}
@@ -97,7 +97,7 @@ public class FieldMetadata {
         return this.sobjectField;
     }
 
-    public String serialize() {
+    public override String toString() {
         return JSON.serialize(this);
     }
 
@@ -124,7 +124,7 @@ public class FieldMetadata {
         }
     }
 
-    public class PicklistEntryMetadata {
+    public virtual class PicklistEntryMetadata {
 
         // Aura-enabled member variables
         @AuraEnabled public Boolean isDefaultValue {get; private set;}

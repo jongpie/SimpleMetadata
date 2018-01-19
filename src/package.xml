@@ -3,6 +3,7 @@
     <types>
         <members>EnvironmentMetadata</members>
         <members>FieldMetadata</members>
+        <members>FieldSetMetadata</members>
         <members>SObjectMetadata</members>
         <name>ApexClass</name>
     </types>
