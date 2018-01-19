@@ -5,14 +5,14 @@
 public virtual class FieldSetMetadata {
 
     // Aura-enabled member variables
-    @AuraEnabled String description                  {get; private set;}
-    @AuraEnabled List<FieldSetMemberMetadata> fields {get; private set;}
-    @AuraEnabled String label                        {get; private set;}
-    @AuraEnabled String localName                    {get; private set;}
-    @AuraEnabled String name                         {get; private set;}
-    @AuraEnabled String namespace                    {get; private set;}
-    @AuraEnabled String sobjectName                  {get; private set;}
-    @AuraEnabled SObjectMetadata sobjectMetadata     {get; private set;}
+    @AuraEnabled String description                           {get; private set;}
+    @AuraEnabled List<FieldSetMemberMetadata> fieldSetMembers {get; private set;}
+    @AuraEnabled String label                                 {get; private set;}
+    @AuraEnabled String localName                             {get; private set;}
+    @AuraEnabled String name                                  {get; private set;}
+    @AuraEnabled String namespace                             {get; private set;}
+    @AuraEnabled String sobjectName                           {get; private set;}
+    @AuraEnabled SObjectMetadata sobjectMetadata              {get; private set;}
 
     // Private variables - marked as transient so they aren't included during JSON.serialize()
     private transient Schema.FieldSet fieldSet;
@@ -53,11 +53,11 @@ public virtual class FieldSetMetadata {
     }
 
     private void setFields() {
-        this.fields = new List<FieldSetMemberMetadata>();
+        this.fieldSetMembers = new List<FieldSetMemberMetadata>();
         for(Schema.FieldSetMember fieldSetMember : fieldSet.getFields()) {
             FieldSetMemberMetadata fieldSetMemberMetadata = new FieldSetMemberMetadata(sobjectName, fieldSetMember);
 
-            this.fields.add(fieldSetMemberMetadata);
+            this.fieldSetMembers.add(fieldSetMemberMetadata);
         }
     }
 
