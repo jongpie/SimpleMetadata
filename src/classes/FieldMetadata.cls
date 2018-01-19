@@ -2,7 +2,7 @@
 * This file is part of the SimpleMetadata project, released under the MIT License.              *
 * See LICENSE file or go to https://github.com/jongpie/SimpleMetadata for full license details.  *
 *************************************************************************************************/
-public class FieldMetadata {
+public virtual class FieldMetadata {
 
     // Aura-enabled member variables
     @AuraEnabled public Integer byteLength                           {get; private set;}
@@ -124,7 +124,7 @@ public class FieldMetadata {
         }
     }
 
-    public class PicklistEntryMetadata {
+    public virtual class PicklistEntryMetadata {
 
         // Aura-enabled member variables
         @AuraEnabled public Boolean isDefaultValue {get; private set;}
