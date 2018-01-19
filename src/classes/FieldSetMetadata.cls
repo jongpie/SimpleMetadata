@@ -2,7 +2,7 @@
 * This file is part of the SimpleMetadata project, released under the MIT License.              *
 * See LICENSE file or go to https://github.com/jongpie/SimpleMetadata for full license details.  *
 *************************************************************************************************/
-public with sharing class FieldSetMetadata {
+public virtual class FieldSetMetadata {
 
     // Aura-enabled member variables
     @AuraEnabled String description                  {get; private set;}
@@ -15,6 +15,10 @@ public with sharing class FieldSetMetadata {
 
     // Private variables - marked as transient so they aren't included during JSON.serialize()
     private transient Schema.FieldSet fieldSet;
+
+    public FieldSetMetadata(Schema.FieldSet fieldSet) {
+        this(String.valueOf(fieldset.getSObjectType()), fieldSet.getName());
+    }
 
     public FieldSetMetadata(String sobjectName, String fieldSetName) {
         this.sobjectName = sobjectName;
@@ -42,14 +46,13 @@ public with sharing class FieldSetMetadata {
 
     private void setFields() {
         for(Schema.FieldSetMember fieldSetMember : fieldSet.getFields()) {
-            String fieldName = fieldSetMember.getFieldPath();
-            FieldSetMemberMetadata fieldSetMemberMetadata = new FieldSetMemberMetadata(sobjectName, fieldName, fieldSetMember);
+            FieldSetMemberMetadata fieldSetMemberMetadata = new FieldSetMemberMetadata(sobjectName, fieldSetMember);
 
             this.fields.add(fieldSetMemberMetadata);
         }
     }
 
-    public class FieldSetMemberMetadata {
+    public virtual class FieldSetMemberMetadata {
 
         // Aura-enabled member variables
         @AuraEnabled public String displayType          {get; private set;}
