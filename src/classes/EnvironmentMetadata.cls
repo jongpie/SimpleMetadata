@@ -8,24 +8,24 @@ public virtual class EnvironmentMetadata {
 
     static {
         SObjectMetadata organizationMetadata = new SObjectMetadata(Schema.Organization.SObjectType);
-        String query = 'SELECT ' + String.join(organizationMetadata.allFieldNames, ', ')
+        String query = 'SELECT ' + String.join(organizationMetadata.fields.allFieldNames, ', ')
             + ' FROM Organization';
 
         organization = (Organization)Database.query(query);
     }
 
     // Aura-enabled member variables
-    @AuraEnabled public String baseURL                        {get; private set;}
-    @AuraEnabled public String instanceName                   {get; private set;}
-    @AuraEnabled public Boolean isMultiCurrencyEnabled        {get; private set;}
-    @AuraEnabled public Boolean isPersonAccountEnabled        {get; private set;}
-    @AuraEnabled public Boolean isProduction                  {get; private set;}
-    @AuraEnabled public Boolean isSandbox                     {get; private set;}
-    @AuraEnabled public Boolean isTerritoryManagementEnabled  {get; private set;}
-    @AuraEnabled public String name                           {get; private set;}
-    @AuraEnabled public Id organizationId                     {get; private set;}
-    @AuraEnabled public String organizationType               {get; private set;}
-    @AuraEnabled public List<String> sobjectTypeNames         {get; private set;}
+    @AuraEnabled public String baseURL                       {get; private set;}
+    @AuraEnabled public String instanceName                  {get; private set;}
+    @AuraEnabled public Boolean isMultiCurrencyEnabled       {get; private set;}
+    @AuraEnabled public Boolean isPersonAccountEnabled       {get; private set;}
+    @AuraEnabled public Boolean isProduction                 {get; private set;}
+    @AuraEnabled public Boolean isSandbox                    {get; private set;}
+    @AuraEnabled public Boolean isTerritoryManagementEnabled {get; private set;}
+    @AuraEnabled public String name                          {get; private set;}
+    @AuraEnabled public Id organizationId                    {get; private set;}
+    @AuraEnabled public String organizationType              {get; private set;}
+    @AuraEnabled public List<String> sobjectTypeNames        {get; private set;}
 
     // Private variables - marked as transient so they aren't included during JSON.serialize()
     private transient Map<String, Schema.SObjectType> sobjectTypes;
