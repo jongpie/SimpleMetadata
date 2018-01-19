@@ -66,7 +66,7 @@ public virtual class FieldMetadata {
         this.isGroupable         = this.getDescribe().isGroupable();
         this.isNameField         = this.getDescribe().isNameField();
         this.isNillable          = this.getDescribe().isNillable();
-        this.isRequired          = this.getDescribe().isNillable() == false; // If a field is NOT nillable, then it's required
+        this.isRequired          = this.getDescribe().isNillable() == false && this.getDescribe().isCreateable(); // If a field is NOT nillable, then it's required
         this.isSortable          = this.getDescribe().isSortable();
         this.isUpdateable        = this.getDescribe().isUpdateable();
         this.label               = this.getDescribe().getLabel();
