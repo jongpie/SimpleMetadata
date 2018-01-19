@@ -5,6 +5,8 @@
 public virtual class SObjectMetadata {
 
     // Aura-enabled member variables
+    @AuraEnabled public Boolean hasHistoryTrackingEnabled    {get; private set;}
+    @AuraEnabled public Boolean hasMultiCurrency             {get; private set;}
     @AuraEnabled public Boolean hasSubtypes                  {get; private set;}
     @AuraEnabled public Boolean isAccessible                 {get; private set;}
     @AuraEnabled public Boolean isCreateable                 {get; private set;}
@@ -41,24 +43,26 @@ public virtual class SObjectMetadata {
     public SObjectMetadata(String sobjectName) {
         this.name = sobjectName;
 
-        this.hasSubtypes     = this.getDescribe().getHasSubtypes();
-        this.isAccessible    = this.getDescribe().isAccessible();
-        this.isCreateable    = this.getDescribe().isCreateable();
-        this.isCustom        = this.getDescribe().isCustom();
-        this.isCustomSetting = this.getDescribe().isCustomSetting();
-        this.isDeletable     = this.getDescribe().isDeletable();
-        this.isFeedEnabled   = this.getDescribe().isFeedEnabled();
-        this.isMruEnabled    = this.getDescribe().isMruEnabled();
-        this.isMergeable     = this.getDescribe().isMergeable();
-        this.isQueryable     = this.getDescribe().isQueryable();
-        this.isSearchable    = this.getDescribe().isSearchable();
-        this.isUndeletable   = this.getDescribe().isUndeletable();
-        this.isUpdateable    = this.getDescribe().isUpdateable();
-        this.keyPrefix       = this.getDescribe().getKeyPrefix();
-        this.label           = this.getDescribe().getLabel();
-        this.labelPlural     = this.getDescribe().getLabelPlural();
-        this.localName       = this.getDescribe().getLocalName();
+        this.hasMultiCurrency = this.getDescribe().fields.getMap().containsKey('CurrencyIsoCode');
+        this.hasSubtypes      = this.getDescribe().getHasSubtypes();
+        this.isAccessible     = this.getDescribe().isAccessible();
+        this.isCreateable     = this.getDescribe().isCreateable();
+        this.isCustom         = this.getDescribe().isCustom();
+        this.isCustomSetting  = this.getDescribe().isCustomSetting();
+        this.isDeletable      = this.getDescribe().isDeletable();
+        this.isFeedEnabled    = this.getDescribe().isFeedEnabled();
+        this.isMruEnabled     = this.getDescribe().isMruEnabled();
+        this.isMergeable      = this.getDescribe().isMergeable();
+        this.isQueryable      = this.getDescribe().isQueryable();
+        this.isSearchable     = this.getDescribe().isSearchable();
+        this.isUndeletable    = this.getDescribe().isUndeletable();
+        this.isUpdateable     = this.getDescribe().isUpdateable();
+        this.keyPrefix        = this.getDescribe().getKeyPrefix();
+        this.label            = this.getDescribe().getLabel();
+        this.labelPlural      = this.getDescribe().getLabelPlural();
+        this.localName        = this.getDescribe().getLocalName();
 
+        this.setHasHistoryTrackingEnabled();
         this.setFields();
         this.setFieldSets();
         this.setNamespace();
@@ -82,6 +86,15 @@ public virtual class SObjectMetadata {
 
     public override String toString() {
         return JSON.serialize(this);
+    }
+
+    private void setHasHistoryTrackingEnabled() {
+        String historyObjectName;
+        // The naming convention is slightly different for custom objects (MyCustomObject__History) vs standard (LeadHistory)
+        if(this.name.endsWith('__c')) historyObjectName = this.name.substring(0, this.name.length() - 1) + 'History';
+        else historyObjectName = this.name + 'History';
+
+        this.hasHistoryTrackingEnabled = Schema.getGlobalDescribe().containsKey(historyObjectName);
     }
 
     private void setFields() {
