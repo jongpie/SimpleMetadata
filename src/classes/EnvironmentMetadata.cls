@@ -47,11 +47,21 @@ public virtual class EnvironmentMetadata {
         this.name                         = organization.Name;
         this.organizationId               = organization.Id;
         this.organizationType             = organization.OrganizationType;
-        this.sobjectTypeNames             = new List<String>(this.sobjectTypes.keySet());
+
+        this.setSObjectTypeNames();
     }
 
     public override String toString() {
         return JSON.serialize(this);
+    }
+
+    private void setSObjectTypeNames() {
+        // We could just use this.sobjectTypeNames = new List<String>(this.sobjectTypes.keySet());
+        // However, it returns the names in lowercase, which can cause problems with Javascript/Lightning since it's case-sensitive
+        this.sobjectTypeNames  = new List<String>();
+        for(Schema.SObjectType sobjectType : this.sobjectTypes.values()) {
+            this.sobjectTypeNames.add(String.valueOf(sobjectType));
+        }
     }
 
 }
