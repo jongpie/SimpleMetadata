@@ -1,11 +1,14 @@
 public virtual class QueueMetadata {
 
     // Stores cached query results
-    private static Map<String, Group> queriedQueuesMap;
+    private static Map<Id, Group> queriedQueuesById;
+    private static Map<String, Group> queriedQueuesByDeveloperName;
 
     static {
         // Query for caching queues
-        queriedQueuesMap = new Map<String, Group>();
+        queriedQueuesById            = new Map<Id, Group>();
+        queriedQueuesByDeveloperName = new Map<String, Group>();
+
         for(Group queue : [
             SELECT DeveloperName, DoesIncludeBosses, DoesSendEmailToMembers, Email, Id, Name, OwnerId, RelatedId,
                 (SELECT Id, SObjectType FROM QueueSObjects),
@@ -13,7 +16,8 @@ public virtual class QueueMetadata {
             FROM Group
             WHERE Type = 'Queue'
         ]) {
-            queriedQueuesMap.put(queue.DeveloperName, queue);
+            queriedQueuesById.put(queue.Id, queue);
+            queriedQueuesByDeveloperName.put(queue.DeveloperName, queue);
         }
     }
 
@@ -31,14 +35,21 @@ public virtual class QueueMetadata {
     // Private variables - marked as transient so they aren't included during JSON.serialize()
     private transient Group queue;
 
+    public QueueMetadata(Id queueId) {
+        this(queriedQueuesById.get(queueId).DeveloperName);
+    }
+
     public QueueMetadata(String queueName) {
-        this.name = queueName;
-        this.queue = queriedQueuesMap.get(queueName);
+        // Since ID is a type of String, calling QueueMetadata('00G0Y000003ASYI') treats the string as the name, instead of the intended ID
+        // To compensate, check of the 'queueName' is really the queueId
+        if(queueName instanceOf Id) this.queue = queriedQueuesById.get(queueName);
+        else this.queue = queriedQueuesByDeveloperName.get(queueName);
 
         this.doesIncludeBosses      = this.queue.DoesIncludeBosses;
         this.doesSendEmailToMembers = this.queue.DoesSendEmailToMembers;
         this.email                  = this.queue.Email;
         this.label                  = this.queue.Name;
+        this.name                   = this.queue.DeveloperName;
         this.ownerId                = this.queue.OwnerId;
         this.queueId                = this.queue.Id;
 
