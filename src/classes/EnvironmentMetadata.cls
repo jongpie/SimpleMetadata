@@ -8,9 +8,7 @@ public virtual class EnvironmentMetadata {
     private static Organization organization;
 
     static {
-        SObjectMetadata organizationMetadata = new SObjectMetadata(Schema.Organization.SObjectType);
-        String query = 'SELECT ' + String.join(organizationMetadata.fields.allFieldNames, ', ') + ' FROM Organization';
-        organization = (Organization)Database.query(query);
+        organization = [SELECT Id, Name, InstanceName, OrganizationType, IsSandbox FROM Organization LIMIT 1];
     }
 
     // Aura-enabled member variables
