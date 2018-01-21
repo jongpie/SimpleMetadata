@@ -9,11 +9,11 @@ public virtual class SObjectMetadata {
     @AuraEnabled public Boolean hasMultiCurrency             {get; private set;}
     @AuraEnabled public Boolean hasSubtypes                  {get; private set;}
     @AuraEnabled public Boolean isAccessible                 {get; private set;}
+    @AuraEnabled public Boolean isChatterFeedEnabled         {get; private set;}
     @AuraEnabled public Boolean isCreateable                 {get; private set;}
     @AuraEnabled public Boolean isCustom                     {get; private set;}
     @AuraEnabled public Boolean isCustomSetting              {get; private set;}
     @AuraEnabled public Boolean isDeletable                  {get; private set;}
-    @AuraEnabled public Boolean isFeedEnabled                {get; private set;}
     @AuraEnabled public Boolean isMruEnabled                 {get; private set;}
     @AuraEnabled public Boolean isMergeable                  {get; private set;}
     @AuraEnabled public Boolean isQueryable                  {get; private set;}
@@ -43,24 +43,25 @@ public virtual class SObjectMetadata {
     public SObjectMetadata(String sobjectName) {
         this.name = sobjectName;
 
-        this.hasMultiCurrency = this.getDescribe().fields.getMap().containsKey('CurrencyIsoCode');
-        this.hasSubtypes      = this.getDescribe().getHasSubtypes();
-        this.isAccessible     = this.getDescribe().isAccessible();
-        this.isCreateable     = this.getDescribe().isCreateable();
-        this.isCustom         = this.getDescribe().isCustom();
-        this.isCustomSetting  = this.getDescribe().isCustomSetting();
-        this.isDeletable      = this.getDescribe().isDeletable();
-        this.isFeedEnabled    = this.getDescribe().isFeedEnabled();
-        this.isMruEnabled     = this.getDescribe().isMruEnabled();
-        this.isMergeable      = this.getDescribe().isMergeable();
-        this.isQueryable      = this.getDescribe().isQueryable();
-        this.isSearchable     = this.getDescribe().isSearchable();
-        this.isUndeletable    = this.getDescribe().isUndeletable();
-        this.isUpdateable     = this.getDescribe().isUpdateable();
-        this.keyPrefix        = this.getDescribe().getKeyPrefix();
-        this.label            = this.getDescribe().getLabel();
-        this.labelPlural      = this.getDescribe().getLabelPlural();
-        this.localName        = this.getDescribe().getLocalName();
+        this.hasMultiCurrency     = this.getDescribe().fields.getMap().containsKey('CurrencyIsoCode');
+        this.hasSubtypes          = this.getDescribe().getHasSubtypes();
+        this.isAccessible         = this.getDescribe().isAccessible();
+        this.isChatterFeedEnabled = this.getDescribe().isFeedEnabled();
+        this.isCreateable         = this.getDescribe().isCreateable();
+        this.isCustom             = this.getDescribe().isCustom();
+        this.isCustomSetting      = this.getDescribe().isCustomSetting();
+        this.isDeletable          = this.getDescribe().isDeletable();
+        this.isMergeable          = this.getDescribe().isMergeable();
+        this.isMRUEnabled         = this.getDescribe().isMruEnabled();
+        this.isQueryable          = this.getDescribe().isQueryable();
+        this.isSearchable         = this.getDescribe().isSearchable();
+        this.isUndeletable        = this.getDescribe().isUndeletable();
+        this.isUpdateable         = this.getDescribe().isUpdateable();
+        this.fields               = new Fields(this.getDescribe());
+        this.keyPrefix            = this.getDescribe().getKeyPrefix();
+        this.label                = this.getDescribe().getLabel();
+        this.labelPlural          = this.getDescribe().getLabelPlural();
+        this.localName            = this.getDescribe().getLocalName();
 
         this.setHasHistoryTrackingEnabled();
         this.setFields();
@@ -68,6 +69,10 @@ public virtual class SObjectMetadata {
         this.setNamespace();
         this.setRecordTypes();
         this.setTabIcon();
+    }
+
+    public override String toString() {
+        return JSON.serialize(this);
     }
 
     public Schema.DescribeSObjectResult getDescribe() {
@@ -82,10 +87,6 @@ public virtual class SObjectMetadata {
         if(this.sobjectType == null) this.sobjectType = Schema.getGlobalDescribe().get(this.name);
 
         return this.sobjectType;
-    }
-
-    public override String toString() {
-        return JSON.serialize(this);
     }
 
     private void setHasHistoryTrackingEnabled() {
