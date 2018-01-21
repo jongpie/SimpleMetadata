@@ -1,5 +1,5 @@
 /*************************************************************************************************
-* This file is part of the SimpleMetadata project, released under the MIT License.              *
+* This file is part of the SimpleMetadata project, released under the MIT License.               *
 * See LICENSE file or go to https://github.com/jongpie/SimpleMetadata for full license details.  *
 *************************************************************************************************/
 public virtual class EnvironmentMetadata {
@@ -8,8 +8,7 @@ public virtual class EnvironmentMetadata {
 
     static {
         SObjectMetadata organizationMetadata = new SObjectMetadata(Schema.Organization.SObjectType);
-        String query = 'SELECT ' + String.join(organizationMetadata.fields.allFieldNames, ', ')
-            + ' FROM Organization';
+        String query = 'SELECT ' + String.join(organizationMetadata.fields.allFieldNames, ', ') + ' FROM Organization';
 
         organization = (Organization)Database.query(query);
     }
