@@ -27,7 +27,6 @@ public virtual class SObjectMetadata {
     @AuraEnabled public String labelPlural                   {get; private set;}
     @AuraEnabled public String localName                     {get; private set;}
     @AuraEnabled public String name                          {get; private set;}
-    @AuraEnabled public String nameField                     {get; private set;}
     @AuraEnabled public String namespace                     {get; private set;}
     @AuraEnabled public List<RecordTypeMetadata> recordTypes {get; private set;}
     @AuraEnabled public String tabIcon                       {get; private set;}
@@ -64,7 +63,6 @@ public virtual class SObjectMetadata {
         this.localName            = this.getDescribe().getLocalName();
 
         this.setHasHistoryTrackingEnabled();
-        this.setFields();
         this.setFieldSets();
         this.setNamespace();
         this.setRecordTypes();
@@ -96,28 +94,6 @@ public virtual class SObjectMetadata {
         else historyObjectName = this.name + 'History';
 
         this.hasHistoryTrackingEnabled = Schema.getGlobalDescribe().containsKey(historyObjectName);
-    }
-
-    private void setFields() {
-        this.fields = new FIelds();
-        this.fields.allFieldNames        = new List<String>();
-        this.fields.accessibleFieldNames = new List<String>();
-        this.fields.createableFieldNames = new List<String>();
-        this.fields.requiredFieldNames   = new List<String>();
-        this.fields.updateableFieldNames = new List<String>();
-
-        for(Schema.SObjectField field : this.getDescribe().fields.getMap().values()) {
-            Schema.DescribeFieldResult fieldDescribe = field.getDescribe();
-            String fieldName = fieldDescribe.getName();
-
-            if(fieldDescribe.isNameField()) this.nameField = fieldDescribe.getName();
-
-            this.fields.allFieldNames.add(fieldName);
-            if(fieldDescribe.isAccessible()) this.fields.accessibleFieldNames.add(fieldName);
-            if(fieldDescribe.isCreateable()) this.fields.createableFieldNames.add(fieldName);
-            if(fieldDescribe.isNillable() == false && fieldDescribe.isCreateable()) this.fields.requiredFieldNames.add(fieldName);
-            if(fieldDescribe.isUpdateable()) this.fields.updateableFieldNames.add(fieldName);
-        }
     }
 
     private void setFieldSets() {
@@ -161,11 +137,45 @@ public virtual class SObjectMetadata {
     }
 
     public virtual class Fields {
+
+        // Aura-enabled member variables
+        @AuraEnabled public String nameField                  {get; private set;}
         @AuraEnabled public List<String> accessibleFieldNames {get; private set;}
         @AuraEnabled public List<String> allFieldNames        {get; private set;}
         @AuraEnabled public List<String> createableFieldNames {get; private set;}
         @AuraEnabled public List<String> requiredFieldNames   {get; private set;}
         @AuraEnabled public List<String> updateableFieldNames {get; private set;}
+
+        // Private variables - marked as transient so they aren't included during JSON.serialize()
+        private transient Schema.DescribeSObjectResult sobjectDescribe;
+
+        public Fields(Schema.DescribeSObjectResult sobjectDescribe) {
+            this.sobjectDescribe = sobjectDescribe;
+
+            this.init();
+        }
+
+        private void init() {
+            this.allFieldNames        = new List<String>();
+            this.accessibleFieldNames = new List<String>();
+            this.createableFieldNames = new List<String>();
+            this.requiredFieldNames   = new List<String>();
+            this.updateableFieldNames = new List<String>();
+
+            for(Schema.SObjectField field : this.sobjectDescribe.fields.getMap().values()) {
+                Schema.DescribeFieldResult fieldDescribe = field.getDescribe();
+                String fieldName = fieldDescribe.getName();
+
+                if(fieldDescribe.isNameField()) this.nameField = fieldDescribe.getName();
+
+                this.allFieldNames.add(fieldName);
+                if(fieldDescribe.isAccessible()) this.accessibleFieldNames.add(fieldName);
+                if(fieldDescribe.isCreateable()) this.createableFieldNames.add(fieldName);
+                if(fieldDescribe.isNillable() == false && fieldDescribe.isCreateable()) this.requiredFieldNames.add(fieldName);
+                if(fieldDescribe.isUpdateable()) this.updateableFieldNames.add(fieldName);
+            }
+        }
+
     }
 
     public virtual class RecordTypeMetadata {
