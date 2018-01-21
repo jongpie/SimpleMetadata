@@ -4,12 +4,12 @@
 *************************************************************************************************/
 public virtual class EnvironmentMetadata {
 
+    // Some info must be queried from the Organization object, so cache the results to limit query count to 1
     private static Organization organization;
 
     static {
         SObjectMetadata organizationMetadata = new SObjectMetadata(Schema.Organization.SObjectType);
         String query = 'SELECT ' + String.join(organizationMetadata.fields.allFieldNames, ', ') + ' FROM Organization';
-
         organization = (Organization)Database.query(query);
     }
 
