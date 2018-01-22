@@ -26,7 +26,7 @@ A lightweight library of Apex classes for Salesforce that provide easy access to
 
     2. By passing the SObject Type in the constructor
     ```
-    new SObjectMetadata(Schema.Account.SObjectType)`
+    new SObjectMetadata(Schema.Account.SObjectType)
     ```
 
     ### Sample Usage
