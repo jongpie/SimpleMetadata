@@ -102,3 +102,41 @@ A lightweight library of Apex classes for Salesforce that provide easy access to
     Id myQueueId = '00G0Y0000000000';
     new QueueMetadata(myQueueId);
     ```
+
+    <details><summary>See Sample JSON</summary>
+
+        {
+            "doesIncludeBosses": true,
+            "doesSendEmailToMembers": true,
+            "email": "fake@test.com",
+            "label": "My Queue",
+            "name": "My_Queue",
+            "ownerId": "0050Y0000000000000",
+            "queueId": "00G0Y0000011111111",
+            "queueMembers": [
+                {
+                    "queueId": "00G0Y0000011111111",
+                    "queueMemberId": "0110Y000000fHUyQAM",
+                    "type": "User",
+                    "userOrGroupId": "0050Y000001LrM3QAK"
+                },
+                {
+                    "queueId": "00G0Y0000011111111",
+                    "queueMemberId": "0110Y0000000000000",
+                    "type": "User",
+                    "userOrGroupId": "0050Y0000000000000"
+                },
+                {
+                    "queueId": "00G0Y0000011111111",
+                    "queueMemberId": "0110Y000001q5sUQAQ",
+                    "type": "Group",
+                    "userOrGroupId": "00G0Y000001inOQUAY"
+                }
+            ],
+            "supportedSObjectNames": [
+                "Lead",
+                "Case"
+            ]
+        }
+
+    </details>
