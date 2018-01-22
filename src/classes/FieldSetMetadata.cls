@@ -35,15 +35,15 @@ public virtual class FieldSetMetadata {
         this.setFields();
     }
 
+    public override String toString() {
+        return JSON.serialize(this);
+    }
+
     public Schema.FieldSet getFieldSet() {
         // If a JSON object is deserialized into an instance of this class, private variables are null, so set them when needed
         if(this.fieldSet == null) this.fieldSet = this.sobjectMetadata.getDescribe().fieldSets.getMap().get(this.name);
 
         return this.fieldSet;
-    }
-
-    public override String toString() {
-        return JSON.serialize(this);
     }
 
     private void setLocalName() {

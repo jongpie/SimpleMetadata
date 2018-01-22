@@ -1,0 +1,64 @@
+/*************************************************************************************************
+* This file is part of the SimpleMetadata project, released under the MIT License.               *
+* See LICENSE file or go to https://github.com/jongpie/SimpleMetadata for full license details.  *
+*************************************************************************************************/
+public virtual class EnvironmentMetadata {
+
+    // Some info must be queried from the Organization object, so cache the results to limit query count to 1
+    private static Organization organization;
+
+    static {
+        organization = [SELECT Id, Name, InstanceName, OrganizationType, IsSandbox FROM Organization LIMIT 1];
+    }
+
+    // Aura-enabled member variables
+    @AuraEnabled public String baseURL                       {get; private set;}
+    @AuraEnabled public String instanceName                  {get; private set;}
+    @AuraEnabled public Boolean isChatterEnabled             {get; private set;}
+    @AuraEnabled public Boolean isKnowledgeEnabled           {get; private set;}
+    @AuraEnabled public Boolean isMultiCurrencyEnabled       {get; private set;}
+    @AuraEnabled public Boolean isPersonAccountEnabled       {get; private set;}
+    @AuraEnabled public Boolean isProduction                 {get; private set;}
+    @AuraEnabled public Boolean isSandbox                    {get; private set;}
+    @AuraEnabled public Boolean isTerritoryManagementEnabled {get; private set;}
+    @AuraEnabled public String name                          {get; private set;}
+    @AuraEnabled public Id organizationId                    {get; private set;}
+    @AuraEnabled public String organizationType              {get; private set;}
+    @AuraEnabled public List<String> sobjectTypeNames        {get; private set;}
+
+    // Private variables - marked as transient so they aren't included during JSON.serialize()
+    private transient Map<String, Schema.SObjectType> sobjectTypes;
+
+    public EnvironmentMetadata() {
+        this.sobjectTypes = Schema.getGlobalDescribe();
+
+        this.baseURL                      = URL.getSalesforceBaseUrl().toExternalForm();
+        this.instanceName                 = organization.InstanceName;
+        this.isChatterEnabled             = this.sobjectTypes.containsKey('FeedItem');
+        this.isKnowledgeEnabled           = this.sobjectTypes.containsKey('KnowledgeArticle');
+        this.isMultiCurrencyEnabled       = this.sobjectTypes.containsKey('CurrencyType');
+        this.isPersonAccountEnabled       = this.sobjectTypes.get('Account').getDescribe().fields.getMap().containsKey('IsPersonAccount');
+        this.isProduction                 = organization.IsSandbox == false;
+        this.isSandbox                    = organization.IsSandbox;
+        this.isTerritoryManagementEnabled = this.sobjectTypes.containsKey('Territory');
+        this.name                         = organization.Name;
+        this.organizationId               = organization.Id;
+        this.organizationType             = organization.OrganizationType;
+
+        this.setSObjectTypeNames();
+    }
+
+    public override String toString() {
+        return JSON.serialize(this);
+    }
+
+    private void setSObjectTypeNames() {
+        // We could just use this.sobjectTypeNames = new List<String>(this.sobjectTypes.keySet());
+        // However, it returns the names in lowercase, which can cause problems with Javascript/Lightning since it's case-sensitive
+        this.sobjectTypeNames  = new List<String>();
+        for(Schema.SObjectType sobjectType : this.sobjectTypes.values()) {
+            this.sobjectTypeNames.add(String.valueOf(sobjectType));
+        }
+    }
+
+}

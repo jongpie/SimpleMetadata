@@ -66,7 +66,7 @@ public virtual class FieldMetadata {
         this.isGroupable         = this.getDescribe().isGroupable();
         this.isNameField         = this.getDescribe().isNameField();
         this.isNillable          = this.getDescribe().isNillable();
-        this.isRequired          = this.getDescribe().isNillable() == false; // If a field is NOT nillable, then it's required
+        this.isRequired          = this.getDescribe().isNillable() == false && this.getDescribe().isCreateable(); // If a field is NOT nillable, then it's required
         this.isSortable          = this.getDescribe().isSortable();
         this.isUpdateable        = this.getDescribe().isUpdateable();
         this.label               = this.getDescribe().getLabel();
@@ -83,6 +83,10 @@ public virtual class FieldMetadata {
         this.setRelationshipReferences();
     }
 
+    public override String toString() {
+        return JSON.serialize(this);
+    }
+
     public Schema.DescribeFieldResult getDescribe() {
         // If a JSON object is deserialized into an instance of this class, private variables are null, so set them when needed
         if(this.fieldDescribe == null) this.fieldDescribe = this.getSObjectField().getDescribe();
@@ -95,10 +99,6 @@ public virtual class FieldMetadata {
         if(this.sobjectField == null) this.sobjectField = Schema.getGlobalDescribe().get(this.sobjectName).getDescribe().fields.getMap().get(this.name);
 
         return this.sobjectField;
-    }
-
-    public override String toString() {
-        return JSON.serialize(this);
     }
 
     private void setNamespace() {

@@ -5,27 +5,27 @@
 public virtual class SObjectMetadata {
 
     // Aura-enabled member variables
+    @AuraEnabled public Boolean hasMultiCurrency             {get; private set;}
     @AuraEnabled public Boolean hasSubtypes                  {get; private set;}
     @AuraEnabled public Boolean isAccessible                 {get; private set;}
+    @AuraEnabled public Boolean isChatterFeedEnabled         {get; private set;}
     @AuraEnabled public Boolean isCreateable                 {get; private set;}
     @AuraEnabled public Boolean isCustom                     {get; private set;}
     @AuraEnabled public Boolean isCustomSetting              {get; private set;}
     @AuraEnabled public Boolean isDeletable                  {get; private set;}
-    @AuraEnabled public Boolean isFeedEnabled                {get; private set;}
     @AuraEnabled public Boolean isMruEnabled                 {get; private set;}
     @AuraEnabled public Boolean isMergeable                  {get; private set;}
     @AuraEnabled public Boolean isQueryable                  {get; private set;}
     @AuraEnabled public Boolean isSearchable                 {get; private set;}
     @AuraEnabled public Boolean isUndeletable                {get; private set;}
     @AuraEnabled public Boolean isUpdateable                 {get; private set;}
-    @AuraEnabled public List<String> fieldNames              {get; private set;}
+    @AuraEnabled public Fields fields                        {get; private set;}
     @AuraEnabled public List<String> fieldSetNames           {get; private set;}
     @AuraEnabled public String keyPrefix                     {get; private set;}
     @AuraEnabled public String label                         {get; private set;}
     @AuraEnabled public String labelPlural                   {get; private set;}
     @AuraEnabled public String localName                     {get; private set;}
     @AuraEnabled public String name                          {get; private set;}
-    @AuraEnabled public String nameField                     {get; private set;}
     @AuraEnabled public String namespace                     {get; private set;}
     @AuraEnabled public List<RecordTypeMetadata> recordTypes {get; private set;}
     @AuraEnabled public String tabIcon                       {get; private set;}
@@ -41,29 +41,34 @@ public virtual class SObjectMetadata {
     public SObjectMetadata(String sobjectName) {
         this.name = sobjectName;
 
-        this.hasSubtypes     = this.getDescribe().getHasSubtypes();
-        this.isAccessible    = this.getDescribe().isAccessible();
-        this.isCreateable    = this.getDescribe().isCreateable();
-        this.isCustom        = this.getDescribe().isCustom();
-        this.isCustomSetting = this.getDescribe().isCustomSetting();
-        this.isDeletable     = this.getDescribe().isDeletable();
-        this.isFeedEnabled   = this.getDescribe().isFeedEnabled();
-        this.isMruEnabled    = this.getDescribe().isMruEnabled();
-        this.isMergeable     = this.getDescribe().isMergeable();
-        this.isQueryable     = this.getDescribe().isQueryable();
-        this.isSearchable    = this.getDescribe().isSearchable();
-        this.isUndeletable   = this.getDescribe().isUndeletable();
-        this.isUpdateable    = this.getDescribe().isUpdateable();
-        this.keyPrefix       = this.getDescribe().getKeyPrefix();
-        this.label           = this.getDescribe().getLabel();
-        this.labelPlural     = this.getDescribe().getLabelPlural();
-        this.localName       = this.getDescribe().getLocalName();
+        this.hasMultiCurrency     = this.getDescribe().fields.getMap().containsKey('CurrencyIsoCode');
+        this.hasSubtypes          = this.getDescribe().getHasSubtypes();
+        this.isAccessible         = this.getDescribe().isAccessible();
+        this.isChatterFeedEnabled = this.getDescribe().isFeedEnabled();
+        this.isCreateable         = this.getDescribe().isCreateable();
+        this.isCustom             = this.getDescribe().isCustom();
+        this.isCustomSetting      = this.getDescribe().isCustomSetting();
+        this.isDeletable          = this.getDescribe().isDeletable();
+        this.isMergeable          = this.getDescribe().isMergeable();
+        this.isMRUEnabled         = this.getDescribe().isMruEnabled();
+        this.isQueryable          = this.getDescribe().isQueryable();
+        this.isSearchable         = this.getDescribe().isSearchable();
+        this.isUndeletable        = this.getDescribe().isUndeletable();
+        this.isUpdateable         = this.getDescribe().isUpdateable();
+        this.fields               = new Fields(this.getDescribe());
+        this.keyPrefix            = this.getDescribe().getKeyPrefix();
+        this.label                = this.getDescribe().getLabel();
+        this.labelPlural          = this.getDescribe().getLabelPlural();
+        this.localName            = this.getDescribe().getLocalName();
 
-        this.setFields();
         this.setFieldSets();
         this.setNamespace();
         this.setRecordTypes();
         this.setTabIcon();
+    }
+
+    public override String toString() {
+        return JSON.serialize(this);
     }
 
     public Schema.DescribeSObjectResult getDescribe() {
@@ -78,21 +83,6 @@ public virtual class SObjectMetadata {
         if(this.sobjectType == null) this.sobjectType = Schema.getGlobalDescribe().get(this.name);
 
         return this.sobjectType;
-    }
-
-    public override String toString() {
-        return JSON.serialize(this);
-    }
-
-    private void setFields() {
-        this.fieldNames = new List<String>();
-        for(Schema.SObjectField field : this.getDescribe().fields.getMap().values()) {
-            Schema.DescribeFieldResult fieldDescribe = field.getDescribe();
-
-            if(fieldDescribe.isNameField()) this.nameField = fieldDescribe.getName();
-
-            this.fieldNames.add(fieldDescribe.getName());
-        }
     }
 
     private void setFieldSets() {
@@ -133,6 +123,48 @@ public virtual class SObjectMetadata {
         // Hardcoded exceptions - Salesforce doesn't return SVGs for these objects, so hardcoding is necessary
         if(this.tabIcon == null && this.name == 'Asset') this.tabIcon = 'standard:maintenance_asset';
         if(this.tabIcon == null && this.name == 'AssetRelationship') this.tabIcon = 'standard:asset_relationship';
+    }
+
+    public virtual class Fields {
+
+        // Aura-enabled member variables
+        @AuraEnabled public String nameField                  {get; private set;}
+        @AuraEnabled public List<String> accessibleFieldNames {get; private set;}
+        @AuraEnabled public List<String> allFieldNames        {get; private set;}
+        @AuraEnabled public List<String> createableFieldNames {get; private set;}
+        @AuraEnabled public List<String> requiredFieldNames   {get; private set;}
+        @AuraEnabled public List<String> updateableFieldNames {get; private set;}
+
+        // Private variables - marked as transient so they aren't included during JSON.serialize()
+        private transient Schema.DescribeSObjectResult sobjectDescribe;
+
+        public Fields(Schema.DescribeSObjectResult sobjectDescribe) {
+            this.sobjectDescribe = sobjectDescribe;
+
+            this.init();
+        }
+
+        private void init() {
+            this.allFieldNames        = new List<String>();
+            this.accessibleFieldNames = new List<String>();
+            this.createableFieldNames = new List<String>();
+            this.requiredFieldNames   = new List<String>();
+            this.updateableFieldNames = new List<String>();
+
+            for(Schema.SObjectField field : this.sobjectDescribe.fields.getMap().values()) {
+                Schema.DescribeFieldResult fieldDescribe = field.getDescribe();
+                String fieldName = fieldDescribe.getName();
+
+                if(fieldDescribe.isNameField()) this.nameField = fieldDescribe.getName();
+
+                this.allFieldNames.add(fieldName);
+                if(fieldDescribe.isAccessible()) this.accessibleFieldNames.add(fieldName);
+                if(fieldDescribe.isCreateable()) this.createableFieldNames.add(fieldName);
+                if(fieldDescribe.isNillable() == false && fieldDescribe.isCreateable()) this.requiredFieldNames.add(fieldName);
+                if(fieldDescribe.isUpdateable()) this.updateableFieldNames.add(fieldName);
+            }
+        }
+
     }
 
     public virtual class RecordTypeMetadata {
