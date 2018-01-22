@@ -5,7 +5,7 @@ public virtual class QueueMetadata {
     private static Map<String, Group> queriedQueuesByDeveloperName;
 
     static {
-        // Query for caching queues
+        // Query & cache queues
         queriedQueuesById            = new Map<Id, Group>();
         queriedQueuesByDeveloperName = new Map<String, Group>();
 
@@ -41,7 +41,7 @@ public virtual class QueueMetadata {
 
     public QueueMetadata(String queueName) {
         // Since ID is a type of String, calling QueueMetadata('00G0Y000003ASYI') treats the string as the name, instead of the intended ID
-        // To compensate, check of the 'queueName' is really the queueId
+        // To compensate, check if the 'queueName' is really the 'queueId'
         if(queueName instanceOf Id) this.queue = queriedQueuesById.get(queueName);
         else this.queue = queriedQueuesByDeveloperName.get(queueName);
 
