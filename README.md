@@ -7,6 +7,13 @@ A lightweight library of Apex classes for Salesforce that provide easy access to
        src="https://raw.githubusercontent.com/afawcett/githubsfdeploy/master/deploy.png">
 </a>
 
+## EnvironmentMetadata.cls
+* Contains metadata information for the current environment. No parameters are needed to construct it.
+
+    ```
+    new EnvironmentMetadata()
+    ```
+
 ## SObjectMetadata.cls
 * Contains metadata information for the specified SObject. There are 2 ways to create an instance of SObjectMetadata
 
@@ -78,4 +85,18 @@ A lightweight library of Apex classes for Salesforce that provide easy access to
     2. By passing the FieldSet in the constructor
     ```
     new FieldSetMetadata(SObjectType.Lead.FieldSets.MyFieldSet);
+    ```
+
+## QueueMetadata.cls
+* Contains metadata information for a queue, including the queue members and the supported SObject names. There are 2 ways to create an instance of QueueMetadata
+
+    1. By passing the Queue's API name (DeveloperName) in the constructor
+    ```
+    new QueueMetadata('My_Queue_Developer_Name');
+    ```
+
+    2. By passing the Queue's ID in the constructor
+    ```
+    Id myQueueId = '00G0Y0000000000';
+    new QueueMetadata(myQueueId);
     ```
