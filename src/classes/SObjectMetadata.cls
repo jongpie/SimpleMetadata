@@ -5,7 +5,6 @@
 public virtual class SObjectMetadata {
 
     // Aura-enabled member variables
-    @AuraEnabled public Boolean hasHistoryTrackingEnabled    {get; private set;}
     @AuraEnabled public Boolean hasMultiCurrency             {get; private set;}
     @AuraEnabled public Boolean hasSubtypes                  {get; private set;}
     @AuraEnabled public Boolean isAccessible                 {get; private set;}
@@ -62,7 +61,6 @@ public virtual class SObjectMetadata {
         this.labelPlural          = this.getDescribe().getLabelPlural();
         this.localName            = this.getDescribe().getLocalName();
 
-        this.setHasHistoryTrackingEnabled();
         this.setFieldSets();
         this.setNamespace();
         this.setRecordTypes();
@@ -85,15 +83,6 @@ public virtual class SObjectMetadata {
         if(this.sobjectType == null) this.sobjectType = Schema.getGlobalDescribe().get(this.name);
 
         return this.sobjectType;
-    }
-
-    private void setHasHistoryTrackingEnabled() {
-        String historyObjectName;
-        // The naming convention is slightly different for custom objects (MyCustomObject__History) vs standard (LeadHistory)
-        if(this.name.endsWith('__c')) historyObjectName = this.name.substring(0, this.name.length() - 1) + 'History';
-        else historyObjectName = this.name + 'History';
-
-        this.hasHistoryTrackingEnabled = Schema.getGlobalDescribe().containsKey(historyObjectName);
     }
 
     private void setFieldSets() {
