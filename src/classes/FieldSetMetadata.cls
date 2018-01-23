@@ -4,18 +4,14 @@
 *************************************************************************************************/
 public virtual class FieldSetMetadata {
 
-    // Aura-enabled member variables
-    @AuraEnabled String description                           {get; private set;}
-    @AuraEnabled List<FieldSetMemberMetadata> fieldSetMembers {get; private set;}
-    @AuraEnabled String label                                 {get; private set;}
-    @AuraEnabled String localName                             {get; private set;}
-    @AuraEnabled String name                                  {get; private set;}
-    @AuraEnabled String namespace                             {get; private set;}
-    @AuraEnabled String sobjectName                           {get; private set;}
-    @AuraEnabled SObjectMetadata sobjectMetadata              {get; private set;}
-
-    // Private variables - marked as transient so they aren't included during JSON.serialize()
-    private transient Schema.FieldSet fieldSet;
+    @AuraEnabled public final String description                           {get; private set;}
+    @AuraEnabled public final List<FieldSetMemberMetadata> fieldSetMembers {get; private set;}
+    @AuraEnabled public final String label                                 {get; private set;}
+    @AuraEnabled public final String localName                             {get; private set;}
+    @AuraEnabled public final String name                                  {get; private set;}
+    @AuraEnabled public final String namespace                             {get; private set;}
+    @AuraEnabled public final String sobjectName                           {get; private set;}
+    @AuraEnabled public final SObjectMetadata sobjectMetadata              {get; private set;}
 
     public FieldSetMetadata(Schema.FieldSet fieldSet) {
         this(String.valueOf(fieldset.getSObjectType()), fieldSet.getName());
@@ -25,73 +21,59 @@ public virtual class FieldSetMetadata {
         this.sobjectName = sobjectName;
         this.name        = fieldSetName;
 
-        this.sobjectMetadata = new SObjectMetadata(sobjectName);
+        Schema.DescribeSObjectResult sobjectDescribe = Schema.getGlobalDescribe().get(sobjectName).getDescribe();
+        Schema.FieldSet fieldSet                     = sobjectDescribe.fieldSets.getMap().get(fieldSetName);
 
-        this.description = this.getFieldSet().getDescription();
-        this.label       = this.getFieldSet().getLabel();
-        this.namespace   = this.getFieldSet().getNamespace();
-
-        this.setLocalName();
-        this.setFields();
+        this.description     = fieldSet.getDescription();
+        this.fieldSetMembers = this.getFieldSetMembers(fieldSet);
+        this.label           = fieldSet.getLabel();
+        this.localName       = this.getLocalName();
+        this.namespace       = fieldSet.getNamespace();
     }
 
-    public override String toString() {
-        return JSON.serialize(this);
-    }
-
-    public Schema.FieldSet getFieldSet() {
-        // If a JSON object is deserialized into an instance of this class, private variables are null, so set them when needed
-        if(this.fieldSet == null) this.fieldSet = this.sobjectMetadata.getDescribe().fieldSets.getMap().get(this.name);
-
-        return this.fieldSet;
-    }
-
-    private void setLocalName() {
-        Integer localNameIndex = this.name.replace('__c', '').indexOf('__');
-        // Add to to the localNameIndex to compensate for the '__' part of the namespace
-        this.localName = localNameIndex < 0 ? null : this.name.substring(localNameIndex + 2, this.name.length());
-    }
-
-    private void setFields() {
-        this.fieldSetMembers = new List<FieldSetMemberMetadata>();
+    private List<FieldSetMemberMetadata> getFieldSetMembers(Schema.FieldSet fieldSet) {
+        List<FieldSetMemberMetadata> fieldSetMembers = new List<FieldSetMemberMetadata>();
         for(Schema.FieldSetMember fieldSetMember : fieldSet.getFields()) {
             FieldSetMemberMetadata fieldSetMemberMetadata = new FieldSetMemberMetadata(sobjectName, fieldSetMember);
 
-            this.fieldSetMembers.add(fieldSetMemberMetadata);
+            fieldSetMembers.add(fieldSetMemberMetadata);
         }
+        return fieldSetMembers;
+    }
+
+    private String getLocalName() {
+        Integer localNameIndex = this.name.replace('__c', '').indexOf('__');
+        // Add to to the localNameIndex to compensate for the '__' part of the namespace
+        return localNameIndex < 0 ? null : this.name.substring(localNameIndex + 2, this.name.length());
     }
 
     public virtual class FieldSetMemberMetadata {
 
-        // Aura-enabled member variables
-        @AuraEnabled public String displayType          {get; private set;}
-        @AuraEnabled public FieldMetadata fieldMetadata {get; private set;}
-        @AuraEnabled public String fieldPath            {get; private set;}
-        @AuraEnabled public Boolean isDBRequired        {get; private set;}
-        @AuraEnabled public Boolean isRequired          {get; private set;}
-        @AuraEnabled public String label                {get; private set;}
-        @AuraEnabled public String sobjectName          {get; private set;}
-
-        // Private variables - marked as transient so they aren't included during JSON.serialize()
-        private transient Schema.FieldSetMember fieldSetMember;
+        @AuraEnabled public final String displayType          {get; private set;}
+        @AuraEnabled public final FieldMetadata fieldMetadata {get; private set;}
+        @AuraEnabled public final String fieldPath            {get; private set;}
+        @AuraEnabled public final Boolean isDBRequired        {get; private set;}
+        @AuraEnabled public final Boolean isRequired          {get; private set;}
+        @AuraEnabled public final String label                {get; private set;}
+        @AuraEnabled public final String sobjectName          {get; private set;}
 
         private FieldSetMemberMetadata(String sobjectName, Schema.FieldSetMember fieldSetMember) {
             this.sobjectName    = sobjectName;
-            this.fieldSetMember = fieldSetMember;
 
-            this.displayType  = this.fieldSetMember.getType().name();
-            this.fieldPath    = this.fieldSetMember.getFieldPath();
-            this.isDBRequired = this.fieldSetMember.getDBRequired();
-            this.isRequired   = this.fieldSetMember.getRequired();
-            this.label        = this.fieldSetMember.getLabel();
-
-            this.setFieldMetadata();
+            this.displayType   = fieldSetMember.getType().name();
+            this.fieldMetadata = this.getFieldMetadata(fieldSetMember);
+            this.fieldPath     = fieldSetMember.getFieldPath();
+            this.isDBRequired  = fieldSetMember.getDBRequired();
+            this.isRequired    = fieldSetMember.getRequired();
+            this.label         = fieldSetMember.getLabel();
         }
 
-        private void setFieldMetadata() {
-            List<String> fieldChain = this.fieldPath.split('\\.');
+        private FieldMetadata getFieldMetadata(Schema.FieldSetMember fieldSetMember) {
+            FieldMetadata fieldMetadata;
 
-            if(fieldChain.size() == 0) return;
+            List<String> fieldChain = fieldSetMember.getFieldPath().split('\\.');
+
+            if(fieldChain.size() == 0) return fieldMetadata;
 
             Schema.SObjectType currentFieldSObjectType = Schema.getGlobalDescribe().get(this.sobjectName);
             String currentFieldSObjectName = this.sobjectName;
@@ -111,9 +93,9 @@ public virtual class FieldSetMetadata {
                     }
 
                 }
-
-                this.fieldMetadata = new FieldMetadata(currentFieldSObjectName, currentFieldName);
             }
+
+            return new FieldMetadata(currentFieldSObjectName, currentFieldName);
         }
 
     }

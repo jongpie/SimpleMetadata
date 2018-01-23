@@ -4,43 +4,38 @@
 *************************************************************************************************/
 public virtual class FieldMetadata {
 
-    // Aura-enabled member variables
-    @AuraEnabled public Integer byteLength                           {get; private set;}
-    @AuraEnabled public Object defaultValue                          {get; private set;}
-    @AuraEnabled public Integer digits                               {get; private set;}
-    @AuraEnabled public String displayType                           {get; private set;}
-    @AuraEnabled public String inlineHelpText                        {get; private set;}
-    @AuraEnabled public Boolean isAccessible                         {get; private set;}
-    @AuraEnabled public Boolean isAutoNumber                         {get; private set;}
-    @AuraEnabled public Boolean isCalculated                         {get; private set;}
-    @AuraEnabled public Boolean isCaseSensitive                      {get; private set;}
-    @AuraEnabled public Boolean isCreateable                         {get; private set;}
-    @AuraEnabled public Boolean isCustom                             {get; private set;}
-    @AuraEnabled public Boolean isDefaultedOnCreate                  {get; private set;}
-    @AuraEnabled public Boolean isFilterable                         {get; private set;}
-    @AuraEnabled public Boolean isGroupable                          {get; private set;}
-    @AuraEnabled public Boolean isNameField                          {get; private set;}
-    @AuraEnabled public Boolean isNillable                           {get; private set;}
-    @AuraEnabled public Boolean isRequired                           {get; private set;}
-    @AuraEnabled public Boolean isSortable                           {get; private set;}
-    @AuraEnabled public Boolean isUpdateable                         {get; private set;}
-    @AuraEnabled public String label                                 {get; private set;}
-    @AuraEnabled public String localName                             {get; private set;}
-    @AuraEnabled public Integer maxLength                            {get; private set;}
-    @AuraEnabled public String name                                  {get; private set;}
-    @AuraEnabled public String namespace                             {get; private set;}
-    @AuraEnabled public List<PicklistEntryMetadata> picklistOptions  {get; private set;}
-    @AuraEnabled public Integer precision                            {get; private set;}
-    @AuraEnabled public String relationshipName                      {get; private set;}
-    @AuraEnabled public Integer relationshipOrder                    {get; private set;}
-    @AuraEnabled public List<SObjectMetadata> relationshipReferences {get; private set;}
-    @AuraEnabled public Integer scale                                {get; private set;}
-    @AuraEnabled public String soapType                              {get; private set;}
-    @AuraEnabled public String sobjectName                           {get; private set;}
-
-    // Private variables - marked as transient so they aren't included during JSON.serialize()
-    private transient Schema.DescribeFieldResult fieldDescribe;
-    private transient Schema.SObjectField sobjectField;
+    @AuraEnabled public final Integer byteLength                           {get; private set;}
+    @AuraEnabled public final Object defaultValue                          {get; private set;}
+    @AuraEnabled public final Integer digits                               {get; private set;}
+    @AuraEnabled public final String displayType                           {get; private set;}
+    @AuraEnabled public final String inlineHelpText                        {get; private set;}
+    @AuraEnabled public final Boolean isAccessible                         {get; private set;}
+    @AuraEnabled public final Boolean isAutoNumber                         {get; private set;}
+    @AuraEnabled public final Boolean isCalculated                         {get; private set;}
+    @AuraEnabled public final Boolean isCaseSensitive                      {get; private set;}
+    @AuraEnabled public final Boolean isCreateable                         {get; private set;}
+    @AuraEnabled public final Boolean isCustom                             {get; private set;}
+    @AuraEnabled public final Boolean isDefaultedOnCreate                  {get; private set;}
+    @AuraEnabled public final Boolean isFilterable                         {get; private set;}
+    @AuraEnabled public final Boolean isGroupable                          {get; private set;}
+    @AuraEnabled public final Boolean isNameField                          {get; private set;}
+    @AuraEnabled public final Boolean isNillable                           {get; private set;}
+    @AuraEnabled public final Boolean isRequired                           {get; private set;}
+    @AuraEnabled public final Boolean isSortable                           {get; private set;}
+    @AuraEnabled public final Boolean isUpdateable                         {get; private set;}
+    @AuraEnabled public final String label                                 {get; private set;}
+    @AuraEnabled public final String localName                             {get; private set;}
+    @AuraEnabled public final Integer maxLength                            {get; private set;}
+    @AuraEnabled public final String name                                  {get; private set;}
+    @AuraEnabled public final String namespace                             {get; private set;}
+    @AuraEnabled public final List<PicklistEntryMetadata> picklistOptions  {get; private set;}
+    @AuraEnabled public final Integer precision                            {get; private set;}
+    @AuraEnabled public final String relationshipName                      {get; private set;}
+    @AuraEnabled public final Integer relationshipOrder                    {get; private set;}
+    @AuraEnabled public final List<SObjectMetadata> relationshipReferences {get; private set;}
+    @AuraEnabled public final Integer scale                                {get; private set;}
+    @AuraEnabled public final String soapType                              {get; private set;}
+    @AuraEnabled public final String sobjectName                           {get; private set;}
 
     public FieldMetadata(Schema.SObjectType sobjectType, Schema.SObjectField sobjectField) {
         this(sobjectType.getDescribe().getName(), sobjectField.getDescribe().getName());
@@ -50,102 +45,82 @@ public virtual class FieldMetadata {
         this.sobjectName     = sobjectName;
         this.name            = fieldName;
 
-        this.byteLength          = this.getDescribe().getByteLength();
-        this.defaultValue        = this.getDescribe().getDefaultValue();
-        this.digits              = this.getDescribe().getDigits();
-        this.displayType         = this.getDescribe().getType().name();
-        this.inlineHelpText      = this.getDescribe().getInlineHelpText();
-        this.isAccessible        = this.getDescribe().isAccessible();
-        this.isAutoNumber        = this.getDescribe().isAutoNumber();
-        this.isCalculated        = this.getDescribe().isCalculated();
-        this.isCaseSensitive     = this.getDescribe().isCaseSensitive();
-        this.isCreateable        = this.getDescribe().isCreateable();
-        this.isCustom            = this.getDescribe().isCustom();
-        this.isDefaultedOnCreate = this.getDescribe().isDefaultedOnCreate();
-        this.isFilterable        = this.getDescribe().isFilterable();
-        this.isGroupable         = this.getDescribe().isGroupable();
-        this.isNameField         = this.getDescribe().isNameField();
-        this.isNillable          = this.getDescribe().isNillable();
-        this.isRequired          = this.getDescribe().isNillable() == false && this.getDescribe().isCreateable(); // If a field is NOT nillable, then it's required
-        this.isSortable          = this.getDescribe().isSortable();
-        this.isUpdateable        = this.getDescribe().isUpdateable();
-        this.label               = this.getDescribe().getLabel();
-        this.localName           = this.getDescribe().getLocalName();
-        this.maxLength           = this.getDescribe().getLength();
-        this.precision           = this.getDescribe().getPrecision();
-        this.relationshipName    = this.getDescribe().getRelationshipName();
-        this.relationshipOrder   = this.getDescribe().getRelationshipOrder();
-        this.scale               = this.getDescribe().getScale();
-        this.soapType            = this.getDescribe().getSOAPType().name();
+        Schema.DescribeSObjectResult sobjectDescribe = Schema.getGlobalDescribe().get(sobjectName).getDescribe();
+        Schema.DescribeFieldResult fieldDescribe     = sobjectDescribe.fields.getMap().get(fieldName).getDescribe();
 
-        this.setNamespace();
-        this.setPicklistOptions();
-        this.setRelationshipReferences();
+        this.byteLength             = fieldDescribe.getByteLength();
+        this.defaultValue           = fieldDescribe.getDefaultValue();
+        this.digits                 = fieldDescribe.getDigits();
+        this.displayType            = fieldDescribe.getType().name();
+        this.inlineHelpText         = fieldDescribe.getInlineHelpText();
+        this.isAccessible           = fieldDescribe.isAccessible();
+        this.isAutoNumber           = fieldDescribe.isAutoNumber();
+        this.isCalculated           = fieldDescribe.isCalculated();
+        this.isCaseSensitive        = fieldDescribe.isCaseSensitive();
+        this.isCreateable           = fieldDescribe.isCreateable();
+        this.isCustom               = fieldDescribe.isCustom();
+        this.isDefaultedOnCreate    = fieldDescribe.isDefaultedOnCreate();
+        this.isFilterable           = fieldDescribe.isFilterable();
+        this.isGroupable            = fieldDescribe.isGroupable();
+        this.isNameField            = fieldDescribe.isNameField();
+        this.isNillable             = fieldDescribe.isNillable();
+        this.isRequired             = fieldDescribe.isNillable() == false && fieldDescribe.isCreateable(); // If a field is NOT nillable, then it's required
+        this.isSortable             = fieldDescribe.isSortable();
+        this.isUpdateable           = fieldDescribe.isUpdateable();
+        this.label                  = fieldDescribe.getLabel();
+        this.localName              = fieldDescribe.getLocalName();
+        this.maxLength              = fieldDescribe.getLength();
+        this.namespace              = this.getNamespace();
+        this.picklistOptions        = this.getPicklistOptions(fieldDescribe);
+        this.precision              = fieldDescribe.getPrecision();
+        this.relationshipName       = fieldDescribe.getRelationshipName();
+        this.relationshipOrder      = fieldDescribe.getRelationshipOrder();
+        this.relationshipReferences = this.getRelationshipReferences(fieldDescribe);
+        this.scale                  = fieldDescribe.getScale();
+        this.soapType               = fieldDescribe.getSOAPType().name();
     }
 
-    public override String toString() {
-        return JSON.serialize(this);
-    }
-
-    public Schema.DescribeFieldResult getDescribe() {
-        // If a JSON object is deserialized into an instance of this class, private variables are null, so set them when needed
-        if(this.fieldDescribe == null) this.fieldDescribe = this.getSObjectField().getDescribe();
-
-        return this.fieldDescribe;
-    }
-
-    public Schema.SObjectField getSObjectField() {
-        // If a JSON object is deserialized into an instance of this class, private variables are null, so set them when needed
-        if(this.sobjectField == null) this.sobjectField = Schema.getGlobalDescribe().get(this.sobjectName).getDescribe().fields.getMap().get(this.name);
-
-        return this.sobjectField;
-    }
-
-    private void setNamespace() {
+    private String getNamespace() {
         Integer localNameIndex = this.name.replace('__c', '').indexOf('__');
-        this.namespace = localNameIndex < 0 ? null : this.name.substring(0, localNameIndex);
+        return localNameIndex < 0 ? null : this.name.substring(0, localNameIndex);
     }
 
-    private void setPicklistOptions() {
-        this.picklistOptions = new List<PicklistEntryMetadata>();
+    private List<PicklistEntryMetadata> getPicklistOptions(Schema.DescribeFieldResult fieldDescribe) {
+        List<PicklistEntryMetadata> picklistOptions = new List<PicklistEntryMetadata>();
 
-        if(this.getDescribe().getPickListValues().isEmpty()) return;
+        if(fieldDescribe.getPickListValues().isEmpty()) return picklistOptions;
 
-        this.picklistOptions.add(new PicklistEntryMetadata()); // Empty picklist value
-        for(Schema.PicklistEntry picklistEntry : this.getDescribe().getPickListValues()) {
-            this.picklistOptions.add(new PicklistEntryMetadata(picklistEntry));
+        picklistOptions.add(new PicklistEntryMetadata()); // Add an empty picklist value
+        for(Schema.PicklistEntry picklistEntry : fieldDescribe.getPickListValues()) {
+            picklistOptions.add(new PicklistEntryMetadata(picklistEntry));
         }
+        return picklistOptions;
     }
 
-    private void setRelationshipReferences() {
-        this.relationshipReferences = new List<SObjectMetadata>();
-        for(Schema.SObjectType sobjectType : this.fieldDescribe.getReferenceTo()) {
-            this.relationshipReferences.add(new SObjectMetadata(sobjectType));
+    private List<SObjectMetadata> getRelationshipReferences(Schema.DescribeFieldResult fieldDescribe) {
+        List<SObjectMetadata> relationshipReferences = new List<SObjectMetadata>();
+        for(Schema.SObjectType sobjectType : fieldDescribe.getReferenceTo()) {
+            relationshipReferences.add(new SObjectMetadata(sobjectType));
         }
+        return relationshipReferences;
     }
 
     public virtual class PicklistEntryMetadata {
 
-        // Aura-enabled member variables
-        @AuraEnabled public Boolean isDefaultValue {get; private set;}
-        @AuraEnabled public String label           {get; private set;}
-        @AuraEnabled public String value           {get; private set;}
+        @AuraEnabled public final Boolean isDefaultValue {get; private set;}
+        @AuraEnabled public final String label           {get; private set;}
+        @AuraEnabled public final String value           {get; private set;}
 
-        // Private variables - marked as transient so they aren't included during JSON.serialize()
-        private transient Schema.PicklistEntry picklistEntry;
-
-        private PicklistEntryMetadata() {
+        public PicklistEntryMetadata() {
+            this.isDefaultValue = false;
             this.label          = '--None--';
             this.value          = '';
-            this.isDefaultValue = false;
         }
 
-        private PicklistEntryMetadata(Schema.PicklistEntry picklistEntry) {
-            this.picklistEntry  = picklistEntry;
-
+        public PicklistEntryMetadata(Schema.PicklistEntry picklistEntry) {
+            this.isDefaultValue = picklistEntry.isDefaultValue();
             this.label          = picklistEntry.getLabel();
             this.value          = picklistEntry.getValue();
-            this.isDefaultValue = picklistEntry.isDefaultValue();
         }
 
     }
