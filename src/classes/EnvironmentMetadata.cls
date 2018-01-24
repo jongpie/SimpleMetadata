@@ -11,54 +11,47 @@ public virtual class EnvironmentMetadata {
         organization = [SELECT Id, Name, InstanceName, OrganizationType, IsSandbox FROM Organization LIMIT 1];
     }
 
-    // Aura-enabled member variables
-    @AuraEnabled public String baseURL                       {get; private set;}
-    @AuraEnabled public String instanceName                  {get; private set;}
-    @AuraEnabled public Boolean isChatterEnabled             {get; private set;}
-    @AuraEnabled public Boolean isKnowledgeEnabled           {get; private set;}
-    @AuraEnabled public Boolean isMultiCurrencyEnabled       {get; private set;}
-    @AuraEnabled public Boolean isPersonAccountEnabled       {get; private set;}
-    @AuraEnabled public Boolean isProduction                 {get; private set;}
-    @AuraEnabled public Boolean isSandbox                    {get; private set;}
-    @AuraEnabled public Boolean isTerritoryManagementEnabled {get; private set;}
-    @AuraEnabled public String name                          {get; private set;}
-    @AuraEnabled public Id organizationId                    {get; private set;}
-    @AuraEnabled public String organizationType              {get; private set;}
-    @AuraEnabled public List<String> sobjectTypeNames        {get; private set;}
-
-    // Private variables - marked as transient so they aren't included during JSON.serialize()
-    private transient Map<String, Schema.SObjectType> sobjectTypes;
+    @AuraEnabled public final String baseURL                       {get; private set;}
+    @AuraEnabled public final String instanceName                  {get; private set;}
+    @AuraEnabled public final Boolean isChatterEnabled             {get; private set;}
+    @AuraEnabled public final Boolean isKnowledgeEnabled           {get; private set;}
+    @AuraEnabled public final Boolean isMultiCurrencyEnabled       {get; private set;}
+    @AuraEnabled public final Boolean isPersonAccountEnabled       {get; private set;}
+    @AuraEnabled public final Boolean isProduction                 {get; private set;}
+    @AuraEnabled public final Boolean isSandbox                    {get; private set;}
+    @AuraEnabled public final Boolean isTerritoryManagementEnabled {get; private set;}
+    @AuraEnabled public final String name                          {get; private set;}
+    @AuraEnabled public final Id organizationId                    {get; private set;}
+    @AuraEnabled public final String organizationType              {get; private set;}
+    @AuraEnabled public final List<String> sobjectTypeNames        {get; private set;}
 
     public EnvironmentMetadata() {
-        this.sobjectTypes = Schema.getGlobalDescribe();
+        Map<String, Schema.SObjectType> sobjectTypes = Schema.getGlobalDescribe();
 
         this.baseURL                      = URL.getSalesforceBaseUrl().toExternalForm();
         this.instanceName                 = organization.InstanceName;
-        this.isChatterEnabled             = this.sobjectTypes.containsKey('FeedItem');
-        this.isKnowledgeEnabled           = this.sobjectTypes.containsKey('KnowledgeArticle');
-        this.isMultiCurrencyEnabled       = this.sobjectTypes.containsKey('CurrencyType');
-        this.isPersonAccountEnabled       = this.sobjectTypes.get('Account').getDescribe().fields.getMap().containsKey('IsPersonAccount');
+        this.isChatterEnabled             = sobjectTypes.containsKey('FeedItem');
+        this.isKnowledgeEnabled           = sobjectTypes.containsKey('KnowledgeArticle');
+        this.isMultiCurrencyEnabled       = sobjectTypes.containsKey('CurrencyType');
+        this.isPersonAccountEnabled       = sobjectTypes.get('Account').getDescribe().fields.getMap().containsKey('IsPersonAccount');
         this.isProduction                 = organization.IsSandbox == false;
         this.isSandbox                    = organization.IsSandbox;
-        this.isTerritoryManagementEnabled = this.sobjectTypes.containsKey('Territory');
+        this.isTerritoryManagementEnabled = sobjectTypes.containsKey('Territory');
         this.name                         = organization.Name;
         this.organizationId               = organization.Id;
         this.organizationType             = organization.OrganizationType;
-
-        this.setSObjectTypeNames();
+        this.sobjectTypeNames             = this.getSObjectTypeNames(sobjectTypes);
     }
 
-    public override String toString() {
-        return JSON.serialize(this);
-    }
-
-    private void setSObjectTypeNames() {
-        // We could just use this.sobjectTypeNames = new List<String>(this.sobjectTypes.keySet());
+    private List<String> getSObjectTypeNames(Map<String, Schema.SObjectType> sobjectTypes) {
+        // We could just use this.sobjectTypeNames = new List<String>(sobjectTypes.keySet());
         // However, it returns the names in lowercase, which can cause problems with Javascript/Lightning since it's case-sensitive
-        this.sobjectTypeNames  = new List<String>();
-        for(Schema.SObjectType sobjectType : this.sobjectTypes.values()) {
-            this.sobjectTypeNames.add(String.valueOf(sobjectType));
+        List<String> sobjectTypeNames  = new List<String>();
+        for(Schema.SObjectType sobjectType : sobjectTypes.values()) {
+            sobjectTypeNames.add(String.valueOf(sobjectType));
         }
+        sobjectTypeNames.sort();
+        return sobjectTypeNames;
     }
 
 }
