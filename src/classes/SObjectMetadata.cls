@@ -66,7 +66,7 @@ public virtual class SObjectMetadata {
     private List<String> getFieldSetNames(Schema.DescribeSObjectResult sobjectDescribe) {
         List<String> fieldSetNames = new List<String>();
         for(Schema.FieldSet fieldSet : sobjectDescribe.fieldSets.getMap().values()) {
-            this.fieldSetNames.add(fieldSet.getName());
+            fieldSetNames.add(fieldSet.getName());
         }
         return fieldSetNames;
     }
@@ -79,7 +79,7 @@ public virtual class SObjectMetadata {
     private List<RecordTypeMetadata> getRecordTypes(Schema.DescribeSObjectResult sobjectDescribe) {
         List<RecordTypeMetadata> recordTypes = new List<RecordTypeMetadata>();
         for(Schema.RecordTypeInfo recordTypeInfo : sobjectDescribe.getRecordTypeInfos()) {
-            this.recordTypes.add(new RecordTypeMetadata(recordTypeInfo));
+            recordTypes.add(new RecordTypeMetadata(recordTypeInfo));
         }
         return recordTypes;
     }
