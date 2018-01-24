@@ -27,7 +27,7 @@ public virtual class SObjectMetadata {
     @AuraEnabled public final String name                          {get; private set;}
     @AuraEnabled public final String namespace                     {get; private set;}
     @AuraEnabled public final List<RecordTypeMetadata> recordTypes {get; private set;}
-    @AuraEnabled public String tabIcon                       {get; private set;}
+    @AuraEnabled public final String tabIcon                       {get; private set;}
 
     public SObjectMetadata(Schema.SObjectType sobjectType) {
         this(sobjectType.getDescribe().getName());
