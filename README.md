@@ -1,7 +1,7 @@
 # SimpleMetadata
 [![Build Status](https://travis-ci.org/jongpie/SimpleMetadata.svg?branch=fieldset-metadata)](https://travis-ci.org/jongpie/SimpleMetadata)
 <br />
-A lightweight library of Apex classes for Salesforce that provide easy access to metadata information for frontend and backend Salesforce developers
+A lightweight library of Apex classes for Salesforce that provide easy access to metadata information
 <br />
 <br />
 <a href="https://githubsfdeploy.herokuapp.com" target="_blank">
