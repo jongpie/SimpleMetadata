@@ -5,13 +5,13 @@
 public virtual class QueueMetadata {
 
     // Stores cached query results
-    private static Map<Id, Group> queriedQueuesById;
-    private static Map<String, Group> queriedQueuesByDeveloperName;
+    private static final Map<Id, Group> QUERIED_QUEUES_BY_ID;
+    private static final Map<String, Group> QUERIED_QUEUES_BY_DEVELOPE_NAME;
 
     static {
         // Query & cache queues
-        queriedQueuesById            = new Map<Id, Group>();
-        queriedQueuesByDeveloperName = new Map<String, Group>();
+        QUERIED_QUEUES_BY_ID            = new Map<Id, Group>();
+        QUERIED_QUEUES_BY_DEVELOPE_NAME = new Map<String, Group>();
 
         for(Group queue : [
             SELECT DeveloperName, DoesIncludeBosses, DoesSendEmailToMembers, Email, Id, Name, OwnerId, RelatedId,
@@ -20,8 +20,8 @@ public virtual class QueueMetadata {
             FROM Group
             WHERE Type = 'Queue'
         ]) {
-            queriedQueuesById.put(queue.Id, queue);
-            queriedQueuesByDeveloperName.put(queue.DeveloperName, queue);
+            QUERIED_QUEUES_BY_ID.put(queue.Id, queue);
+            QUERIED_QUEUES_BY_DEVELOPE_NAME.put(queue.DeveloperName, queue);
         }
     }
 
@@ -36,15 +36,15 @@ public virtual class QueueMetadata {
     @AuraEnabled public final List<QueueMemberMetadata> queueMembers {get; private set;}
 
     public QueueMetadata(Id queueId) {
-        this(queriedQueuesById.get(queueId).DeveloperName);
+        this(QUERIED_QUEUES_BY_ID.get(queueId).DeveloperName);
     }
 
     public QueueMetadata(String queueName) {
         // Since ID is a type of String, calling QueueMetadata('00G0Y000003ASYI') treats the string as the name, instead of the intended ID
         // To compensate, check if the 'queueName' is really the 'queueId'
         Group queue;
-        if(queueName instanceOf Id) queue = queriedQueuesById.get(queueName);
-        else queue = queriedQueuesByDeveloperName.get(queueName);
+        if(queueName instanceOf Id) queue = QUERIED_QUEUES_BY_ID.get(queueName);
+        else queue = QUERIED_QUEUES_BY_DEVELOPE_NAME.get(queueName);
 
         this.doesIncludeBosses      = queue.DoesIncludeBosses;
         this.doesSendEmailToMembers = queue.DoesSendEmailToMembers;
