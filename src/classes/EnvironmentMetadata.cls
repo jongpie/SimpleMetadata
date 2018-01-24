@@ -48,7 +48,7 @@ public virtual class EnvironmentMetadata {
         // However, it returns the names in lowercase, which can cause problems with Javascript/Lightning since it's case-sensitive
         List<String> sobjectTypeNames  = new List<String>();
         for(Schema.SObjectType sobjectType : sobjectTypes.values()) {
-            this.sobjectTypeNames.add(String.valueOf(sobjectType));
+            sobjectTypeNames.add(String.valueOf(sobjectType));
         }
         sobjectTypeNames.sort();
         return sobjectTypeNames;
