@@ -2,10 +2,13 @@
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
     <types>
         <members>EnvironmentMetadata</members>
+        <members>EnvironmentMetadata_Tests</members>
         <members>FieldMetadata</members>
+        <members>FieldMetadata_Tests</members>
         <members>FieldSetMetadata</members>
         <members>QueueMetadata</members>
         <members>SObjectMetadata</members>
+        <members>SObjectMetadata_Tests</members>
         <name>ApexClass</name>
     </types>
     <version>41.0</version>
