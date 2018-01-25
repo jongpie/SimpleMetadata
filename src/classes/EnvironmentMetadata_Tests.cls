@@ -29,7 +29,7 @@ private class EnvironmentMetadata_Tests {
     }
 
     private static void validateAttributesAreSet(EnvironmentMetadata environmentMetadata) {
-        Organization organization = [SELECT Id, Name, InstanceName, OrganizationType, IsSandbox FROM Organization LIMIT 1];
+        Organization organization = [SELECT Id, Name, InstanceName, NamespacePrefix, OrganizationType, IsSandbox FROM Organization LIMIT 1];
         Map<String, Schema.SObjectType> sobjectTypes = Schema.getGlobalDescribe();
 
         System.assertEquals(URL.getSalesforceBaseUrl().toExternalForm(), environmentMetadata.baseURL);
@@ -42,6 +42,7 @@ private class EnvironmentMetadata_Tests {
         System.assertEquals(organization.IsSandbox, environmentMetadata.isSandbox);
         System.assertEquals(sobjectTypes.containsKey('Territory'), environmentMetadata.isTerritoryManagementEnabled);
         System.assertEquals(organization.Name, environmentMetadata.name);
+        System.assertEquals(organization.NamespacePrefix, environmentMetadata.namespace);
         System.assertEquals(organization.Id, environmentMetadata.organizationId);
         System.assertEquals(organization.OrganizationType, environmentMetadata.organizationType);
         //System.assert(environmentMetadata.sobjectTypeNames.containsAll(sobjectTypes.keySet()));

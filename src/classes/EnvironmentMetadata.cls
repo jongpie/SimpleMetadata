@@ -8,7 +8,7 @@ global virtual class EnvironmentMetadata {
     private static Organization organization;
 
     static {
-        organization = [SELECT Id, Name, InstanceName, OrganizationType, IsSandbox FROM Organization LIMIT 1];
+        organization = [SELECT Id, Name, InstanceName, NamespacePrefix, OrganizationType, IsSandbox FROM Organization LIMIT 1];
     }
 
     @AuraEnabled global final String baseURL                       {get; private set;}
@@ -21,6 +21,7 @@ global virtual class EnvironmentMetadata {
     @AuraEnabled global final Boolean isSandbox                    {get; private set;}
     @AuraEnabled global final Boolean isTerritoryManagementEnabled {get; private set;}
     @AuraEnabled global final String name                          {get; private set;}
+    @AuraEnabled global final String namespace                     {get; private set;}
     @AuraEnabled global final Id organizationId                    {get; private set;}
     @AuraEnabled global final String organizationType              {get; private set;}
     @AuraEnabled global final List<String> sobjectTypeNames        {get; private set;}
@@ -38,6 +39,7 @@ global virtual class EnvironmentMetadata {
         this.isSandbox                    = organization.IsSandbox;
         this.isTerritoryManagementEnabled = sobjectTypes.containsKey('Territory');
         this.name                         = organization.Name;
+        this.namespace                    = organization.NamespacePrefix;
         this.organizationId               = organization.Id;
         this.organizationType             = organization.OrganizationType;
         this.sobjectTypeNames             = this.getSObjectTypeNames(sobjectTypes);
