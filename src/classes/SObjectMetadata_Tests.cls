@@ -2,7 +2,7 @@
 private  class SObjectMetadata_Tests {
 
     @isTest
-    static void it_should_return_metadata_for_account_sobject_type() {
+    static void it_should_return_metadata_for_account_sobject_token() {
         SObjectMetadata accountMetadata = new SObjectMetadata(Schema.Account.SObjectType);
         validateAttributesAreSet(accountMetadata);
     }
