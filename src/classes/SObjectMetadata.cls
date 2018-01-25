@@ -2,38 +2,38 @@
 * This file is part of the SimpleMetadata project, released under the MIT License.               *
 * See LICENSE file or go to https://github.com/jongpie/SimpleMetadata for full license details.  *
 *************************************************************************************************/
-public virtual class SObjectMetadata {
+global virtual class SObjectMetadata {
 
-    @AuraEnabled public final Boolean hasMultiCurrency             {get; private set;}
-    @AuraEnabled public final Boolean hasSubtypes                  {get; private set;}
-    @AuraEnabled public final Boolean isAccessible                 {get; private set;}
-    @AuraEnabled public final Boolean isChatterFeedEnabled         {get; private set;}
-    @AuraEnabled public final Boolean isCreateable                 {get; private set;}
-    @AuraEnabled public final Boolean isCustom                     {get; private set;}
-    @AuraEnabled public final Boolean isCustomSetting              {get; private set;}
-    @AuraEnabled public final Boolean isDeletable                  {get; private set;}
-    @AuraEnabled public final Boolean isMruEnabled                 {get; private set;}
-    @AuraEnabled public final Boolean isMergeable                  {get; private set;}
-    @AuraEnabled public final Boolean isQueryable                  {get; private set;}
-    @AuraEnabled public final Boolean isSearchable                 {get; private set;}
-    @AuraEnabled public final Boolean isUndeletable                {get; private set;}
-    @AuraEnabled public final Boolean isUpdateable                 {get; private set;}
-    @AuraEnabled public final Fields fields                        {get; private set;}
-    @AuraEnabled public final List<String> fieldSetNames           {get; private set;}
-    @AuraEnabled public final String keyPrefix                     {get; private set;}
-    @AuraEnabled public final String label                         {get; private set;}
-    @AuraEnabled public final String labelPlural                   {get; private set;}
-    @AuraEnabled public final String localName                     {get; private set;}
-    @AuraEnabled public final String name                          {get; private set;}
-    @AuraEnabled public final String namespace                     {get; private set;}
-    @AuraEnabled public final List<RecordTypeMetadata> recordTypes {get; private set;}
-    @AuraEnabled public final String tabIcon                       {get; private set;}
+    @AuraEnabled global final Boolean hasMultiCurrency             {get; private set;}
+    @AuraEnabled global final Boolean hasSubtypes                  {get; private set;}
+    @AuraEnabled global final Boolean isAccessible                 {get; private set;}
+    @AuraEnabled global final Boolean isChatterFeedEnabled         {get; private set;}
+    @AuraEnabled global final Boolean isCreateable                 {get; private set;}
+    @AuraEnabled global final Boolean isCustom                     {get; private set;}
+    @AuraEnabled global final Boolean isCustomSetting              {get; private set;}
+    @AuraEnabled global final Boolean isDeletable                  {get; private set;}
+    @AuraEnabled global final Boolean isMruEnabled                 {get; private set;}
+    @AuraEnabled global final Boolean isMergeable                  {get; private set;}
+    @AuraEnabled global final Boolean isQueryable                  {get; private set;}
+    @AuraEnabled global final Boolean isSearchable                 {get; private set;}
+    @AuraEnabled global final Boolean isUndeletable                {get; private set;}
+    @AuraEnabled global final Boolean isUpdateable                 {get; private set;}
+    @AuraEnabled global final Fields fields                        {get; private set;}
+    @AuraEnabled global final List<String> fieldSetNames           {get; private set;}
+    @AuraEnabled global final String keyPrefix                     {get; private set;}
+    @AuraEnabled global final String label                         {get; private set;}
+    @AuraEnabled global final String labelPlural                   {get; private set;}
+    @AuraEnabled global final String localName                     {get; private set;}
+    @AuraEnabled global final String name                          {get; private set;}
+    @AuraEnabled global final String namespace                     {get; private set;}
+    @AuraEnabled global final List<RecordTypeMetadata> recordTypes {get; private set;}
+    @AuraEnabled global final String tabIcon                       {get; private set;}
 
-    public SObjectMetadata(Schema.SObjectType sobjectType) {
+    global SObjectMetadata(Schema.SObjectType sobjectType) {
         this(sobjectType.getDescribe().getName());
     }
 
-    public SObjectMetadata(String sobjectName) {
+    global SObjectMetadata(String sobjectName) {
         this.name = sobjectName;
 
         Schema.DescribeSObjectResult sobjectDescribe = Schema.getGlobalDescribe().get(this.name).getDescribe();
@@ -108,16 +108,16 @@ public virtual class SObjectMetadata {
         return tabIcon;
     }
 
-    public virtual class Fields {
+    global virtual class Fields {
 
-        @AuraEnabled public final String nameField                  {get; private set;}
-        @AuraEnabled public final List<String> accessibleFieldNames {get; private set;}
-        @AuraEnabled public final List<String> allFieldNames        {get; private set;}
-        @AuraEnabled public final List<String> createableFieldNames {get; private set;}
-        @AuraEnabled public final List<String> requiredFieldNames   {get; private set;}
-        @AuraEnabled public final List<String> updateableFieldNames {get; private set;}
+        @AuraEnabled global final String nameField                  {get; private set;}
+        @AuraEnabled global final List<String> accessibleFieldNames {get; private set;}
+        @AuraEnabled global final List<String> allFieldNames        {get; private set;}
+        @AuraEnabled global final List<String> createableFieldNames {get; private set;}
+        @AuraEnabled global final List<String> requiredFieldNames   {get; private set;}
+        @AuraEnabled global final List<String> updateableFieldNames {get; private set;}
 
-        public Fields(Schema.DescribeSObjectResult sobjectDescribe) {
+        global Fields(Schema.DescribeSObjectResult sobjectDescribe) {
             this.accessibleFieldNames = new List<String>();
             this.allFieldNames        = new List<String>();
             this.createableFieldNames = new List<String>();
@@ -140,14 +140,14 @@ public virtual class SObjectMetadata {
 
     }
 
-    public virtual class RecordTypeMetadata {
+    global virtual class RecordTypeMetadata {
 
-        @AuraEnabled public final Boolean isActive                   {get; private set;}
-        @AuraEnabled public final Boolean isAvailable                {get; private set;}
-        @AuraEnabled public final Boolean isDefaultRecordTypeMapping {get; private set;}
-        @AuraEnabled public final Boolean isMaster                   {get; private set;}
-        @AuraEnabled public final Id recordTypeId                    {get; private set;}
-        @AuraEnabled public final String name                        {get; private set;}
+        @AuraEnabled global final Boolean isActive                   {get; private set;}
+        @AuraEnabled global final Boolean isAvailable                {get; private set;}
+        @AuraEnabled global final Boolean isDefaultRecordTypeMapping {get; private set;}
+        @AuraEnabled global final Boolean isMaster                   {get; private set;}
+        @AuraEnabled global final Id recordTypeId                    {get; private set;}
+        @AuraEnabled global final String name                        {get; private set;}
 
         private RecordTypeMetadata(Schema.RecordTypeInfo recordTypeInfo) {
             this.isActive                   = recordTypeInfo.isActive();
