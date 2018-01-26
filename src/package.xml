@@ -14,9 +14,5 @@
         <members>SObjectMetadata_Tests</members>
         <name>ApexClass</name>
     </types>
-    <types>
-        <members>RecordTypeMetadataCache__c</members>
-        <name>CustomObject</name>
-    </types>
     <version>41.0</version>
 </Package>

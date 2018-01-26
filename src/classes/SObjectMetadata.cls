@@ -36,7 +36,8 @@ global virtual class SObjectMetadata {
     global SObjectMetadata(String sobjectName) {
         this.name = sobjectName;
 
-        Schema.DescribeSObjectResult sobjectDescribe = Schema.getGlobalDescribe().get(this.name).getDescribe();
+        Schema.SObjectType sobjectType               = Schema.getGlobalDescribe().get(this.name);
+        Schema.DescribeSObjectResult sobjectDescribe = sobjectType.getDescribe();
 
         this.fields               = new Fields(sobjectDescribe);
         this.fieldSetNames        = this.getFieldSetNames(sobjectDescribe);
@@ -59,7 +60,7 @@ global virtual class SObjectMetadata {
         this.labelPlural          = sobjectDescribe.getLabelPlural();
         this.localName            = sobjectDescribe.getLocalName();
         this.namespace            = this.getNamespace();
-        this.recordTypes          = this.getRecordTypes(sobjectDescribe);
+        this.recordTypes          = this.getRecordTypes(sobjectType, sobjectDescribe);
         this.tabIcon              = this.getTabIcon();
     }
 
@@ -76,10 +77,10 @@ global virtual class SObjectMetadata {
         return localNameIndex < 0 ? null : this.name.substring(0, localNameIndex);
     }
 
-    private List<RecordTypeMetadata> getRecordTypes(Schema.DescribeSObjectResult sobjectDescribe) {
+    private List<RecordTypeMetadata> getRecordTypes(Schema.SObjectType sobjectType, Schema.DescribeSObjectResult sobjectDescribe) {
         List<RecordTypeMetadata> recordTypes = new List<RecordTypeMetadata>();
         for(Schema.RecordTypeInfo recordTypeInfo : sobjectDescribe.getRecordTypeInfos()) {
-            recordTypes.add(new RecordTypeMetadata(recordTypeInfo));
+            recordTypes.add(new RecordTypeMetadata(sobjectType, recordTypeInfo));
         }
         return recordTypes;
     }

@@ -519,21 +519,21 @@ A lightweight library of Apex classes for Salesforce that provide easy access to
 ## RecordTypeMetadata.cls
 * Contains metadata information for a record type by combinging RecordTypeInfo and RecordType objects together. There are 3 ways to create an instance of RecordTypeMetadata
 
-    1. By passing the RecordType's API name (DeveloperName) in the constructor
+    1. By passing the SObject's API name and the RecordType's API name (DeveloperName) in the constructor
     ```
-    new RecordTypeMetadata('My_RecordType_Developer_Name');
+    new RecordTypeMetadata('Account', 'My_RecordType_Developer_Name');
     ```
 
     2. By passing the RecordType's ID in the constructor
     ```
-    Id myRecordTypeId = '00G0Y0000000000';
-    new RecordTypeMetadata(myRecordTypeId);
+    new RecordTypeMetadata(myAccountRecord.RecordTypeId);
     ```
 
-    3. By passing the Schema.RecordTypeInfo object of the Record Type in the constructor
+    3. By passing the Schema.SObjectType and the Schema.RecordTypeInfo in the constructor
     ```
+    Schema.SObjectType accountSObjectType = Schema.Account.SObjectType;
     Schema.RecordTypeInfo someAccountRecordTypeInfo;
-    new RecordTypeMetadata(someAccountRecordTypeInfo);
+    new RecordTypeMetadata(accountSObjectType, someAccountRecordTypeInfo);
     ```
 
     <details><summary>See Sample JSON</summary>
