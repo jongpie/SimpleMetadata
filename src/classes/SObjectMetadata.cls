@@ -140,24 +140,4 @@ global virtual class SObjectMetadata {
 
     }
 
-    global virtual class RecordTypeMetadata {
-
-        @AuraEnabled global final Boolean isActive                   {get; private set;}
-        @AuraEnabled global final Boolean isAvailable                {get; private set;}
-        @AuraEnabled global final Boolean isDefaultRecordTypeMapping {get; private set;}
-        @AuraEnabled global final Boolean isMaster                   {get; private set;}
-        @AuraEnabled global final Id recordTypeId                    {get; private set;}
-        @AuraEnabled global final String name                        {get; private set;}
-
-        private RecordTypeMetadata(Schema.RecordTypeInfo recordTypeInfo) {
-            this.isActive                   = recordTypeInfo.isActive();
-            this.isAvailable                = recordTypeInfo.isAvailable();
-            this.isDefaultRecordTypeMapping = recordTypeInfo.isDefaultRecordTypeMapping();
-            this.isMaster                   = recordTypeInfo.isMaster();
-            this.name                       = recordTypeInfo.getName();
-            this.recordTypeId               = recordTypeInfo.getRecordTypeId();
-        }
-
-    }
-
 }
