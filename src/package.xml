@@ -5,6 +5,7 @@
         <members>FieldMetadata</members>
         <members>FieldSetMetadata</members>
         <members>QueueMetadata</members>
+        <members>RecordTypeMetadata</members>
         <members>SObjectMetadata</members>
         <name>ApexClass</name>
     </types>
