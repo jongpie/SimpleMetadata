@@ -6,6 +6,7 @@ global virtual class RecordTypeMetadata {
 
     @AuraEnabled global final Id businessProcessId               {get; private set;}
     @AuraEnabled global final String description                 {get; private set;}
+    @AuraEnabled global final Id id                              {get; private set;}
     @AuraEnabled global final Boolean isActive                   {get; private set;}
     @AuraEnabled global final Boolean isAvailable                {get; private set;}
     @AuraEnabled global final Boolean isDefaultRecordTypeMapping {get; private set;}
@@ -13,7 +14,6 @@ global virtual class RecordTypeMetadata {
     @AuraEnabled global final String label                       {get; private set;}
     @AuraEnabled global final String name                        {get; private set;}
     @AuraEnabled global final String namespace                   {get; private set;}
-    @AuraEnabled global final Id recordTypeId                    {get; private set;}
     @AuraEnabled global final String sobjectName                 {get; private set;}
 
     global RecordTypeMetadata(Schema.RecordTypeInfo recordTypeInfo) {
@@ -32,6 +32,7 @@ global virtual class RecordTypeMetadata {
 
         this.businessProcessId          = recordTypeMetadataCache.BusinessProcessId__c;
         this.description                = recordTypeMetadataCache.Description__c;
+        this.id                         = recordTypeInfo.getRecordTypeId();
         this.isActive                   = recordTypeInfo.isActive();
         this.isAvailable                = recordTypeInfo.isAvailable();
         this.isDefaultRecordTypeMapping = recordTypeInfo.isDefaultRecordTypeMapping();
@@ -39,7 +40,6 @@ global virtual class RecordTypeMetadata {
         this.label                      = recordTypeInfo.getName();
         this.name                       = recordTypeMetadataCache.DeveloperName__c;
         this.namespace                  = recordTypeMetadataCache.NamespacePrefix__c;
-        this.recordTypeId               = recordTypeInfo.getRecordTypeId();
         this.sobjectName                = recordTypeMetadataCache.SObjectType__c;
     }
 
@@ -85,11 +85,10 @@ global virtual class RecordTypeMetadata {
         return sobjectDescribe.getRecordTypeInfosById().get(recordTypeId);
     }
 
+    // Static method so it can be called from an overloaded constructor
     private static Id getRecordTypeId(String sobjectName, String recordTypeName) {
         new RecordTypeMetadata(); // Private constructor to Load cache
         for(RecordTypeMetadataCache__c cachedRecordType : RecordTypeMetadataCache__c.getAll().values()) {
-            System.debug('cachedRecordType=');
-            System.debug(cachedRecordType);
             if(cachedRecordType.SObjectType__c != sobjectName) continue;
             if(cachedRecordType.DeveloperName__c != recordTypeName) continue;
 
