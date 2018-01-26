@@ -516,6 +516,44 @@ A lightweight library of Apex classes for Salesforce that provide easy access to
     new FieldSetMetadata(SObjectType.Lead.FieldSets.MyFieldSet);
     ```
 
+## RecordTypeMetadata.cls
+* Contains metadata information for a record type by combinging RecordTypeInfo and RecordType objects together. There are 3 ways to create an instance of RecordTypeMetadata
+
+    1. By passing the RecordType's API name (DeveloperName) in the constructor
+    ```
+    new RecordTypeMetadata('My_RecordType_Developer_Name');
+    ```
+
+    2. By passing the RecordType's ID in the constructor
+    ```
+    Id myRecordTypeId = '00G0Y0000000000';
+    new RecordTypeMetadata(myRecordTypeId);
+    ```
+
+    3. By passing the Schema.RecordTypeInfo object of the Record Type in the constructor
+    ```
+    Schema.RecordTypeInfo someAccountRecordTypeInfo;
+    new RecordTypeMetadata(someAccountRecordTypeInfo);
+    ```
+
+    <details><summary>See Sample JSON</summary>
+
+        {
+          "businessProcessId": null,
+          "description": "This is my example record type",
+          "isActive": true,
+          "isAvailable": true,
+          "isDefaultRecordTypeMapping": true,
+          "isMaster": false,
+          "label": "My Record Type",
+          "name": "My_RecordType_Developer_Name"
+          "namespace": "Nebula",
+          "recordTypeId": "0120Y000000EEEEE",
+          "sobjectName": "Account"
+        }
+
+    </details>
+
 ## QueueMetadata.cls
 * Contains metadata information for a queue, including the queue members and the supported SObject names. There are 2 ways to create an instance of QueueMetadata
 
