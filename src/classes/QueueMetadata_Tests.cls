@@ -70,7 +70,7 @@ private class QueueMetadata_Tests {
         System.assertEquals(queue.Name, queueMetadata.label);
         System.assertEquals(queue.DeveloperName, queueMetadata.name);
         System.assertEquals(queue.OwnerId, queueMetadata.ownerId);
-        System.assertEquals(queue.Id, queueMetadata.queueId);
+        System.assertEquals(queue.Id, queueMetadata.id);
     }
 
 }

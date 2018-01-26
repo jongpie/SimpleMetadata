@@ -28,10 +28,10 @@ global virtual class QueueMetadata {
     @AuraEnabled global final Boolean doesIncludeBosses              {get; private set;}
     @AuraEnabled global final Boolean doesSendEmailToMembers         {get; private set;}
     @AuraEnabled global final String email                           {get; private set;}
+    @AuraEnabled global final Id id                                  {get; private set;}
     @AuraEnabled global final String label                           {get; private set;}
     @AuraEnabled global final String name                            {get; private set;}
     @AuraEnabled global final Id ownerId                             {get; private set;}
-    @AuraEnabled global final Id queueId                             {get; private set;}
     @AuraEnabled global final List<String> supportedSObjectNames     {get; private set;}
     @AuraEnabled global final List<QueueMemberMetadata> queueMembers {get; private set;}
 
@@ -49,10 +49,10 @@ global virtual class QueueMetadata {
         this.doesIncludeBosses      = queue.DoesIncludeBosses;
         this.doesSendEmailToMembers = queue.DoesSendEmailToMembers;
         this.email                  = queue.Email;
+        this.id                     = queue.Id;
         this.label                  = queue.Name;
         this.name                   = queue.DeveloperName;
         this.ownerId                = queue.OwnerId;
-        this.queueId                = queue.Id;
         this.queueMembers           = this.getQueueMembers(queue);
         this.supportedSObjectNames  = this.getSupportedSObjectNames(queue);
     }
