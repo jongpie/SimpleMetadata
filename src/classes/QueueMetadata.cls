@@ -6,12 +6,12 @@ global virtual class QueueMetadata {
 
     // Stores cached query results
     private static final Map<Id, Group> QUERIED_QUEUES_BY_ID;
-    private static final Map<String, Group> QUERIED_QUEUES_BY_DEVELOPE_NAME;
+    private static final Map<String, Group> QUERIED_QUEUES_BY_DEVELOPER_NAME;
 
     static {
         // Query & cache queues
         QUERIED_QUEUES_BY_ID            = new Map<Id, Group>();
-        QUERIED_QUEUES_BY_DEVELOPE_NAME = new Map<String, Group>();
+        QUERIED_QUEUES_BY_DEVELOPER_NAME = new Map<String, Group>();
 
         for(Group queue : [
             SELECT DeveloperName, DoesIncludeBosses, DoesSendEmailToMembers, Email, Id, Name, OwnerId, RelatedId,
@@ -21,7 +21,7 @@ global virtual class QueueMetadata {
             WHERE Type = 'Queue'
         ]) {
             QUERIED_QUEUES_BY_ID.put(queue.Id, queue);
-            QUERIED_QUEUES_BY_DEVELOPE_NAME.put(queue.DeveloperName, queue);
+            QUERIED_QUEUES_BY_DEVELOPER_NAME.put(queue.DeveloperName, queue);
         }
     }
 
@@ -44,7 +44,7 @@ global virtual class QueueMetadata {
         // To compensate, check if the 'queueName' is really the 'queueId'
         Group queue;
         if(queueName instanceOf Id) queue = QUERIED_QUEUES_BY_ID.get(queueName);
-        else queue = QUERIED_QUEUES_BY_DEVELOPE_NAME.get(queueName);
+        else queue = QUERIED_QUEUES_BY_DEVELOPER_NAME.get(queueName);
 
         this.doesIncludeBosses      = queue.DoesIncludeBosses;
         this.doesSendEmailToMembers = queue.DoesSendEmailToMembers;
