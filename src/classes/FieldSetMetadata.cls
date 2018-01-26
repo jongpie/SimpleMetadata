@@ -2,22 +2,22 @@
 * This file is part of the SimpleMetadata project, released under the MIT License.               *
 * See LICENSE file or go to https://github.com/jongpie/SimpleMetadata for full license details.  *
 *************************************************************************************************/
-public virtual class FieldSetMetadata {
+global virtual class FieldSetMetadata {
 
-    @AuraEnabled public final String description                           {get; private set;}
-    @AuraEnabled public final List<FieldSetMemberMetadata> fieldSetMembers {get; private set;}
-    @AuraEnabled public final String label                                 {get; private set;}
-    @AuraEnabled public final String localName                             {get; private set;}
-    @AuraEnabled public final String name                                  {get; private set;}
-    @AuraEnabled public final String namespace                             {get; private set;}
-    @AuraEnabled public final String sobjectName                           {get; private set;}
-    @AuraEnabled public final SObjectMetadata sobjectMetadata              {get; private set;}
+    @AuraEnabled global final String description                           {get; private set;}
+    @AuraEnabled global final List<FieldSetMemberMetadata> fieldSetMembers {get; private set;}
+    @AuraEnabled global final String label                                 {get; private set;}
+    @AuraEnabled global final String localName                             {get; private set;}
+    @AuraEnabled global final String name                                  {get; private set;}
+    @AuraEnabled global final String namespace                             {get; private set;}
+    @AuraEnabled global final String sobjectName                           {get; private set;}
+    @AuraEnabled global final SObjectMetadata sobjectMetadata              {get; private set;}
 
-    public FieldSetMetadata(Schema.FieldSet fieldSet) {
+    global FieldSetMetadata(Schema.FieldSet fieldSet) {
         this(String.valueOf(fieldset.getSObjectType()), fieldSet.getName());
     }
 
-    public FieldSetMetadata(String sobjectName, String fieldSetName) {
+    global FieldSetMetadata(String sobjectName, String fieldSetName) {
         this.sobjectName = sobjectName;
         this.name        = fieldSetName;
 
@@ -47,15 +47,15 @@ public virtual class FieldSetMetadata {
         return localNameIndex < 0 ? null : this.name.substring(localNameIndex + 2, this.name.length());
     }
 
-    public virtual class FieldSetMemberMetadata {
+    global virtual class FieldSetMemberMetadata {
 
-        @AuraEnabled public final String displayType          {get; private set;}
-        @AuraEnabled public final FieldMetadata fieldMetadata {get; private set;}
-        @AuraEnabled public final String fieldPath            {get; private set;}
-        @AuraEnabled public final Boolean isDBRequired        {get; private set;}
-        @AuraEnabled public final Boolean isRequired          {get; private set;}
-        @AuraEnabled public final String label                {get; private set;}
-        @AuraEnabled public final String sobjectName          {get; private set;}
+        @AuraEnabled global final String displayType          {get; private set;}
+        @AuraEnabled global final FieldMetadata fieldMetadata {get; private set;}
+        @AuraEnabled global final String fieldPath            {get; private set;}
+        @AuraEnabled global final Boolean isDBRequired        {get; private set;}
+        @AuraEnabled global final Boolean isRequired          {get; private set;}
+        @AuraEnabled global final String label                {get; private set;}
+        @AuraEnabled global final String sobjectName          {get; private set;}
 
         private FieldSetMemberMetadata(String sobjectName, Schema.FieldSetMember fieldSetMember) {
             this.sobjectName    = sobjectName;

@@ -2,46 +2,46 @@
 * This file is part of the SimpleMetadata project, released under the MIT License.               *
 * See LICENSE file or go to https://github.com/jongpie/SimpleMetadata for full license details.  *
 *************************************************************************************************/
-public virtual class FieldMetadata {
+global virtual class FieldMetadata {
 
-    @AuraEnabled public final Integer byteLength                           {get; private set;}
-    @AuraEnabled public final Object defaultValue                          {get; private set;}
-    @AuraEnabled public final Integer digits                               {get; private set;}
-    @AuraEnabled public final String displayType                           {get; private set;}
-    @AuraEnabled public final String inlineHelpText                        {get; private set;}
-    @AuraEnabled public final Boolean isAccessible                         {get; private set;}
-    @AuraEnabled public final Boolean isAutoNumber                         {get; private set;}
-    @AuraEnabled public final Boolean isCalculated                         {get; private set;}
-    @AuraEnabled public final Boolean isCaseSensitive                      {get; private set;}
-    @AuraEnabled public final Boolean isCreateable                         {get; private set;}
-    @AuraEnabled public final Boolean isCustom                             {get; private set;}
-    @AuraEnabled public final Boolean isDefaultedOnCreate                  {get; private set;}
-    @AuraEnabled public final Boolean isFilterable                         {get; private set;}
-    @AuraEnabled public final Boolean isGroupable                          {get; private set;}
-    @AuraEnabled public final Boolean isNameField                          {get; private set;}
-    @AuraEnabled public final Boolean isNillable                           {get; private set;}
-    @AuraEnabled public final Boolean isRequired                           {get; private set;}
-    @AuraEnabled public final Boolean isSortable                           {get; private set;}
-    @AuraEnabled public final Boolean isUpdateable                         {get; private set;}
-    @AuraEnabled public final String label                                 {get; private set;}
-    @AuraEnabled public final String localName                             {get; private set;}
-    @AuraEnabled public final Integer maxLength                            {get; private set;}
-    @AuraEnabled public final String name                                  {get; private set;}
-    @AuraEnabled public final String namespace                             {get; private set;}
-    @AuraEnabled public final List<PicklistEntryMetadata> picklistOptions  {get; private set;}
-    @AuraEnabled public final Integer precision                            {get; private set;}
-    @AuraEnabled public final String relationshipName                      {get; private set;}
-    @AuraEnabled public final Integer relationshipOrder                    {get; private set;}
-    @AuraEnabled public final List<SObjectMetadata> relationshipReferences {get; private set;}
-    @AuraEnabled public final Integer scale                                {get; private set;}
-    @AuraEnabled public final String soapType                              {get; private set;}
-    @AuraEnabled public final String sobjectName                           {get; private set;}
+    @AuraEnabled global final Integer byteLength                           {get; private set;}
+    @AuraEnabled global final Object defaultValue                          {get; private set;}
+    @AuraEnabled global final Integer digits                               {get; private set;}
+    @AuraEnabled global final String displayType                           {get; private set;}
+    @AuraEnabled global final String inlineHelpText                        {get; private set;}
+    @AuraEnabled global final Boolean isAccessible                         {get; private set;}
+    @AuraEnabled global final Boolean isAutoNumber                         {get; private set;}
+    @AuraEnabled global final Boolean isCalculated                         {get; private set;}
+    @AuraEnabled global final Boolean isCaseSensitive                      {get; private set;}
+    @AuraEnabled global final Boolean isCreateable                         {get; private set;}
+    @AuraEnabled global final Boolean isCustom                             {get; private set;}
+    @AuraEnabled global final Boolean isDefaultedOnCreate                  {get; private set;}
+    @AuraEnabled global final Boolean isFilterable                         {get; private set;}
+    @AuraEnabled global final Boolean isGroupable                          {get; private set;}
+    @AuraEnabled global final Boolean isNameField                          {get; private set;}
+    @AuraEnabled global final Boolean isNillable                           {get; private set;}
+    @AuraEnabled global final Boolean isRequired                           {get; private set;}
+    @AuraEnabled global final Boolean isSortable                           {get; private set;}
+    @AuraEnabled global final Boolean isUpdateable                         {get; private set;}
+    @AuraEnabled global final String label                                 {get; private set;}
+    @AuraEnabled global final String localName                             {get; private set;}
+    @AuraEnabled global final Integer maxLength                            {get; private set;}
+    @AuraEnabled global final String name                                  {get; private set;}
+    @AuraEnabled global final String namespace                             {get; private set;}
+    @AuraEnabled global final List<PicklistEntryMetadata> picklistOptions  {get; private set;}
+    @AuraEnabled global final Integer precision                            {get; private set;}
+    @AuraEnabled global final String relationshipName                      {get; private set;}
+    @AuraEnabled global final Integer relationshipOrder                    {get; private set;}
+    @AuraEnabled global final List<SObjectMetadata> relationshipReferences {get; private set;}
+    @AuraEnabled global final Integer scale                                {get; private set;}
+    @AuraEnabled global final String soapType                              {get; private set;}
+    @AuraEnabled global final String sobjectName                           {get; private set;}
 
-    public FieldMetadata(Schema.SObjectType sobjectType, Schema.SObjectField sobjectField) {
+    global FieldMetadata(Schema.SObjectType sobjectType, Schema.SObjectField sobjectField) {
         this(sobjectType.getDescribe().getName(), sobjectField.getDescribe().getName());
     }
 
-    public FieldMetadata(String sobjectName, String fieldName) {
+    global FieldMetadata(String sobjectName, String fieldName) {
         this.sobjectName     = sobjectName;
         this.name            = fieldName;
 
@@ -105,19 +105,19 @@ public virtual class FieldMetadata {
         return relationshipReferences;
     }
 
-    public virtual class PicklistEntryMetadata {
+    global virtual class PicklistEntryMetadata {
 
-        @AuraEnabled public final Boolean isDefaultValue {get; private set;}
-        @AuraEnabled public final String label           {get; private set;}
-        @AuraEnabled public final String value           {get; private set;}
+        @AuraEnabled global final Boolean isDefaultValue {get; private set;}
+        @AuraEnabled global final String label           {get; private set;}
+        @AuraEnabled global final String value           {get; private set;}
 
-        public PicklistEntryMetadata() {
+        global PicklistEntryMetadata() {
             this.isDefaultValue = false;
             this.label          = '--None--';
             this.value          = '';
         }
 
-        public PicklistEntryMetadata(Schema.PicklistEntry picklistEntry) {
+        global PicklistEntryMetadata(Schema.PicklistEntry picklistEntry) {
             this.isDefaultValue = picklistEntry.isDefaultValue();
             this.label          = picklistEntry.getLabel();
             this.value          = picklistEntry.getValue();
