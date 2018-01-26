@@ -599,8 +599,8 @@ A lightweight library of Apex classes for Salesforce that provide easy access to
                 }
             ],
             "supportedSObjectNames": [
-                "Lead",
-                "Case"
+                "Case",
+                "Lead"
             ]
         }
 
