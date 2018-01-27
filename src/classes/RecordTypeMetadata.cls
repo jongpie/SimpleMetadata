@@ -36,20 +36,10 @@ global virtual class RecordTypeMetadata {
     }
 
     global RecordTypeMetadata(Id recordTypeId) {
-        RecordType recordType                = QUERIED_RECORD_TYPES_BY_ID.get(recordTypeId);
-        Schema.RecordTypeInfo recordTypeInfo = Schema.getGlobalDescribe().get(recordType.SObjectType).getDescribe().getRecordTypeInfosById().get(recordTypeId);
-
-        this.businessProcessId          = recordType.BusinessProcessId;
-        this.description                = recordType.Description;
-        this.id                         = recordTypeInfo.getRecordTypeId();
-        this.isActive                   = recordTypeInfo.isActive();
-        this.isAvailable                = recordTypeInfo.isAvailable();
-        this.isDefaultRecordTypeMapping = recordTypeInfo.isDefaultRecordTypeMapping();
-        this.isMaster                   = recordTypeInfo.isMaster();
-        this.label                      = recordTypeInfo.getName();
-        this.name                       = recordType.DeveloperName;
-        this.namespace                  = recordType.NamespacePrefix;
-        this.sobjectName                = recordType.SObjectType;
+        this(
+            Schema.getGlobalDescribe().get(QUERIED_RECORD_TYPES_BY_ID.get(recordTypeId).SObjectType),
+            Schema.getGlobalDescribe().get(QUERIED_RECORD_TYPES_BY_ID.get(recordTypeId).SObjectType).getDescribe().getRecordTypeInfosById().get(recordTypeId)
+        );
     }
 
     global RecordTypeMetadata(Schema.SObjectType sobjectType, Schema.RecordTypeInfo recordTypeInfo) {
@@ -67,17 +57,5 @@ global virtual class RecordTypeMetadata {
         this.namespace                  = recordType == null ? null : recordType.NamespacePrefix;
         this.sobjectName                = String.valueOf(sobjectType);
     }
-
-    // Static method so it can be called from an overloaded constructor
-    /*private static Id getRecordTypeId(String sobjectName, String recordTypeName) {
-        new RecordTypeMetadata(); // Private constructor to Load cache
-        for(RecordTypeMetadataCache__c cachedRecordType : RecordTypeMetadataCache__c.getAll().values()) {
-            if(cachedRecordType.SObjectType__c != sobjectName) continue;
-            if(cachedRecordType.DeveloperName__c != recordTypeName) continue;
-
-            return (Id)cachedRecordType.Name; // Name field stores the record type ID as a string
-        }
-        return null;
-    }*/
 
 }
