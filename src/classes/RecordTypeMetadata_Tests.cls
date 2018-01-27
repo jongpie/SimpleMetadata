@@ -39,6 +39,8 @@ private class RecordTypeMetadata_Tests {
             break;
         }
 
+        if(queryableRecordTypeInfo == null) return; // This will be null in orgs with no record types, so the test can't finish
+
         RecordTypeMetadata recordTypeMetadata = new RecordTypeMetadata(queryableRecordTypeInfo.getRecordTypeId());
         RecordType recordType = [
             SELECT Id, BusinessProcessId, Description, DeveloperName, NamespacePrefix, SObjectType
