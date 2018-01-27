@@ -31,14 +31,20 @@ private class RecordTypeMetadata_Tests {
 
     @isTest
     static void it_should_return_record_type_metadata_for_record_type_id() {
-        Schema.RecordTypeInfo recordTypeInfo = Schema.SObjectType.Account.getRecordTypeInfos()[0];
+        Schema.RecordTypeInfo queryableRecordTypeInfo;
+        for(Schema.RecordTypeInfo recordTypeInfo : Schema.SObjectType.Account.getRecordTypeInfos()) {
+            if(recordTypeInfo.isMaster()) continue;
 
-        RecordTypeMetadata recordTypeMetadata = new RecordTypeMetadata(recordTypeInfo.getRecordTypeId());
+            queryableRecordTypeInfo = recordTypeInfo;
+            break;
+        }
+
+        RecordTypeMetadata recordTypeMetadata = new RecordTypeMetadata(queryableRecordTypeInfo.getRecordTypeId());
         RecordType recordType = [
             SELECT Id, BusinessProcessId, Description, DeveloperName, NamespacePrefix, SObjectType
-            FROM RecordType WHERE Id = :recordTypeInfo.getRecordTypeId()
+            FROM RecordType WHERE Id = :queryableRecordTypeInfo.getRecordTypeId()
         ];
-        validateAttributesAreSet(recordTypeInfo, recordType, recordType.SObjectType, recordTypeMetadata);
+        validateAttributesAreSet(queryableRecordTypeInfo, recordType, recordType.SObjectType, recordTypeMetadata);
     }
 
     private static void validateAttributesAreSet(RecordTypeInfo recordTypeInfo, RecordType recordType, String sobjectName, RecordTypeMetadata recordTypeMetadata) {
