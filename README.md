@@ -16,8 +16,9 @@ Each class has at least 2 contstructors
 
 Each class returns an immutable DTO with no public methods. Each member variables follows these naming conventions:
 1. Variables are named using camelCase - this is less important in Apex development since Apex is case-insensitive, but important to note for Lightning development since Javascript is case-sensitive.
-2. Variables called 'name' refer to the API name or Developer Name. Example: sobjectName = 'MyObject__c';
-3. Variables called 'label' refer to the label displayed to the user. Example: new SObjectMetadata('MyObject__c').label; // Gets the localized/translated label for your custom object
+2. Variables called 'name' refer to the API name or Developer Name, including the namespace prefix. Example: sobjectName = 'MyNameSpace__MyObject__c';
+3. Variables called 'localNme' refer to the API name or Developer Name, excluding the namespace prefix. Example: sobjectName = 'MyObject__c';
+4. Variables called 'label' refer to the label displayed to the user. Example: new SObjectMetadata('MyObject__c').label; // Gets the localized/translated label for your custom object
 
 ## EnvironmentMetadata.cls
 * Contains metadata information for the current environment. No parameters are needed to construct it.
