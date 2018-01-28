@@ -14,7 +14,10 @@ global virtual class FieldSetMetadata {
     @AuraEnabled global final SObjectMetadata sobjectMetadata              {get; private set;}
 
     global FieldSetMetadata(Schema.FieldSet fieldSet) {
-        this(String.valueOf(fieldset.getSObjectType()), fieldSet.getName());
+        this(
+            String.valueOf(fieldset.getSObjectType()),
+            (fieldSet.getNamespace() == null ? '' : fieldSet.getNamespace() + '__') + fieldSet.getName()
+        );
     }
 
     global FieldSetMetadata(String sobjectName, String fieldSetName) {
