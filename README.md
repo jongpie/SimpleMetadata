@@ -9,6 +9,16 @@ A lightweight library of Apex classes for Salesforce that provide easy access to
        src="https://raw.githubusercontent.com/afawcett/githubsfdeploy/master/deploy.png">
 </a>
 
+## Overview
+Each class has at least 2 contstructors
+1. Constructor that accepts strings parameters - ideal for Lightning components/Javascript where strings are needed
+2. Constructor that accepts Apex metadata classes, like Schema.SObjectType and Schema.SObjectField - ideal for Apex development where you want something safer than strings
+
+Each class returns an immutable DTO with no public methods. Each member variables follows these naming conventions:
+1. Variables are named using camelCase - this is less important in Apex development since Apex is case-insensitive, but important to note for Lightning development since Javascript is case-sensitive.
+2. Variables called 'name' refer to the API name or Developer Name. Example: sobjectName = 'MyObject__c';
+3. Variables called 'label' refer to the label displayed to the user. Example: new SObjectMetadata('MyObject__c').label; // Gets the localized/translated label for your custom object
+
 ## EnvironmentMetadata.cls
 * Contains metadata information for the current environment. No parameters are needed to construct it.
 

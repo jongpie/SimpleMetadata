@@ -11,6 +11,8 @@ global virtual class RecordTypeMetadata {
     static {
         // Query & cache Record_Types
         QUERIED_RECORD_TYPES_BY_ID                         = new Map<Id, RecordType>();
+        // Salesforce enforces the combination of sobject name + record type developer name to be unique,
+        // so we can use the combination as the key in a map
         QUERIED_RECORD_TYPES_BY_SOBJECT_AND_DEVELOPER_NAME = new Map<String, RecordType>();
 
         for(RecordType recordType : [SELECT Id, BusinessProcessId, Description, DeveloperName, NamespacePrefix, SObjectType FROM RecordType]) {

@@ -10,7 +10,7 @@ global virtual class QueueMetadata {
 
     static {
         // Query & cache queues
-        QUERIED_QUEUES_BY_ID            = new Map<Id, Group>();
+        QUERIED_QUEUES_BY_ID             = new Map<Id, Group>();
         QUERIED_QUEUES_BY_DEVELOPER_NAME = new Map<String, Group>();
 
         for(Group queue : [
