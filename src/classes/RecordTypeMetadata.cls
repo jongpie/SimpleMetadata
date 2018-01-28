@@ -29,6 +29,7 @@ global virtual class RecordTypeMetadata {
     @AuraEnabled global final Boolean isDefaultRecordTypeMapping {get; private set;}
     @AuraEnabled global final Boolean isMaster                   {get; private set;}
     @AuraEnabled global final String label                       {get; private set;}
+    @AuraEnabled global final String localName                   {get; private set;}
     @AuraEnabled global final String name                        {get; private set;}
     @AuraEnabled global final String namespace                   {get; private set;}
     @AuraEnabled global final String sobjectName                 {get; private set;}
@@ -55,9 +56,19 @@ global virtual class RecordTypeMetadata {
         this.isDefaultRecordTypeMapping = recordTypeInfo.isDefaultRecordTypeMapping();
         this.isMaster                   = recordTypeInfo.isMaster();
         this.label                      = recordTypeInfo.getName();
-        this.name                       = recordType == null ? null : recordType.DeveloperName;
+        this.localName                  = recordType == null ? null : recordType.DeveloperName;
+        this.name                       = this.getName(recordType);
         this.namespace                  = recordType == null ? null : recordType.NamespacePrefix;
         this.sobjectName                = String.valueOf(sobjectType);
+    }
+
+    private String getName(RecordType recordType) {
+        if(recordType == null) return null;
+
+        String namespacePrefix = '';
+        if(recordType.NamespacePrefix != null) namespacePrefix = recordType.NamespacePrefix + '__';
+
+        return namespacePrefix + recordType.DeveloperName;
     }
 
 }

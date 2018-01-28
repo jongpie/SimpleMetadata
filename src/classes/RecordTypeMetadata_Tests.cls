@@ -50,6 +50,11 @@ private class RecordTypeMetadata_Tests {
     }
 
     private static void validateAttributesAreSet(RecordTypeInfo recordTypeInfo, RecordType recordType, String sobjectName, RecordTypeMetadata recordTypeMetadata) {
+        String namespacePrefix = '';
+        if(recordType != null && recordType.NamespacePrefix != null) namespacePrefix = recordType.NamespacePrefix + '__';
+
+        String recordTypeName = recordType == null ? null : namespacePrefix + recordType.DeveloperName;
+
         System.assertEquals(recordType == null ? null : recordType.BusinessProcessId, recordTypeMetadata.businessProcessId);
         System.assertEquals(recordType == null ? null : recordType.Description, recordTypeMetadata.description);
         System.assertEquals(recordTypeInfo.getRecordTypeId(), recordTypeMetadata.id);
@@ -58,7 +63,8 @@ private class RecordTypeMetadata_Tests {
         System.assertEquals(recordTypeInfo.isDefaultRecordTypeMapping(), recordTypeMetadata.isDefaultRecordTypeMapping);
         System.assertEquals(recordTypeInfo.isMaster(), recordTypeMetadata.isMaster);
         System.assertEquals(recordTypeInfo.getName(), recordTypeMetadata.label);
-        System.assertEquals(recordType == null ? null : recordType.DeveloperName, recordTypeMetadata.name);
+        System.assertEquals(recordType == null ? null : recordType.DeveloperName, recordTypeMetadata.localName);
+        System.assertEquals(recordType == null ? null : recordTypeName, recordTypeMetadata.name);
         System.assertEquals(recordType == null ? null : recordType.NamespacePrefix, recordTypeMetadata.namespace);
         System.assertEquals(sobjectName, recordTypeMetadata.sobjectName);
     }
