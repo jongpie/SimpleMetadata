@@ -6,7 +6,7 @@
 private  class FieldMetadata_Tests {
 
     @isTest
-    static void it_should_return_metadata_for_account_field_name() {
+    static void it_should_return_metadata_for_sobject_name_and_field_name() {
         String sobjectname = 'Account';
         String fieldName = 'Name';
 
@@ -19,7 +19,7 @@ private  class FieldMetadata_Tests {
     }
 
     @isTest
-    static void it_should_return_metadata_for_account_field_token() {
+    static void it_should_return_metadata_for_sobject_type_token_and_field_token() {
         SObjectType accountSObjectType = Account.SObjectType;
         SObjectField accountNameField = Account.Name;
 
