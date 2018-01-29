@@ -5,22 +5,7 @@
 @isTest
 private  class FieldSetMetadata_Tests {
 
-    @isTest
-    static void it_should_return_metadata_for_field_set_token() {
-        SObjectField nameFieldField = Account.Name;
-
-        Schema.FieldSet fieldSet = getFieldSet();
-        if(fieldSet == null) return;
-
-        Test.startTest();
-
-        FieldSetMetadata fieldSetMetadata = new FieldSetMetadata(fieldSet);
-        validateAttributesAreSet(fieldSet, fieldSetMetadata);
-
-        Test.stopTest();
-    }
-
-    @isTest
+     @isTest
     static void it_should_return_metadata_for_sobject_name_and_field_set_name() {
         SObjectField nameFieldField = Account.Name;
 
@@ -33,6 +18,21 @@ private  class FieldSetMetadata_Tests {
         String fieldSetNamespace = fieldSet.getNamespace() == null ? '' : fieldSet.getNamespace() + '__';
         String fieldSetName = fieldSetNamespace + fieldSet.getName();
         FieldSetMetadata fieldSetMetadata = new FieldSetMetadata(sobjectName, fieldSetName);
+        validateAttributesAreSet(fieldSet, fieldSetMetadata);
+
+        Test.stopTest();
+    }
+
+    @isTest
+    static void it_should_return_metadata_for_field_set_token() {
+        SObjectField nameFieldField = Account.Name;
+
+        Schema.FieldSet fieldSet = getFieldSet();
+        if(fieldSet == null) return;
+
+        Test.startTest();
+
+        FieldSetMetadata fieldSetMetadata = new FieldSetMetadata(fieldSet);
         validateAttributesAreSet(fieldSet, fieldSetMetadata);
 
         Test.stopTest();
