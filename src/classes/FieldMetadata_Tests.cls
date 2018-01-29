@@ -6,13 +6,27 @@
 private  class FieldMetadata_Tests {
 
     @isTest
-    static void it_should_return_metadata_for_account_name_field_token() {
-        SObjectField nameFieldField = Account.Name;
+    static void it_should_return_metadata_for_account_field_name() {
+        String sobjectname = 'Account';
+        String fieldName = 'Name';
 
         Test.startTest();
 
-        FieldMetadata accountFieldMetadata = new FieldMetadata(Account.SObjectType, nameFieldField);
-        validateAttributesAreSet(String.valueOf(nameFieldField), accountFieldMetadata);
+        FieldMetadata accountFieldMetadata = new FieldMetadata(sobjectName, fieldName);
+        validateAttributesAreSet(String.valueOf(fieldName), accountFieldMetadata);
+
+        Test.stopTest();
+    }
+
+    @isTest
+    static void it_should_return_metadata_for_account_field_token() {
+        SObjectType accountSObjectType = Account.SObjectType;
+        SObjectField accountNameField = Account.Name;
+
+        Test.startTest();
+
+        FieldMetadata accountFieldMetadata = new FieldMetadata(accountSObjectType, accountNameField);
+        validateAttributesAreSet(String.valueOf(accountNameField), accountFieldMetadata);
 
         Test.stopTest();
     }
