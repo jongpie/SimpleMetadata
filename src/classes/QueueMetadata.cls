@@ -35,16 +35,12 @@ global virtual class QueueMetadata {
     @AuraEnabled global final List<String> supportedSObjectNames     {get; private set;}
     @AuraEnabled global final List<QueueMemberMetadata> queueMembers {get; private set;}
 
-    global QueueMetadata(Id queueId) {
-        this(QUERIED_QUEUES_BY_ID.get(queueId).DeveloperName);
+    global QueueMetadata(String queueName) {
+        this(QUERIED_QUEUES_BY_DEVELOPER_NAME.get(queueName).Id);
     }
 
-    global QueueMetadata(String queueName) {
-        // Since ID is a type of String, calling QueueMetadata('00G0Y000003ASYI') treats the string as the name, instead of the intended ID
-        // To compensate, check if the 'queueName' is really the 'queueId'
-        Group queue;
-        if(queueName instanceOf Id) queue = QUERIED_QUEUES_BY_ID.get(queueName);
-        else queue = QUERIED_QUEUES_BY_DEVELOPER_NAME.get(queueName);
+    global QueueMetadata(Id queueId) {
+        Group queue = QUERIED_QUEUES_BY_ID.get(queueId);
 
         this.doesIncludeBosses      = queue.DoesIncludeBosses;
         this.doesSendEmailToMembers = queue.DoesSendEmailToMembers;
