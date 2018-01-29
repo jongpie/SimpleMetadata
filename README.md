@@ -558,8 +558,9 @@ Each class returns an immutable DTO with no public methods. Each member variable
           "isDefaultRecordTypeMapping": true,
           "isMaster": false,
           "label": "My Record Type",
-          "name": "My_RecordType_Developer_Name"
-          "namespace": "Nebula",
+          "localName": "My_RecordType_Developer_Name"
+          "name": "MyNamespace__My_RecordType_Developer_Name"
+          "namespace": "MyNamespace",
           "recordTypeId": "0120Y000000EEEEE",
           "sobjectName": "Account"
         }
