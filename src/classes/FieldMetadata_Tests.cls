@@ -3,7 +3,7 @@
 * See LICENSE file or go to https://github.com/jongpie/SimpleMetadata for full license details.  *
 *************************************************************************************************/
 @isTest
-private  class FieldMetadata_Tests {
+private class FieldMetadata_Tests {
 
     @isTest
     static void it_should_return_metadata_for_sobject_name_and_field_name() {

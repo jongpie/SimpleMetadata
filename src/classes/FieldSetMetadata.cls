@@ -47,7 +47,7 @@ global virtual class FieldSetMetadata {
     global virtual class FieldSetMemberMetadata {
 
         @AuraEnabled global final String displayType          {get; private set;}
-        @AuraEnabled global final FieldMetadata fieldMetadata {get; private set;}
+        @AuraEnabled global final FieldMetadata field         {get; private set;}
         @AuraEnabled global final String fieldPath            {get; private set;}
         @AuraEnabled global final Boolean isDBRequired        {get; private set;}
         @AuraEnabled global final Boolean isRequired          {get; private set;}
@@ -58,7 +58,7 @@ global virtual class FieldSetMetadata {
             this.sobjectName    = sobjectName;
 
             this.displayType   = fieldSetMember.getType().name();
-            this.fieldMetadata = this.getFieldMetadata(fieldSetMember);
+            this.field         = this.getFieldMetadata(fieldSetMember);
             this.fieldPath     = fieldSetMember.getFieldPath();
             this.isDBRequired  = fieldSetMember.getDBRequired();
             this.isRequired    = fieldSetMember.getRequired();
