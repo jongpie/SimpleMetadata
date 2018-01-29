@@ -33,7 +33,7 @@ global virtual class EnvironmentMetadata {
         this.instanceName                 = organization.InstanceName;
         this.isChatterEnabled             = sobjectTypes.containsKey('FeedItem');
         this.isKnowledgeEnabled           = sobjectTypes.containsKey('KnowledgeArticle');
-        this.isMultiCurrencyEnabled       = sobjectTypes.containsKey('CurrencyType');
+        this.isMultiCurrencyEnabled       = UserInfo.isMultiCurrencyOrganization();
         this.isPersonAccountEnabled       = sobjectTypes.get('Account').getDescribe().fields.getMap().containsKey('IsPersonAccount');
         this.isProduction                 = organization.IsSandbox == false;
         this.isSandbox                    = organization.IsSandbox;
