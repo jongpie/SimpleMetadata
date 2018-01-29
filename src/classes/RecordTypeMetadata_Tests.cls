@@ -52,7 +52,6 @@ private class RecordTypeMetadata_Tests {
     private static void validateAttributesAreSet(RecordTypeInfo recordTypeInfo, RecordType recordType, String sobjectName, RecordTypeMetadata recordTypeMetadata) {
         String namespacePrefix = '';
         if(recordType != null && recordType.NamespacePrefix != null) namespacePrefix = recordType.NamespacePrefix + '__';
-
         String recordTypeName = recordType == null ? null : namespacePrefix + recordType.DeveloperName;
 
         System.assertEquals(recordType == null ? null : recordType.BusinessProcessId, recordTypeMetadata.businessProcessId);

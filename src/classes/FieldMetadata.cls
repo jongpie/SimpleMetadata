@@ -37,16 +37,16 @@ global virtual class FieldMetadata {
     @AuraEnabled global final String soapType                              {get; private set;}
     @AuraEnabled global final String sobjectName                           {get; private set;}
 
-    global FieldMetadata(Schema.SObjectType sobjectType, Schema.SObjectField sobjectField) {
-        this(sobjectType.getDescribe().getName(), sobjectField.getDescribe().getName());
+    global FieldMetadata(String sobjectName, String fieldName) {
+        this(
+            Schema.getGlobalDescribe().get(sobjectName),
+            Schema.getGlobalDescribe().get(sobjectName).getDescribe().fields.getMap().get(fieldName)
+        );
     }
 
-    global FieldMetadata(String sobjectName, String fieldName) {
-        this.sobjectName     = sobjectName;
-        this.name            = fieldName;
-
-        Schema.DescribeSObjectResult sobjectDescribe = Schema.getGlobalDescribe().get(sobjectName).getDescribe();
-        Schema.DescribeFieldResult fieldDescribe     = sobjectDescribe.fields.getMap().get(fieldName).getDescribe();
+    global FieldMetadata(Schema.SObjectType sobjectType, Schema.SObjectField sobjectField) {
+        Schema.DescribeSObjectResult sobjectDescribe = sobjectType.getDescribe();
+        Schema.DescribeFieldResult fieldDescribe     = sobjectField.getDescribe();
 
         this.byteLength             = fieldDescribe.getByteLength();
         this.defaultValue           = fieldDescribe.getDefaultValue();
@@ -70,6 +70,7 @@ global virtual class FieldMetadata {
         this.label                  = fieldDescribe.getLabel();
         this.localName              = fieldDescribe.getLocalName();
         this.maxLength              = fieldDescribe.getLength();
+        this.name                   = String.valueOf(sobjectField);
         this.namespace              = this.getNamespace();
         this.picklistOptions        = this.getPicklistOptions(fieldDescribe);
         this.precision              = fieldDescribe.getPrecision();
@@ -78,6 +79,8 @@ global virtual class FieldMetadata {
         this.relationshipReferences = this.getRelationshipReferences(fieldDescribe);
         this.scale                  = fieldDescribe.getScale();
         this.soapType               = fieldDescribe.getSOAPType().name();
+        this.sobjectName            = String.valueOf(sobjectName);
+
     }
 
     private String getNamespace() {

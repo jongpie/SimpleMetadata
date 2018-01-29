@@ -29,15 +29,12 @@ global virtual class SObjectMetadata {
     @AuraEnabled global final List<RecordTypeMetadata> recordTypes {get; private set;}
     @AuraEnabled global final String tabIcon                       {get; private set;}
 
-    global SObjectMetadata(Schema.SObjectType sobjectType) {
-        this(sobjectType.getDescribe().getName());
+    global SObjectMetadata(String sobjectName) {
+        this(Schema.getGlobalDescribe().get(sobjectName));
     }
 
-    global SObjectMetadata(String sobjectName) {
-        this.name = sobjectName;
-
-        Schema.SObjectType sobjectType               = Schema.getGlobalDescribe().get(this.name);
-        Schema.DescribeSObjectResult sobjectDescribe = sobjectType.getDescribe();
+    global SObjectMetadata(Schema.SObjectType sobjectType) {
+        DescribeSObjectResult sobjectDescribe = sobjectType.getDescribe();
 
         this.fields               = new Fields(sobjectDescribe);
         this.fieldSetNames        = this.getFieldSetNames(sobjectDescribe);
@@ -59,6 +56,7 @@ global virtual class SObjectMetadata {
         this.label                = sobjectDescribe.getLabel();
         this.labelPlural          = sobjectDescribe.getLabelPlural();
         this.localName            = sobjectDescribe.getLocalName();
+        this.name                 = String.valueOf(sobjectType);
         this.namespace            = this.getNamespace();
         this.recordTypes          = this.getRecordTypes(sobjectType, sobjectDescribe);
         this.tabIcon              = this.getTabIcon();
