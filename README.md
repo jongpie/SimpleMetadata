@@ -19,6 +19,7 @@ Each class returns an immutable DTO with no public methods. Each member variable
 2. Variables called 'name' refer to the API name or Developer Name, including the namespace prefix. Example: sobjectName = 'MyNameSpace__MyObject__c';
 3. Variables called 'localName' refer to the API name or Developer Name, excluding the namespace prefix. Example: sobjectName = 'MyObject__c';
 4. Variables called 'label' refer to the label displayed to the user. Example: new SObjectMetadata('MyObject__c').label; // Gets the localized/translated label for your custom object
+5. Variables called 'displayFieldName' refer to the name field of an SObject - typically, the field is actually called Name, but there are exceptions, like Case.CaseNumber, Task.Subject, Order.OrderNumber, etc.
 
 ## EnvironmentMetadata.cls
 * Contains metadata information for the current environment. No parameters are needed to construct it.
