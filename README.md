@@ -9,6 +9,18 @@ A lightweight library of Apex classes for Salesforce that provide easy access to
        src="https://raw.githubusercontent.com/afawcett/githubsfdeploy/master/deploy.png">
 </a>
 
+## Overview
+Each class has at least 2 contstructors
+1. Constructor that accepts strings parameters - ideal for Lightning components/Javascript where strings are needed
+2. Constructor that accepts Apex metadata classes, like Schema.SObjectType and Schema.SObjectField - ideal for Apex development where you want something safer than strings
+
+Each class returns an immutable DTO with no public methods. Each member variables follows these naming conventions:
+1. Variables are named using camelCase - this is less important in Apex development since Apex is case-insensitive, but important to note for Lightning development since Javascript is case-sensitive.
+2. Variables called 'name' refer to the API name or Developer Name, including the namespace prefix. Example: sobjectName = 'MyNameSpace__MyObject__c';
+3. Variables called 'localName' refer to the API name or Developer Name, excluding the namespace prefix. Example: sobjectName = 'MyObject__c';
+4. Variables called 'label' refer to the label displayed to the user. Example: new SObjectMetadata('MyObject__c').label; // Gets the localized/translated label for your custom object
+5. Variables called 'displayFieldName' refer to the name field of an SObject - typically, the field is actually called Name, but there are exceptions, like Case.CaseNumber, Task.Subject, Order.OrderNumber, etc.
+
 ## EnvironmentMetadata.cls
 * Contains metadata information for the current environment. No parameters are needed to construct it.
 
@@ -516,6 +528,45 @@ A lightweight library of Apex classes for Salesforce that provide easy access to
     new FieldSetMetadata(SObjectType.Lead.FieldSets.MyFieldSet);
     ```
 
+## RecordTypeMetadata.cls
+* Contains metadata information for a record type by combinging RecordTypeInfo and RecordType objects together. There are 3 ways to create an instance of RecordTypeMetadata
+
+    1. By passing the SObject's API name and the RecordType's API name (DeveloperName) in the constructor
+    ```
+    new RecordTypeMetadata('Account', 'My_RecordType_Developer_Name');
+    ```
+
+    2. By passing the RecordType's ID in the constructor
+    ```
+    new RecordTypeMetadata(myAccountRecord.RecordTypeId);
+    ```
+
+    3. By passing the Schema.SObjectType and the Schema.RecordTypeInfo in the constructor
+    ```
+    Schema.SObjectType accountSObjectType = Schema.Account.SObjectType;
+    Schema.RecordTypeInfo someAccountRecordTypeInfo;
+    new RecordTypeMetadata(accountSObjectType, someAccountRecordTypeInfo);
+    ```
+
+    <details><summary>See Sample JSON</summary>
+
+        {
+          "businessProcessId": null,
+          "description": "This is my example record type",
+          "isActive": true,
+          "isAvailable": true,
+          "isDefaultRecordTypeMapping": true,
+          "isMaster": false,
+          "label": "My Record Type",
+          "localName": "My_RecordType_Developer_Name"
+          "name": "MyNamespace__My_RecordType_Developer_Name"
+          "namespace": "MyNamespace",
+          "recordTypeId": "0120Y000000EEEEE",
+          "sobjectName": "Account"
+        }
+
+    </details>
+
 ## QueueMetadata.cls
 * Contains metadata information for a queue, including the queue members and the supported SObject names. There are 2 ways to create an instance of QueueMetadata
 
@@ -561,8 +612,8 @@ A lightweight library of Apex classes for Salesforce that provide easy access to
                 }
             ],
             "supportedSObjectNames": [
-                "Lead",
-                "Case"
+                "Case",
+                "Lead"
             ]
         }
 

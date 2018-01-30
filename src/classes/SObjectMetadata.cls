@@ -4,6 +4,7 @@
 *************************************************************************************************/
 global virtual class SObjectMetadata {
 
+    @AuraEnabled global final String displayFieldName              {get; private set;}
     @AuraEnabled global final Boolean hasMultiCurrency             {get; private set;}
     @AuraEnabled global final Boolean hasSubtypes                  {get; private set;}
     @AuraEnabled global final Boolean isAccessible                 {get; private set;}
@@ -18,7 +19,7 @@ global virtual class SObjectMetadata {
     @AuraEnabled global final Boolean isSearchable                 {get; private set;}
     @AuraEnabled global final Boolean isUndeletable                {get; private set;}
     @AuraEnabled global final Boolean isUpdateable                 {get; private set;}
-    @AuraEnabled global final Fields fields                        {get; private set;}
+    @AuraEnabled global final List<String> fieldNames              {get; private set;}
     @AuraEnabled global final List<String> fieldSetNames           {get; private set;}
     @AuraEnabled global final String keyPrefix                     {get; private set;}
     @AuraEnabled global final String label                         {get; private set;}
@@ -29,16 +30,15 @@ global virtual class SObjectMetadata {
     @AuraEnabled global final List<RecordTypeMetadata> recordTypes {get; private set;}
     @AuraEnabled global final String tabIcon                       {get; private set;}
 
-    global SObjectMetadata(Schema.SObjectType sobjectType) {
-        this(sobjectType.getDescribe().getName());
+    global SObjectMetadata(String sobjectName) {
+        this(Schema.getGlobalDescribe().get(sobjectName));
     }
 
-    global SObjectMetadata(String sobjectName) {
-        this.name = sobjectName;
+    global SObjectMetadata(Schema.SObjectType sobjectType) {
+        DescribeSObjectResult sobjectDescribe = sobjectType.getDescribe();
 
-        Schema.DescribeSObjectResult sobjectDescribe = Schema.getGlobalDescribe().get(this.name).getDescribe();
-
-        this.fields               = new Fields(sobjectDescribe);
+        this.displayFieldName     = this.getDisplayFieldName(sobjectDescribe);
+        this.fieldNames           = this.getFieldNames(sobjectDescribe);
         this.fieldSetNames        = this.getFieldSetNames(sobjectDescribe);
         this.hasMultiCurrency     = sobjectDescribe.fields.getMap().containsKey('CurrencyIsoCode');
         this.hasSubtypes          = sobjectDescribe.getHasSubtypes();
@@ -58,9 +58,40 @@ global virtual class SObjectMetadata {
         this.label                = sobjectDescribe.getLabel();
         this.labelPlural          = sobjectDescribe.getLabelPlural();
         this.localName            = sobjectDescribe.getLocalName();
+        this.name                 = String.valueOf(sobjectType);
         this.namespace            = this.getNamespace();
-        this.recordTypes          = this.getRecordTypes(sobjectDescribe);
+        this.recordTypes          = this.getRecordTypes(sobjectType, sobjectDescribe);
         this.tabIcon              = this.getTabIcon();
+    }
+
+    private String getDisplayFieldName(Schema.DescribeSObjectResult sobjectDescribe) {
+        // There are several commonly used names for the display field name - typically, Name
+        // Check the common names first before resorting to looping through all SObject fields
+        List<String> educatedGuesses = new List<String>{
+            'Name', 'CaseNumber', 'Subject', 'Title', 'OrderNumber', 'OrderItemNumber'
+        };
+        for(String fieldName : educatedGuesses) {
+            Schema.DescribeFieldResult fieldDescribe = sobjectDescribe.fields.getMap().get(fieldName).getDescribe();
+
+            if(fieldDescribe.isNameField()) return fieldDescribe.getName();
+        }
+
+        // If we still don't have the displayFieldName, then loop through all fields to find it
+        for(Schema.SObjectField field : sobjectDescribe.fields.getMap().values()) {
+            Schema.DescribeFieldResult fieldDescribe = field.getDescribe();
+
+            if(fieldDescribe.isNameField()) return fieldDescribe.getName();
+        }
+
+        return null;
+    }
+
+    private List<String> getFieldNames(Schema.DescribeSObjectResult sobjectDescribe) {
+        List<String> fieldNames = new List<String>();
+        for(Schema.SObjectField field : sobjectDescribe.fields.getMap().values()) {
+            fieldNames.add(String.valueOf(field));
+        }
+        return fieldNames;
     }
 
     private List<String> getFieldSetNames(Schema.DescribeSObjectResult sobjectDescribe) {
@@ -76,10 +107,10 @@ global virtual class SObjectMetadata {
         return localNameIndex < 0 ? null : this.name.substring(0, localNameIndex);
     }
 
-    private List<RecordTypeMetadata> getRecordTypes(Schema.DescribeSObjectResult sobjectDescribe) {
+    private List<RecordTypeMetadata> getRecordTypes(Schema.SObjectType sobjectType, Schema.DescribeSObjectResult sobjectDescribe) {
         List<RecordTypeMetadata> recordTypes = new List<RecordTypeMetadata>();
         for(Schema.RecordTypeInfo recordTypeInfo : sobjectDescribe.getRecordTypeInfos()) {
-            recordTypes.add(new RecordTypeMetadata(recordTypeInfo));
+            recordTypes.add(new RecordTypeMetadata(sobjectType, recordTypeInfo));
         }
         return recordTypes;
     }
@@ -106,58 +137,6 @@ global virtual class SObjectMetadata {
         if(tabIcon == null && this.name == 'AssetRelationship') tabIcon = 'standard:asset_relationship';
 
         return tabIcon;
-    }
-
-    global virtual class Fields {
-
-        @AuraEnabled global final String nameField                  {get; private set;}
-        @AuraEnabled global final List<String> accessibleFieldNames {get; private set;}
-        @AuraEnabled global final List<String> allFieldNames        {get; private set;}
-        @AuraEnabled global final List<String> createableFieldNames {get; private set;}
-        @AuraEnabled global final List<String> requiredFieldNames   {get; private set;}
-        @AuraEnabled global final List<String> updateableFieldNames {get; private set;}
-
-        global Fields(Schema.DescribeSObjectResult sobjectDescribe) {
-            this.accessibleFieldNames = new List<String>();
-            this.allFieldNames        = new List<String>();
-            this.createableFieldNames = new List<String>();
-            this.requiredFieldNames   = new List<String>();
-            this.updateableFieldNames = new List<String>();
-
-            for(Schema.SObjectField field : sobjectDescribe.fields.getMap().values()) {
-                Schema.DescribeFieldResult fieldDescribe = field.getDescribe();
-                String fieldName = fieldDescribe.getName();
-
-                if(fieldDescribe.isNameField()) this.nameField = fieldDescribe.getName();
-
-                this.allFieldNames.add(fieldName);
-                if(fieldDescribe.isAccessible()) this.accessibleFieldNames.add(fieldName);
-                if(fieldDescribe.isCreateable()) this.createableFieldNames.add(fieldName);
-                if(fieldDescribe.isNillable() == false && fieldDescribe.isCreateable()) this.requiredFieldNames.add(fieldName);
-                if(fieldDescribe.isUpdateable()) this.updateableFieldNames.add(fieldName);
-            }
-        }
-
-    }
-
-    global virtual class RecordTypeMetadata {
-
-        @AuraEnabled global final Boolean isActive                   {get; private set;}
-        @AuraEnabled global final Boolean isAvailable                {get; private set;}
-        @AuraEnabled global final Boolean isDefaultRecordTypeMapping {get; private set;}
-        @AuraEnabled global final Boolean isMaster                   {get; private set;}
-        @AuraEnabled global final Id recordTypeId                    {get; private set;}
-        @AuraEnabled global final String name                        {get; private set;}
-
-        private RecordTypeMetadata(Schema.RecordTypeInfo recordTypeInfo) {
-            this.isActive                   = recordTypeInfo.isActive();
-            this.isAvailable                = recordTypeInfo.isAvailable();
-            this.isDefaultRecordTypeMapping = recordTypeInfo.isDefaultRecordTypeMapping();
-            this.isMaster                   = recordTypeInfo.isMaster();
-            this.name                       = recordTypeInfo.getName();
-            this.recordTypeId               = recordTypeInfo.getRecordTypeId();
-        }
-
     }
 
 }

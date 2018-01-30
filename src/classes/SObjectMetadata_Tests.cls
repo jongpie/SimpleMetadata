@@ -20,7 +20,8 @@ private  class SObjectMetadata_Tests {
     private static void validateAttributesAreSet(SObjectMetadata sobjectMetadata) {
         Schema.DescribeSObjectResult accountDescribe = Schema.Account.SObjectType.getDescribe();
 
-        System.assertEquals(accountDescribe.fields.getMap().containsKey('CurrencyIsoCode'), sobjectMetadata.hasMultiCurrency);
+        System.assertEquals('Name', sobjectMetadata.displayFieldName);
+        System.assertEquals(accountDescribe.fields.getMap().size(), sobjectMetadata.fieldNames.size());
         System.assertEquals(accountDescribe.getHasSubtypes(), sobjectMetadata.hasSubtypes);
         System.assertEquals(accountDescribe.isAccessible(), sobjectMetadata.isAccessible);
         System.assertEquals(accountDescribe.isFeedEnabled(), sobjectMetadata.isChatterFeedEnabled);
@@ -40,6 +41,7 @@ private  class SObjectMetadata_Tests {
         System.assertEquals(accountDescribe.getLocalName(), sobjectMetadata.localName);
         System.assertEquals('standard:account', sobjectMetadata.tabIcon);
 
+        System.assertNotEquals(null, sobjectMetadata.displayFieldName);
         System.assertNotEquals(null, sobjectMetadata.hasMultiCurrency);
         System.assertNotEquals(null, sobjectMetadata.hasSubtypes);
         System.assertNotEquals(null, sobjectMetadata.isAccessible);
@@ -54,7 +56,7 @@ private  class SObjectMetadata_Tests {
         System.assertNotEquals(null, sobjectMetadata.isSearchable);
         System.assertNotEquals(null, sobjectMetadata.isUndeletable);
         System.assertNotEquals(null, sobjectMetadata.isUpdateable);
-        System.assertNotEquals(null, sobjectMetadata.fields);
+        System.assertNotEquals(null, sobjectMetadata.fieldNames);
         System.assertNotEquals(null, sobjectMetadata.fieldSetNames);
         System.assertNotEquals(null, sobjectMetadata.keyPrefix);
         System.assertNotEquals(null, sobjectMetadata.label);

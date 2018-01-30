@@ -11,18 +11,15 @@ global virtual class FieldSetMetadata {
     @AuraEnabled global final String name                                  {get; private set;}
     @AuraEnabled global final String namespace                             {get; private set;}
     @AuraEnabled global final String sobjectName                           {get; private set;}
-    @AuraEnabled global final SObjectMetadata sobjectMetadata              {get; private set;}
-
-    global FieldSetMetadata(Schema.FieldSet fieldSet) {
-        this(String.valueOf(fieldset.getSObjectType()), fieldSet.getName());
-    }
 
     global FieldSetMetadata(String sobjectName, String fieldSetName) {
-        this.sobjectName = sobjectName;
-        this.name        = fieldSetName;
+        this(Schema.getGlobalDescribe().get(sobjectName).getDescribe().fieldSets.getMap().get(fieldSetName));
+    }
 
-        Schema.DescribeSObjectResult sobjectDescribe = Schema.getGlobalDescribe().get(sobjectName).getDescribe();
-        Schema.FieldSet fieldSet                     = sobjectDescribe.fieldSets.getMap().get(fieldSetName);
+    global FieldSetMetadata(Schema.FieldSet fieldSet) {
+        // SObject name & field name are used to set other values, so set them first
+        this.sobjectName = String.valueOf(fieldSet.getSObjectType());
+        this.name        = (fieldSet.getNamespace() == null ? '' : fieldSet.getNamespace() + '__') + fieldSet.getName();
 
         this.description     = fieldSet.getDescription();
         this.fieldSetMembers = this.getFieldSetMembers(fieldSet);
@@ -34,7 +31,7 @@ global virtual class FieldSetMetadata {
     private List<FieldSetMemberMetadata> getFieldSetMembers(Schema.FieldSet fieldSet) {
         List<FieldSetMemberMetadata> fieldSetMembers = new List<FieldSetMemberMetadata>();
         for(Schema.FieldSetMember fieldSetMember : fieldSet.getFields()) {
-            FieldSetMemberMetadata fieldSetMemberMetadata = new FieldSetMemberMetadata(sobjectName, fieldSetMember);
+            FieldSetMemberMetadata fieldSetMemberMetadata = new FieldSetMemberMetadata(this.sobjectName, fieldSetMember);
 
             fieldSetMembers.add(fieldSetMemberMetadata);
         }
@@ -50,7 +47,7 @@ global virtual class FieldSetMetadata {
     global virtual class FieldSetMemberMetadata {
 
         @AuraEnabled global final String displayType          {get; private set;}
-        @AuraEnabled global final FieldMetadata fieldMetadata {get; private set;}
+        @AuraEnabled global final FieldMetadata field         {get; private set;}
         @AuraEnabled global final String fieldPath            {get; private set;}
         @AuraEnabled global final Boolean isDBRequired        {get; private set;}
         @AuraEnabled global final Boolean isRequired          {get; private set;}
@@ -61,7 +58,7 @@ global virtual class FieldSetMetadata {
             this.sobjectName    = sobjectName;
 
             this.displayType   = fieldSetMember.getType().name();
-            this.fieldMetadata = this.getFieldMetadata(fieldSetMember);
+            this.field         = this.getFieldMetadata(fieldSetMember);
             this.fieldPath     = fieldSetMember.getFieldPath();
             this.isDBRequired  = fieldSetMember.getDBRequired();
             this.isRequired    = fieldSetMember.getRequired();

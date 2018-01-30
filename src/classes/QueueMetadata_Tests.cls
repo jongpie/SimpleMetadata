@@ -30,7 +30,7 @@ private class QueueMetadata_Tests {
     }
 
     @isTest
-    static void it_should_return_queue_metadata_by_id() {
+    static void it_should_return_queue_metadata_for_id() {
         Group queue = getQueue();
 
         Test.startTest();
@@ -42,7 +42,7 @@ private class QueueMetadata_Tests {
     }
 
     @isTest
-    static void it_should_return_queue_metadata_by_developer_name() {
+    static void it_should_return_queue_metadata_for_developer_name() {
         Group queue = getQueue();
 
         Test.startTest();
@@ -70,7 +70,7 @@ private class QueueMetadata_Tests {
         System.assertEquals(queue.Name, queueMetadata.label);
         System.assertEquals(queue.DeveloperName, queueMetadata.name);
         System.assertEquals(queue.OwnerId, queueMetadata.ownerId);
-        System.assertEquals(queue.Id, queueMetadata.queueId);
+        System.assertEquals(queue.Id, queueMetadata.id);
     }
 
 }
