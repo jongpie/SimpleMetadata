@@ -71,9 +71,10 @@ global virtual class SObjectMetadata {
         // Check the common names first before resorting to looping through all SObject fields
         // The order of the field names has been sorted based on number of objects in a dev org with that field
         List<String> educatedGuesses = new List<String>{
-            'Name', 'DeveloperName', 'AssetRelationshipNumber', 'CaseNumber', 'ContractNumber', 'Domain',
-            'FriendlyName', 'FunctionName', 'Label', 'LocalPart', 'OrderItemNumber', 'OrderNumber',
-            'SolutionName', 'TestSuiteName', 'Subject', 'Title', 'ApiName', 'Name', 'Subject', 'Title', 'DeveloperName', 'ApiName'
+            'Name', 'DeveloperName', 'ApiName', 'Title', 'Subject',
+            'AssetRelationshipNumber', 'CaseNumber', 'ContractNumber',
+            'Domain', 'FriendlyName', 'FunctionName', 'Label', 'LocalPart',
+            'OrderItemNumber', 'OrderNumber', 'SolutionName', 'TestSuiteName'
         };
         for(String fieldName : educatedGuesses) {
             Schema.SObjectField field = sobjectDescribe.fields.getMap().get(fieldName);
