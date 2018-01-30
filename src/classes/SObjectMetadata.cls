@@ -69,11 +69,18 @@ global virtual class SObjectMetadata {
     private String getDisplayFieldName(Schema.DescribeSObjectResult sobjectDescribe) {
         // There are several commonly used names for the display field name - typically, Name
         // Check the common names first before resorting to looping through all SObject fields
+        // The order of the field names has been sorted based on number of objects in a dev org with that field
         List<String> educatedGuesses = new List<String>{
-            'Name', 'Subject', 'Title', 'CaseNumber', 'OrderNumber', 'OrderItemNumber'
+            'Name', 'DeveloperName', 'AssetRelationshipNumber', 'CaseNumber', 'ContractNumber', 'Domain',
+            'FriendlyName', 'FunctionName', 'Label', 'LocalPart', 'OrderItemNumber', 'OrderNumber',
+            'SolutionName', 'TestSuiteName', 'Subject', 'Title', 'ApiName', 'Name', 'Subject', 'Title', 'DeveloperName', 'ApiName'
         };
         for(String fieldName : educatedGuesses) {
-            Schema.DescribeFieldResult fieldDescribe = sobjectDescribe.fields.getMap().get(fieldName).getDescribe();
+            Schema.SObjectField field = sobjectDescribe.fields.getMap().get(fieldName);
+
+            if(field == null) continue;
+
+            Schema.DescribeFieldResult fieldDescribe = field.getDescribe();
 
             if(fieldDescribe.isNameField()) return fieldDescribe.getName();
         }
