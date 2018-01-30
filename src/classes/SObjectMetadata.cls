@@ -28,7 +28,7 @@ global virtual class SObjectMetadata {
     @AuraEnabled global final String localName                     {get; private set;}
     @AuraEnabled global final String name                          {get; private set;}
     @AuraEnabled global final String namespace                     {get; private set;}
-    @AuraEnabled global final List<RecordTypeMetadata> recordTypes {get; private set;}
+    @AuraEnabled global final List<String> recordTypeNames         {get; private set;}
     @AuraEnabled global final String tabIcon                       {get; private set;}
 
     global SObjectMetadata(String sobjectName) {
@@ -62,7 +62,7 @@ global virtual class SObjectMetadata {
         this.localName            = sobjectDescribe.getLocalName();
         this.name                 = String.valueOf(sobjectType);
         this.namespace            = this.getNamespace();
-        this.recordTypes          = this.getRecordTypes(sobjectType, sobjectDescribe);
+        this.recordTypeNames      = RecordTypeMetadata.getRecordTypeNames(String.valueOf(sobjectType));//this.getRecordTypeNames(sobjectType, sobjectDescribe);
         this.tabIcon              = this.getTabIcon();
     }
 
@@ -99,7 +99,8 @@ global virtual class SObjectMetadata {
     private List<String> getFieldSetNames(Schema.DescribeSObjectResult sobjectDescribe) {
         List<String> fieldSetNames = new List<String>();
         for(Schema.FieldSet fieldSet : sobjectDescribe.fieldSets.getMap().values()) {
-            fieldSetNames.add(fieldSet.getName());
+            String namespace = fieldSet.getNameSpace() == null ? '' : FieldSet.getNamespace() + '__';
+            fieldSetNames.add(namespace + fieldSet.getName());
         }
         return fieldSetNames;
     }
@@ -107,14 +108,6 @@ global virtual class SObjectMetadata {
     private String getNamespace() {
         Integer localNameIndex = this.name.replace('__c', '').indexOf('__');
         return localNameIndex < 0 ? null : this.name.substring(0, localNameIndex);
-    }
-
-    private List<RecordTypeMetadata> getRecordTypes(Schema.SObjectType sobjectType, Schema.DescribeSObjectResult sobjectDescribe) {
-        List<RecordTypeMetadata> recordTypes = new List<RecordTypeMetadata>();
-        for(Schema.RecordTypeInfo recordTypeInfo : sobjectDescribe.getRecordTypeInfos()) {
-            recordTypes.add(new RecordTypeMetadata(sobjectType, recordTypeInfo));
-        }
-        return recordTypes;
     }
 
     private String getTabIcon() {
