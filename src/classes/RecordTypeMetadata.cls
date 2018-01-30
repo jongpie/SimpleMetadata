@@ -7,6 +7,7 @@ global virtual class RecordTypeMetadata {
     // Stores cached query results
     private static final Map<Id, RecordType> QUERIED_RECORD_TYPES_BY_ID;
     private static final Map<String, RecordType> QUERIED_RECORD_TYPES_BY_SOBJECT_AND_DEVELOPER_NAME;
+    private static final Map<String, List<String>> QUERIED_RECORD_TYPE_NAMES_BY_SOBJECT_NAME;
 
     static {
         // Query & cache Record_Types
@@ -14,11 +15,24 @@ global virtual class RecordTypeMetadata {
         // Salesforce enforces the combination of sobject name + record type developer name to be unique,
         // so we can use the combination as the key in a map
         QUERIED_RECORD_TYPES_BY_SOBJECT_AND_DEVELOPER_NAME = new Map<String, RecordType>();
+        QUERIED_RECORD_TYPE_NAMES_BY_SOBJECT_NAME            = new Map<String, List<String>>();
 
         for(RecordType recordType : [SELECT Id, BusinessProcessId, Description, DeveloperName, NamespacePrefix, SObjectType FROM RecordType]) {
             QUERIED_RECORD_TYPES_BY_ID.put(recordType.Id, recordType);
             QUERIED_RECORD_TYPES_BY_SOBJECT_AND_DEVELOPER_NAME.put(recordType.SObjectType + recordType.DeveloperName, recordType);
+
+            if(!QUERIED_RECORD_TYPE_NAMES_BY_SOBJECT_NAME.containsKey(recordType.SObjectType)) {
+                QUERIED_RECORD_TYPE_NAMES_BY_SOBJECT_NAME.put(recordType.SObjectType, new List<String>{});
+            }
+            List<String> recordTypeNames = QUERIED_RECORD_TYPE_NAMES_BY_SOBJECT_NAME.get(recordType.SObjectType);
+            recordTypeNames.add((recordType.NamespacePrefix == null ? '' : recordType.NamespacePrefix + '__') + recordType.DeveloperName);
+            QUERIED_RECORD_TYPE_NAMES_BY_SOBJECT_NAME.put(recordType.SObjectType, recordTypeNames);
         }
+    }
+
+    public static List<String> getRecordTypeNames(String sobjectName) {
+        List<String> results = QUERIED_RECORD_TYPE_NAMES_BY_SOBJECT_NAME.get(sobjectName);
+        return results != null ? results : new List<String>();
     }
 
     @AuraEnabled global final Id businessProcessId               {get; private set;}

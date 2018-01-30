@@ -4,17 +4,6 @@
 *************************************************************************************************/
 global virtual class SObjectMetadata {
 
-    // Stores cached query results
-    private static final Map<Id, ListView> QUERIED_LIST_VIEWS_BY_ID;
-
-    static {
-        // Query & cache queues
-        QUERIED_LIST_VIEWS_BY_ID = new Map<Id, ListView>();
-        for(ListView listView : [SELECT Id, NameSpacePrefix, DeveloperName FROM ListView]) {
-            QUERIED_LIST_VIEWS_BY_ID.put(listView.Id, listView);
-        }
-    }
-
     @AuraEnabled global final String displayFieldName              {get; private set;}
     @AuraEnabled global final Boolean hasMultiCurrency             {get; private set;}
     @AuraEnabled global final Boolean hasSubtypes                  {get; private set;}
@@ -69,7 +58,7 @@ global virtual class SObjectMetadata {
         this.keyPrefix            = sobjectDescribe.getKeyPrefix();
         this.label                = sobjectDescribe.getLabel();
         this.labelPlural          = sobjectDescribe.getLabelPlural();
-        this.listViewNames        = this.getListViewNames(sobjectType);
+        this.listViewNames        = ListViewMetadata.getListViewNames(String.valueOf(sobjectType));
         this.localName            = sobjectDescribe.getLocalName();
         this.name                 = String.valueOf(sobjectType);
         this.namespace            = this.getNamespace();
@@ -113,19 +102,6 @@ global virtual class SObjectMetadata {
             fieldSetNames.add(fieldSet.getName());
         }
         return fieldSetNames;
-    }
-
-    private List<String> getListViewNames(Schema.SObjectType sobjectType) {
-        String query = 'SELECT Id FROM ' + sobjectType + ' LIMIT 0';
-        ApexPages.StandardSetController stdSetController = new ApexPages.StandardSetController(Database.getQueryLocator(query));
-
-        List<String> listViewNames = new List<String>();
-        for(SelectOption selectOption : stdSetController.getListViewOptions()) {
-            ListView listView = QUERIED_LIST_VIEWS_BY_ID.get(selectOption.getValue());
-            String listViewName = (listView.NamespacePrefix == null ? '' : listView.NamespacePrefix + '__') + listView.DeveloperName;
-            listViewNames.add(listViewName);
-        }
-        return listViewNames;
     }
 
     private String getNamespace() {
