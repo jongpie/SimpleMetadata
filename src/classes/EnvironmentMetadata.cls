@@ -24,7 +24,7 @@ global virtual class EnvironmentMetadata {
     @AuraEnabled global final String namespace                     {get; private set;}
     @AuraEnabled global final Id organizationId                    {get; private set;}
     @AuraEnabled global final String organizationType              {get; private set;}
-    @AuraEnabled global final List<String> sobjectTypeNames        {get; private set;}
+    @AuraEnabled global final List<String> sobjectNames        {get; private set;}
 
     global EnvironmentMetadata() {
         Map<String, Schema.SObjectType> sobjectTypes = Schema.getGlobalDescribe();
@@ -42,18 +42,18 @@ global virtual class EnvironmentMetadata {
         this.namespace                    = organization.NamespacePrefix;
         this.organizationId               = organization.Id;
         this.organizationType             = organization.OrganizationType;
-        this.sobjectTypeNames             = this.getSObjectTypeNames(sobjectTypes);
+        this.sobjectNames             = this.getSObjectNames(sobjectTypes);
     }
 
-    private List<String> getSObjectTypeNames(Map<String, Schema.SObjectType> sobjectTypes) {
-        // We could just use this.sobjectTypeNames = new List<String>(sobjectTypes.keySet());
+    private List<String> getSObjectNames(Map<String, Schema.SObjectType> sobjectTypes) {
+        // We could just use this.sobjectNames = new List<String>(sobjectTypes.keySet());
         // However, it returns the names in lowercase, which can cause problems with Javascript/Lightning since it's case-sensitive
-        List<String> sobjectTypeNames  = new List<String>();
+        List<String> sobjectNames  = new List<String>();
         for(Schema.SObjectType sobjectType : sobjectTypes.values()) {
-            sobjectTypeNames.add(String.valueOf(sobjectType));
+            sobjectNames.add(String.valueOf(sobjectType));
         }
-        sobjectTypeNames.sort();
-        return sobjectTypeNames;
+        sobjectNames.sort();
+        return sobjectNames;
     }
 
 }
