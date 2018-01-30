@@ -15,6 +15,7 @@ global class ListViewMetadata {
         }
     }
 
+    // Method is static so it can be used in static methods and instance methods
     private static String buildFullyQualifiedName(ListView listView) {
         return (listView.NamespacePrefix == null ? '' : listView.NamespacePrefix + '__') + listView.DeveloperName;
     }
