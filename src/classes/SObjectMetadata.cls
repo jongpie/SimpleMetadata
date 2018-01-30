@@ -13,7 +13,7 @@ global virtual class SObjectMetadata {
     @AuraEnabled global final Boolean isCustom                     {get; private set;}
     @AuraEnabled global final Boolean isCustomSetting              {get; private set;}
     @AuraEnabled global final Boolean isDeletable                  {get; private set;}
-    @AuraEnabled global final Boolean isMruEnabled                 {get; private set;}
+    @AuraEnabled global final Boolean isMRUEnabled                 {get; private set;}
     @AuraEnabled global final Boolean isMergeable                  {get; private set;}
     @AuraEnabled global final Boolean isQueryable                  {get; private set;}
     @AuraEnabled global final Boolean isSearchable                 {get; private set;}
@@ -50,7 +50,7 @@ global virtual class SObjectMetadata {
         this.isCustomSetting      = sobjectDescribe.isCustomSetting();
         this.isDeletable          = sobjectDescribe.isDeletable();
         this.isMergeable          = sobjectDescribe.isMergeable();
-        this.isMRUEnabled         = sobjectDescribe.isMruEnabled();
+        this.isMRUEnabled         = sobjectDescribe.isMRUEnabled();
         this.isQueryable          = sobjectDescribe.isQueryable();
         this.isSearchable         = sobjectDescribe.isSearchable();
         this.isUndeletable        = sobjectDescribe.isUndeletable();
