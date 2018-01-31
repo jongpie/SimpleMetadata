@@ -32,7 +32,7 @@ global virtual class FieldMetadata {
     @AuraEnabled global final Integer precision                            {get; private set;}
     @AuraEnabled global final String relationshipName                      {get; private set;}
     @AuraEnabled global final Integer relationshipOrder                    {get; private set;}
-    @AuraEnabled global final List<SObjectMetadata> relationshipReferences {get; private set;}
+    @AuraEnabled global final List<SObjectMetadata> relationshipReferences {get; private set;} // TODO consider changing to string[] of names instead
     @AuraEnabled global final Integer scale                                {get; private set;}
     @AuraEnabled global final String soapType                              {get; private set;}
     @AuraEnabled global final String sobjectName                           {get; private set;}
