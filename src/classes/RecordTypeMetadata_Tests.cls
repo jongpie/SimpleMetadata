@@ -21,7 +21,7 @@ private class RecordTypeMetadata_Tests {
     }
 
     @isTest
-    static void it_should_return_record_type_metadata_for_sobject_and_record_type_names() {
+    static void it_should_return_record_type_metadata_for_sobject_and_record_type_api_names() {
         for(RecordType recordType : [SELECT Id, BusinessProcessId, Description, DeveloperName, NamespacePrefix, SObjectType FROM RecordType LIMIT 5]) {
             Schema.RecordTypeInfo recordTypeInfo = Schema.getGlobalDescribe().get(recordType.SObjectType).getDescribe().getRecordTypeInfosById().get(recordType.Id);
             RecordTypeMetadata recordTypeMetadata = new RecordTypeMetadata(recordType.SObjectType, recordType.DeveloperName);
@@ -49,11 +49,12 @@ private class RecordTypeMetadata_Tests {
         validateAttributesAreSet(queryableRecordTypeInfo, recordType, recordType.SObjectType, recordTypeMetadata);
     }
 
-    private static void validateAttributesAreSet(RecordTypeInfo recordTypeInfo, RecordType recordType, String sobjectName, RecordTypeMetadata recordTypeMetadata) {
+    private static void validateAttributesAreSet(RecordTypeInfo recordTypeInfo, RecordType recordType, String sobjectApiName, RecordTypeMetadata recordTypeMetadata) {
         String namespacePrefix = '';
         if(recordType != null && recordType.NamespacePrefix != null) namespacePrefix = recordType.NamespacePrefix + '__';
         String recordTypeName = recordType == null ? null : namespacePrefix + recordType.DeveloperName;
 
+        System.assertEquals(recordType == null ? null : recordTypeName, recordTypeMetadata.apiName);
         System.assertEquals(recordType == null ? null : recordType.BusinessProcessId, recordTypeMetadata.businessProcessId);
         System.assertEquals(recordType == null ? null : recordType.Description, recordTypeMetadata.description);
         System.assertEquals(recordTypeInfo.getRecordTypeId(), recordTypeMetadata.id);
@@ -62,10 +63,9 @@ private class RecordTypeMetadata_Tests {
         System.assertEquals(recordTypeInfo.isDefaultRecordTypeMapping(), recordTypeMetadata.isDefaultRecordTypeMapping);
         System.assertEquals(recordTypeInfo.isMaster(), recordTypeMetadata.isMaster);
         System.assertEquals(recordTypeInfo.getName(), recordTypeMetadata.label);
-        System.assertEquals(recordType == null ? null : recordType.DeveloperName, recordTypeMetadata.localName);
-        System.assertEquals(recordType == null ? null : recordTypeName, recordTypeMetadata.name);
+        System.assertEquals(recordType == null ? null : recordType.DeveloperName, recordTypeMetadata.localApiName);
         System.assertEquals(recordType == null ? null : recordType.NamespacePrefix, recordTypeMetadata.namespace);
-        System.assertEquals(sobjectName, recordTypeMetadata.sobjectName);
+        System.assertEquals(sobjectApiName, recordTypeMetadata.sobjectApiName);
     }
 
 }

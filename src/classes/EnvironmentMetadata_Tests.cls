@@ -32,18 +32,18 @@ private class EnvironmentMetadata_Tests {
         Organization organization = [SELECT Id, Name, InstanceName, NamespacePrefix, OrganizationType, IsSandbox FROM Organization LIMIT 1];
         Map<String, Schema.SObjectType> sobjectTypes = Schema.getGlobalDescribe();
 
-        System.assertEquals(URL.getSalesforceBaseUrl().toExternalForm(), environmentMetadata.baseURL);
+        System.assertEquals(URL.getSalesforceBaseUrl().toExternalForm(), environmentMetadata.baseUrl);
         System.assertEquals(organization.InstanceName, environmentMetadata.instanceName);
         System.assertEquals(sobjectTypes.containsKey('FeedItem'), environmentMetadata.isChatterEnabled);
         System.assertEquals(sobjectTypes.containsKey('KnowledgeArticle'), environmentMetadata.isKnowledgeEnabled);
-        System.assertEquals(sobjectTypes.containsKey('CurrencyType'), environmentMetadata.isMultiCurrencyEnabled);
+        System.assertEquals(UserInfo.isMultiCurrencyOrganization(), environmentMetadata.isMultiCurrencyEnabled);
         System.assertEquals(sobjectTypes.get('Account').getDescribe().fields.getMap().containsKey('IsPersonAccount'), environmentMetadata.isPersonAccountEnabled);
         System.assertEquals(organization.IsSandbox == false, environmentMetadata.isProduction);
         System.assertEquals(organization.IsSandbox, environmentMetadata.isSandbox);
         System.assertEquals(sobjectTypes.containsKey('Territory'), environmentMetadata.isTerritoryManagementEnabled);
-        System.assertEquals(organization.Name, environmentMetadata.name);
         System.assertEquals(organization.NamespacePrefix, environmentMetadata.namespace);
         System.assertEquals(organization.Id, environmentMetadata.organizationId);
+        System.assertEquals(organization.Name, environmentMetadata.organizationName);
         System.assertEquals(organization.OrganizationType, environmentMetadata.organizationType);
         //System.assert(environmentMetadata.sobjectTypeNames.containsAll(sobjectTypes.keySet()));
     }

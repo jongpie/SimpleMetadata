@@ -6,7 +6,7 @@
 private class FieldMetadata_Tests {
 
     @isTest
-    static void it_should_return_metadata_for_sobject_name_and_field_name() {
+    static void it_should_return_metadata_for_sobject_name_and_field_api_name() {
         String sobjectname = 'Account';
         String fieldName = 'Name';
 
@@ -58,6 +58,7 @@ private class FieldMetadata_Tests {
     private static void validateAttributesAreSet(String fieldName, FieldMetadata fieldMetadata) {
         DescribeFieldResult fieldDescribe = Schema.SObjectType.Account.fields.getMap().get(fieldName).getDescribe();
 
+        System.assertEquals(fieldDescribe.getName(), fieldMetadata.apiName);
         System.assertEquals(fieldDescribe.getByteLength(), fieldMetadata.byteLength);
         System.assertEquals(fieldDescribe.getDefaultValue(), fieldMetadata.defaultValue);
         System.assertEquals(fieldDescribe.getDigits(), fieldMetadata.digits);
@@ -78,7 +79,7 @@ private class FieldMetadata_Tests {
         System.assertEquals(fieldDescribe.isSortable(), fieldMetadata.isSortable);
         System.assertEquals(fieldDescribe.isUpdateable(), fieldMetadata.isUpdateable);
         System.assertEquals(fieldDescribe.getLabel(), fieldMetadata.label);
-        System.assertEquals(fieldDescribe.getLocalName(), fieldMetadata.localName);
+        System.assertEquals(fieldDescribe.getLocalName(), fieldMetadata.localApiName);
         System.assertEquals(fieldDescribe.getLength(), fieldMetadata.maxLength);
         //System.assertEquals(this.getNamespace(), fieldMetadata.namespace);
         //System.assertEquals(this.getPicklistOptions(fieldDescribe), fieldMetadata.picklistOptions);
@@ -86,6 +87,7 @@ private class FieldMetadata_Tests {
         System.assertEquals(fieldDescribe.getRelationshipName(), fieldMetadata.relationshipName);
         System.assertEquals(fieldDescribe.getRelationshipOrder(), fieldMetadata.relationshipOrder);
         //System.assertEquals( this.getRelationshipReferences(fieldDescribe), fieldMetadata.relationshipReferences);
+        System.assertEquals(fieldDescribe.getScale(), fieldMetadata.scale);
         System.assertEquals(fieldDescribe.getScale(), fieldMetadata.scale);
         System.assertEquals(fieldDescribe.getSOAPType().name(), fieldMetadata.soapType);
     }

@@ -24,17 +24,18 @@ global virtual class RecordTypeMetadata {
             if(!QUERIED_RECORD_TYPE_NAMES_BY_SOBJECT_NAME.containsKey(recordType.SObjectType)) {
                 QUERIED_RECORD_TYPE_NAMES_BY_SOBJECT_NAME.put(recordType.SObjectType, new List<String>{});
             }
-            List<String> recordTypeNames = QUERIED_RECORD_TYPE_NAMES_BY_SOBJECT_NAME.get(recordType.SObjectType);
-            recordTypeNames.add((recordType.NamespacePrefix == null ? '' : recordType.NamespacePrefix + '__') + recordType.DeveloperName);
-            QUERIED_RECORD_TYPE_NAMES_BY_SOBJECT_NAME.put(recordType.SObjectType, recordTypeNames);
+            List<String> recordTypeApiNames = QUERIED_RECORD_TYPE_NAMES_BY_SOBJECT_NAME.get(recordType.SObjectType);
+            recordTypeApiNames.add((recordType.NamespacePrefix == null ? '' : recordType.NamespacePrefix + '__') + recordType.DeveloperName);
+            QUERIED_RECORD_TYPE_NAMES_BY_SOBJECT_NAME.put(recordType.SObjectType, recordTypeApiNames);
         }
     }
 
-    public static List<String> getRecordTypeNames(String sobjectName) {
-        List<String> results = QUERIED_RECORD_TYPE_NAMES_BY_SOBJECT_NAME.get(sobjectName);
+    public static List<String> getRecordTypeApiNames(String sobjectApiName) {
+        List<String> results = QUERIED_RECORD_TYPE_NAMES_BY_SOBJECT_NAME.get(sobjectApiName);
         return results != null ? results : new List<String>();
     }
 
+    @AuraEnabled global final String apiName                     {get; private set;}
     @AuraEnabled global final Id businessProcessId               {get; private set;}
     @AuraEnabled global final String description                 {get; private set;}
     @AuraEnabled global final Id id                              {get; private set;}
@@ -43,13 +44,12 @@ global virtual class RecordTypeMetadata {
     @AuraEnabled global final Boolean isDefaultRecordTypeMapping {get; private set;}
     @AuraEnabled global final Boolean isMaster                   {get; private set;}
     @AuraEnabled global final String label                       {get; private set;}
-    @AuraEnabled global final String localName                   {get; private set;}
-    @AuraEnabled global final String name                        {get; private set;}
+    @AuraEnabled global final String localApiName                {get; private set;}
     @AuraEnabled global final String namespace                   {get; private set;}
-    @AuraEnabled global final String sobjectName                 {get; private set;}
+    @AuraEnabled global final String sobjectApiName              {get; private set;}
 
-    global RecordTypeMetadata(String sobjectName, String recordTypeName) {
-        this(QUERIED_RECORD_TYPES_BY_SOBJECT_AND_DEVELOPER_NAME.get(sobjectName + recordTypeName).Id);
+    global RecordTypeMetadata(String sobjectApiName, String recordTypeApiName) {
+        this(QUERIED_RECORD_TYPES_BY_SOBJECT_AND_DEVELOPER_NAME.get(sobjectApiName + recordTypeApiName).Id);
     }
 
     global RecordTypeMetadata(Id recordTypeId) {
@@ -62,6 +62,7 @@ global virtual class RecordTypeMetadata {
     global RecordTypeMetadata(Schema.SObjectType sobjectType, Schema.RecordTypeInfo recordTypeInfo) {
         RecordType recordType = QUERIED_RECORD_TYPES_BY_ID.get(recordTypeInfo.getRecordTypeId());
 
+        this.apiName                    = this.getApiName(recordType);
         this.businessProcessId          = recordType == null ? null : recordType.BusinessProcessId;
         this.description                = recordType == null ? null : recordType.Description;
         this.id                         = recordTypeInfo.getRecordTypeId();
@@ -70,13 +71,12 @@ global virtual class RecordTypeMetadata {
         this.isDefaultRecordTypeMapping = recordTypeInfo.isDefaultRecordTypeMapping();
         this.isMaster                   = recordTypeInfo.isMaster();
         this.label                      = recordTypeInfo.getName();
-        this.localName                  = recordType == null ? null : recordType.DeveloperName;
-        this.name                       = this.getName(recordType);
+        this.localApiName               = recordType == null ? null : recordType.DeveloperName;
         this.namespace                  = recordType == null ? null : recordType.NamespacePrefix;
-        this.sobjectName                = String.valueOf(sobjectType);
+        this.sobjectApiName             = String.valueOf(sobjectType);
     }
 
-    private String getName(RecordType recordType) {
+    private String getApiName(RecordType recordType) {
         if(recordType == null) return null;
 
         String namespacePrefix = '';

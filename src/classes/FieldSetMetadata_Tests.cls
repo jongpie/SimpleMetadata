@@ -5,10 +5,8 @@
 @isTest
 private  class FieldSetMetadata_Tests {
 
-     @isTest
-    static void it_should_return_metadata_for_sobject_name_and_field_set_name() {
-        SObjectField nameFieldField = Account.Name;
-
+    @isTest
+    static void it_should_return_metadata_for_sobject_api_name_and_field_set_api_name() {
         Schema.FieldSet fieldSet = getFieldSet();
         if(fieldSet == null) return;
 
@@ -25,8 +23,6 @@ private  class FieldSetMetadata_Tests {
 
     @isTest
     static void it_should_return_metadata_for_field_set_token() {
-        SObjectField nameFieldField = Account.Name;
-
         Schema.FieldSet fieldSet = getFieldSet();
         if(fieldSet == null) return;
 
@@ -41,7 +37,6 @@ private  class FieldSetMetadata_Tests {
     private static Schema.FieldSet getFieldSet() {
         // Dynamically check for field sets in some of the most commonly used objects
         // If not results are found, then test coverage will drop
-
         List<String> commonSObjectNames = new List<String>{
             'Account', 'Lead', 'Contact', 'Opportunity'
         };
@@ -58,14 +53,14 @@ private  class FieldSetMetadata_Tests {
         if(fieldSet.getNamespace() != null) namespacePrefix = fieldSet.getNamespace() + '__';
         String fieldSetName = namespacePrefix + fieldSet.getName();
 
+        System.assertEquals(fieldSetName, fieldSetMetadata.apiName);
         System.assertEquals(fieldSet.getDescription(), fieldSetMetadata.description);
         System.assertEquals(fieldSet.getFields().size(), fieldSetMetadata.fieldSetMembers.size());
         // TODO add asserts for field set members' field metadata
         System.assertEquals(fieldSet.getLabel(), fieldSetMetadata.label);
         // TODO add assert for localName
-        System.assertEquals(fieldSetName, fieldSetMetadata.name);
         System.assertEquals(fieldSet.getNamespace(), fieldSetMetadata.namespace);
-        System.assertEquals(String.valueOf(fieldSet.getSObjectType()), fieldSetMetadata.sobjectName);
+        System.assertEquals(String.valueOf(fieldSet.getSObjectType()), fieldSetMetadata.sobjectApiName);
     }
 
 }
