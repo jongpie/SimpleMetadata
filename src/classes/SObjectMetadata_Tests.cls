@@ -3,7 +3,7 @@
 * See LICENSE file or go to https://github.com/jongpie/SimpleMetadata for full license details.  *
 *************************************************************************************************/
 @isTest
-private  class SObjectMetadata_Tests {
+private class SObjectMetadata_Tests {
 
     @isTest
     static void it_should_return_metadata_for_account_sobject_token() {
