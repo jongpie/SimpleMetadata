@@ -18,9 +18,9 @@ global class ListViewMetadata {
             if(!QUERIED_LIST_VIEW_NAMES_BY_SOBJECT_NAME.containsKey(listView.SObjectType)) {
                 QUERIED_LIST_VIEW_NAMES_BY_SOBJECT_NAME.put(listView.SObjectType, new List<String>{});
             }
-            List<String> listViewNames = QUERIED_LIST_VIEW_NAMES_BY_SOBJECT_NAME.get(listView.SObjectType);
-            listViewNames.add((listView.NamespacePrefix == null ? '' : listView.NamespacePrefix + '__') + listView.DeveloperName);
-            QUERIED_LIST_VIEW_NAMES_BY_SOBJECT_NAME.put(listView.SObjectType, listViewNames);
+            List<String> listViewApiNames = QUERIED_LIST_VIEW_NAMES_BY_SOBJECT_NAME.get(listView.SObjectType);
+            listViewApiNames.add((listView.NamespacePrefix == null ? '' : listView.NamespacePrefix + '__') + listView.DeveloperName);
+            QUERIED_LIST_VIEW_NAMES_BY_SOBJECT_NAME.put(listView.SObjectType, listViewApiNames);
         }
     }
 
