@@ -54,8 +54,8 @@ global virtual class RecordTypeMetadata {
 
     global RecordTypeMetadata(Id recordTypeId) {
         this(
-            recordTypeId.getSObjectType(),
-            recordTypeId.getSObjectType().getDescribe().getRecordTypeInfosById().get(recordTypeId)
+            Schema.getGlobalDescribe().get(QUERIED_RECORD_TYPES_BY_ID.get(recordTypeId).SObjectType),
+            Schema.getGlobalDescribe().get(QUERIED_RECORD_TYPES_BY_ID.get(recordTypeId).SObjectType).getDescribe().getRecordTypeInfosById().get(recordTypeId)
         );
     }
 
