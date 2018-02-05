@@ -29,7 +29,7 @@ global virtual class EnvironmentMetadata {
     global EnvironmentMetadata() {
         Map<String, Schema.SObjectType> sobjectTypes = Schema.getGlobalDescribe();
 
-        this.baseUrl                      = URL.getSalesforceBaseUrl().toExternalForm();
+        this.baseUrl                      = Url.getSalesforceBaseUrl().toExternalForm();
         this.instanceName                 = organization.InstanceName;
         this.isChatterEnabled             = sobjectTypes.containsKey('FeedItem');
         this.isKnowledgeEnabled           = sobjectTypes.containsKey('KnowledgeArticle');
