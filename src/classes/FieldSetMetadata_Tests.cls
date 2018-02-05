@@ -80,6 +80,7 @@ private  class FieldSetMetadata_Tests {
         System.assert(untypedFieldSetMetadata.containsKey('localApiName'));
         System.assert(untypedFieldSetMetadata.containsKey('namespace'));
         System.assert(untypedFieldSetMetadata.containsKey('sobjectApiName'));
+        // TODO add asserts for FieldSetMembers
     }
 
 }
