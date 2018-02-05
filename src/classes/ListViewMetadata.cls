@@ -38,7 +38,7 @@ global class ListViewMetadata {
     @AuraEnabled global final Id id                    {get; private set;}
     @AuraEnabled global final Boolean isSoqlCompatible {get; private set;}
     @AuraEnabled global final String label             {get; private set;}
-    @AuraEnabled global final String localName         {get; private set;}
+    @AuraEnabled global final String localApiName      {get; private set;}
     @AuraEnabled global final String namespace         {get; private set;}
     @AuraEnabled global final String sobjectApiName    {get; private set;}
 
@@ -53,7 +53,7 @@ global class ListViewMetadata {
         this.id               = listView.Id;
         this.isSoqlCompatible = listView.IsSoqlCompatible;
         this.label            = listView.Name;
-        this.localName        = listView.DeveloperName;
+        this.localApiName     = listView.DeveloperName;
         this.namespace        = listView.NamespacePrefix;
         this.sobjectApiName   = listView.SObjectType;
     }

@@ -26,7 +26,7 @@ private class ListViewMetadata_Tests {
         System.assertEquals(listView.Id, listViewMetadata.id);
         System.assertEquals(listView.IsSoqlCompatible, listViewMetadata.isSoqlCompatible);
         System.assertEquals(listView.Name, listViewMetadata.label);
-        System.assertEquals(listView.DeveloperName, listViewMetadata.localName);
+        System.assertEquals(listView.DeveloperName, listViewMetadata.localApiName);
         System.assertEquals(listView.NamespacePrefix, listViewMetadata.namespace);
         System.assertEquals(listView.SObjectType, listViewMetadata.sobjectApiName);
     }
@@ -43,7 +43,7 @@ private class ListViewMetadata_Tests {
         System.assert(untypedListViewMetadata.containsKey('id'));
         System.assert(untypedListViewMetadata.containsKey('isSoqlCompatible'));
         System.assert(untypedListViewMetadata.containsKey('label'));
-        System.assert(untypedListViewMetadata.containsKey('localName'));
+        System.assert(untypedListViewMetadata.containsKey('localApiName'));
         System.assert(untypedListViewMetadata.containsKey('namespace'));
         System.assert(untypedListViewMetadata.containsKey('sobjectApiName'));
     }
