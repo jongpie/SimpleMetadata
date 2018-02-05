@@ -60,7 +60,7 @@ private class RecordTypeMetadata_Tests {
         System.assertEquals(recordTypeInfo.getRecordTypeId(), recordTypeMetadata.id);
         System.assertEquals(recordTypeInfo.isActive(), recordTypeMetadata.isActive);
         System.assertEquals(recordTypeInfo.isAvailable(), recordTypeMetadata.isAvailable);
-        System.assertEquals(recordTypeInfo.isDefaultRecordTypeMapping(), recordTypeMetadata.isDefaultRecordTypeMapping);
+        System.assertEquals(recordTypeInfo.isDefaultRecordTypeMapping(), recordTypeMetadata.isDefault);
         System.assertEquals(recordTypeInfo.isMaster(), recordTypeMetadata.isMaster);
         System.assertEquals(recordTypeInfo.getName(), recordTypeMetadata.label);
         System.assertEquals(recordType == null ? null : recordType.DeveloperName, recordTypeMetadata.localApiName);
