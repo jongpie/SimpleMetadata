@@ -46,13 +46,13 @@ global virtual class FieldSetMetadata {
 
     global virtual class FieldSetMemberMetadata {
 
-        @AuraEnabled global final String displayType          {get; private set;}
-        @AuraEnabled global final FieldMetadata field         {get; private set;}
-        @AuraEnabled global final String fieldPath            {get; private set;}
-        @AuraEnabled global final Boolean isDbRequired        {get; private set;}
-        @AuraEnabled global final Boolean isRequired          {get; private set;}
-        @AuraEnabled global final String label                {get; private set;}
-        @AuraEnabled global final String sobjectApiName       {get; private set;}
+        @AuraEnabled global final String displayType    {get; private set;}
+        @AuraEnabled global final FieldMetadata field   {get; private set;}
+        @AuraEnabled global final String fieldPath      {get; private set;}
+        @AuraEnabled global final Boolean isDbRequired  {get; private set;}
+        @AuraEnabled global final Boolean isRequired    {get; private set;}
+        @AuraEnabled global final String label          {get; private set;}
+        @AuraEnabled global final String sobjectApiName {get; private set;}
 
         private FieldSetMemberMetadata(String sobjectApiName, Schema.FieldSetMember fieldSetMember) {
             this.sobjectApiName = sobjectApiName;
