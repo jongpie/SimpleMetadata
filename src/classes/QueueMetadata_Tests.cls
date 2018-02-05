@@ -55,7 +55,7 @@ private class QueueMetadata_Tests {
 
     private static Group getQueue() {
         Group queue = [
-            SELECT Id, Name, DeveloperName, DoesIncludeBosses, DoesSendEmailToMembers, Email, OwnerId
+            SELECT Id, Name, DeveloperName, DoesIncludeBosses, DoesSendEmailToMembers, Email, OwnerId, Owner.Name
             FROM Group
             WHERE Type = 'Queue'
             AND DeveloperName = :queueDeveloperName
@@ -70,6 +70,8 @@ private class QueueMetadata_Tests {
         System.assertEquals(queue.Email, queueMetadata.email);
         System.assertEquals(queue.Name, queueMetadata.label);
         System.assertEquals(queue.OwnerId, queueMetadata.ownerId);
+        System.assertEquals(queue.Owner.Name, queueMetadata.ownerName);
+        System.assertEquals(queue.Owner.Type, queueMetadata.ownerType);
         System.assertEquals(queue.Id, queueMetadata.id);
     }
 

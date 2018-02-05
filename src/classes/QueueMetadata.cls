@@ -14,7 +14,7 @@ global virtual class QueueMetadata {
         QUERIED_QUEUES_BY_DEVELOPER_NAME = new Map<String, Group>();
 
         for(Group queue : [
-            SELECT DeveloperName, DoesIncludeBosses, DoesSendEmailToMembers, Email, Id, Name, OwnerId, RelatedId,
+            SELECT DeveloperName, DoesIncludeBosses, DoesSendEmailToMembers, Email, Id, Name, OwnerId, Owner.Name, Owner.Type, RelatedId,
                 (SELECT Id, SObjectType FROM QueueSObjects),
                 (SELECT Id, GroupId, UserOrGroupId FROM GroupMembers)
             FROM Group
@@ -32,6 +32,8 @@ global virtual class QueueMetadata {
     @AuraEnabled global final Id id                                  {get; private set;}
     @AuraEnabled global final String label                           {get; private set;}
     @AuraEnabled global final Id ownerId                             {get; private set;}
+    @AuraEnabled global final String ownerName                       {get; private set;}
+    @AuraEnabled global final String ownerType                       {get; private set;}
     @AuraEnabled global final List<String> supportedSObjectApiNames  {get; private set;}
     @AuraEnabled global final List<QueueMemberMetadata> queueMembers {get; private set;}
 
@@ -49,6 +51,8 @@ global virtual class QueueMetadata {
         this.id                       = queue.Id;
         this.label                    = queue.Name;
         this.ownerId                  = queue.OwnerId;
+        this.ownerName                = queue.Owner.Name;
+        this.ownerType                = queue.Owner.Type;
         this.queueMembers             = this.getQueueMembers(queue);
         this.supportedSObjectApiNames = this.getSupportedSObjectApiNames(queue);
     }
