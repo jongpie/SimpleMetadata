@@ -24,8 +24,8 @@ global class ListViewMetadata {
         }
     }
 
-    public static List<String> getListViewNames(String sobjectName) {
-        List<String> results = QUERIED_LIST_VIEW_NAMES_BY_SOBJECT_NAME.get(sobjectName);
+    public static List<String> getListViewApiNames(String sobjectApiName) {
+        List<String> results = QUERIED_LIST_VIEW_NAMES_BY_SOBJECT_NAME.get(sobjectApiName);
         return results != null ? results : new List<String>();
     }
 
@@ -34,28 +34,28 @@ global class ListViewMetadata {
         return (listView.NamespacePrefix == null ? '' : listView.NamespacePrefix + '__') + listView.DeveloperName;
     }
 
+    @AuraEnabled global final String apiName           {get; private set;}
     @AuraEnabled global final Id id                    {get; private set;}
-    @AuraEnabled global final Boolean isSOQLCompatible {get; private set;}
+    @AuraEnabled global final Boolean isSoqlCompatible {get; private set;}
     @AuraEnabled global final String label             {get; private set;}
     @AuraEnabled global final String localName         {get; private set;}
-    @AuraEnabled global final String name              {get; private set;}
     @AuraEnabled global final String namespace         {get; private set;}
-    @AuraEnabled global final String sobjectName       {get; private set;}
+    @AuraEnabled global final String sobjectApiName    {get; private set;}
 
-    global ListViewMetadata(String sobjectName, String listViewName) {
-        this(QUERIED_LIST_VIEWS_BY_SOBJECT_AND_DEVELOPER_NAME.get(sobjectName + listViewName).Id);
+    global ListViewMetadata(String sobjectApiName, String listViewApiName) {
+        this(QUERIED_LIST_VIEWS_BY_SOBJECT_AND_DEVELOPER_NAME.get(sobjectApiName + listViewApiName).Id);
     }
 
     global ListViewMetadata(Id listViewId) {
         ListView listView = QUERIED_LIST_VIEWS_BY_ID.get(listViewId);
 
+        this.apiName          = buildFullyQualifiedName(listView);
         this.id               = listView.Id;
-        this.isSOQLCompatible = listView.IsSOQLCompatible;
+        this.isSoqlCompatible = listView.IsSoqlCompatible;
         this.label            = listView.Name;
         this.localName        = listView.DeveloperName;
-        this.name             = buildFullyQualifiedName(listView);
         this.namespace        = listView.NamespacePrefix;
-        this.sobjectName      = listView.SObjectType;
+        this.sobjectApiName   = listView.SObjectType;
     }
 
 }
