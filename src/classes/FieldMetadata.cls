@@ -25,7 +25,7 @@ global virtual class FieldMetadata {
     @AuraEnabled global final Boolean isSortable                           {get; private set;}
     @AuraEnabled global final Boolean isUpdateable                         {get; private set;}
     @AuraEnabled global final String label                                 {get; private set;}
-    @AuraEnabled global final String localApiName                             {get; private set;}
+    @AuraEnabled global final String localApiName                          {get; private set;}
     @AuraEnabled global final Integer maxLength                            {get; private set;}
     @AuraEnabled global final String namespace                             {get; private set;}
     @AuraEnabled global final List<PicklistEntryMetadata> picklistOptions  {get; private set;}
