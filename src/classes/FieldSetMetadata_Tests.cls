@@ -17,6 +17,7 @@ private  class FieldSetMetadata_Tests {
         String fieldSetName = fieldSetNamespace + fieldSet.getName();
         FieldSetMetadata fieldSetMetadata = new FieldSetMetadata(sobjectName, fieldSetName);
         validateAttributesAreSet(fieldSet, fieldSetMetadata);
+        validateCaseSentivityForJavascript(fieldSetMetadata);
 
         Test.stopTest();
     }
@@ -30,6 +31,7 @@ private  class FieldSetMetadata_Tests {
 
         FieldSetMetadata fieldSetMetadata = new FieldSetMetadata(fieldSet);
         validateAttributesAreSet(fieldSet, fieldSetMetadata);
+        validateCaseSentivityForJavascript(fieldSetMetadata);
 
         Test.stopTest();
     }
@@ -61,6 +63,23 @@ private  class FieldSetMetadata_Tests {
         // TODO add assert for localName
         System.assertEquals(fieldSet.getNamespace(), fieldSetMetadata.namespace);
         System.assertEquals(String.valueOf(fieldSet.getSObjectType()), fieldSetMetadata.sobjectApiName);
+    }
+
+    private static void validateCaseSentivityForJavascript(FieldSetMetadata fieldSetMetadata) {
+        // Validate that the attributes are named exactly as expected so that javascript can rely on them
+        String jsonFieldSetMetadata = JSON.serialize(fieldSetMetadata);
+        Map<String, Object> untypedFieldSetMetadata = (Map<String, Object>)JSON.deserializeUntyped(jsonFieldSetMetadata);
+
+        // One negative to confirm that the strings in our map are case sensitive
+        System.assert(untypedFieldSetMetadata.containsKey('APINAME') == false);
+        // Now for the 'real' tests
+        System.assert(untypedFieldSetMetadata.containsKey('apiName'));
+        System.assert(untypedFieldSetMetadata.containsKey('description'));
+        System.assert(untypedFieldSetMetadata.containsKey('fieldSetMembers'));
+        System.assert(untypedFieldSetMetadata.containsKey('label'));
+        System.assert(untypedFieldSetMetadata.containsKey('localApiName'));
+        System.assert(untypedFieldSetMetadata.containsKey('namespace'));
+        System.assert(untypedFieldSetMetadata.containsKey('sobjectApiName'));
     }
 
 }

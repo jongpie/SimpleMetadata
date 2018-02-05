@@ -26,6 +26,7 @@ private class RecordTypeMetadata_Tests {
             Schema.RecordTypeInfo recordTypeInfo = Schema.getGlobalDescribe().get(recordType.SObjectType).getDescribe().getRecordTypeInfosById().get(recordType.Id);
             RecordTypeMetadata recordTypeMetadata = new RecordTypeMetadata(recordType.SObjectType, recordType.DeveloperName);
             validateAttributesAreSet(recordTypeInfo, recordType, recordType.SObjectType, recordTypeMetadata);
+            validateCaseSentivityForJavascript(recordTypeMetadata);
         }
     }
 
@@ -47,6 +48,7 @@ private class RecordTypeMetadata_Tests {
             FROM RecordType WHERE Id = :queryableRecordTypeInfo.getRecordTypeId()
         ];
         validateAttributesAreSet(queryableRecordTypeInfo, recordType, recordType.SObjectType, recordTypeMetadata);
+        validateCaseSentivityForJavascript(recordTypeMetadata);
     }
 
     private static void validateAttributesAreSet(RecordTypeInfo recordTypeInfo, RecordType recordType, String sobjectApiName, RecordTypeMetadata recordTypeMetadata) {
@@ -66,6 +68,28 @@ private class RecordTypeMetadata_Tests {
         System.assertEquals(recordType == null ? null : recordType.DeveloperName, recordTypeMetadata.localApiName);
         System.assertEquals(recordType == null ? null : recordType.NamespacePrefix, recordTypeMetadata.namespace);
         System.assertEquals(sobjectApiName, recordTypeMetadata.sobjectApiName);
+    }
+
+    private static void validateCaseSentivityForJavascript(RecordTypeMetadata recordTypeMetadata) {
+        // Validate that the attributes are named exactly as expected so that javascript can rely on them
+        String jsonRecordTypeMetadata = JSON.serialize(recordTypeMetadata);
+        Map<String, Object> untypedRecordTypeMetadata = (Map<String, Object>)JSON.deserializeUntyped(jsonRecordTypeMetadata);
+
+        // One negative to confirm that the strings in our map are case sensitive
+        System.assert(untypedRecordTypeMetadata.containsKey('APINAME') == false);
+        // Now for the 'real' tests
+        System.assert(untypedRecordTypeMetadata.containsKey('apiName'));
+        System.assert(untypedRecordTypeMetadata.containsKey('businessProcessId'));
+        System.assert(untypedRecordTypeMetadata.containsKey('description'));
+        System.assert(untypedRecordTypeMetadata.containsKey('id'));
+        System.assert(untypedRecordTypeMetadata.containsKey('isActive'));
+        System.assert(untypedRecordTypeMetadata.containsKey('isAvailable'));
+        System.assert(untypedRecordTypeMetadata.containsKey('isDefault'));
+        System.assert(untypedRecordTypeMetadata.containsKey('isMaster'));
+        System.assert(untypedRecordTypeMetadata.containsKey('label'));
+        System.assert(untypedRecordTypeMetadata.containsKey('localApiName'));
+        System.assert(untypedRecordTypeMetadata.containsKey('namespace'));
+        System.assert(untypedRecordTypeMetadata.containsKey('sobjectApiName'));
     }
 
 }

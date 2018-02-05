@@ -9,7 +9,9 @@ private class EnvironmentMetadata_Tests {
     static void it_should_return_environment_metadata() {
         Test.startTest();
 
-        validateAttributesAreSet(new EnvironmentMetadata());
+        EnvironmentMetadata environmentMetadata = new EnvironmentMetadata();
+        validateAttributesAreSet(environmentMetadata);
+        validateCaseSentivityForJavascript(environmentMetadata);
 
         Test.stopTest();
     }
@@ -46,6 +48,30 @@ private class EnvironmentMetadata_Tests {
         System.assertEquals(organization.Name, environmentMetadata.organizationName);
         System.assertEquals(organization.OrganizationType, environmentMetadata.organizationType);
         //System.assert(environmentMetadata.sobjectTypeNames.containsAll(sobjectTypes.keySet()));
+    }
+
+    private static void validateCaseSentivityForJavascript(EnvironmentMetadata environmentMetadata) {
+        // Validate that the attributes are named exactly as expected so that javascript can rely on them
+        String jsonEnvironmentMetadata = JSON.serialize(environmentMetadata);
+        Map<String, Object> untypedEnvironmentMetadata = (Map<String, Object>)JSON.deserializeUntyped(jsonEnvironmentMetadata);
+
+        // One negative to confirm that the strings in our map are case sensitive
+        System.assert(untypedEnvironmentMetadata.containsKey('BASEURL') == false);
+        // Now for the 'real' tests
+        System.assert(untypedEnvironmentMetadata.containsKey('baseUrl'));
+        System.assert(untypedEnvironmentMetadata.containsKey('instanceName'));
+        System.assert(untypedEnvironmentMetadata.containsKey('isChatterEnabled'));
+        System.assert(untypedEnvironmentMetadata.containsKey('isKnowledgeEnabled'));
+        System.assert(untypedEnvironmentMetadata.containsKey('isMultiCurrencyEnabled'));
+        System.assert(untypedEnvironmentMetadata.containsKey('isPersonAccountEnabled'));
+        System.assert(untypedEnvironmentMetadata.containsKey('isProduction'));
+        System.assert(untypedEnvironmentMetadata.containsKey('isSandbox'));
+        System.assert(untypedEnvironmentMetadata.containsKey('isTerritoryManagementEnabled'));
+        System.assert(untypedEnvironmentMetadata.containsKey('namespace'));
+        System.assert(untypedEnvironmentMetadata.containsKey('organizationId'));
+        System.assert(untypedEnvironmentMetadata.containsKey('organizationName'));
+        System.assert(untypedEnvironmentMetadata.containsKey('organizationType'));
+        System.assert(untypedEnvironmentMetadata.containsKey('sobjectApiNames'));
     }
 
 }

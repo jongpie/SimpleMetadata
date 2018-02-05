@@ -14,6 +14,7 @@ private class FieldMetadata_Tests {
 
         FieldMetadata accountFieldMetadata = new FieldMetadata(sobjectName, fieldName);
         validateAttributesAreSet(String.valueOf(fieldName), accountFieldMetadata);
+        validateCaseSentivityForJavascript(accountFieldMetadata);
 
         Test.stopTest();
     }
@@ -27,6 +28,7 @@ private class FieldMetadata_Tests {
 
         FieldMetadata accountFieldMetadata = new FieldMetadata(accountSObjectType, accountNameField);
         validateAttributesAreSet(String.valueOf(accountNameField), accountFieldMetadata);
+        validateCaseSentivityForJavascript(accountFieldMetadata);
 
         Test.stopTest();
     }
@@ -39,6 +41,7 @@ private class FieldMetadata_Tests {
 
         FieldMetadata accountFieldMetadata = new FieldMetadata(Account.SObjectType, parentIdField);
         validateAttributesAreSet(String.valueOf(parentIdField), accountFieldMetadata);
+        validateCaseSentivityForJavascript(accountFieldMetadata);
 
         Test.stopTest();
     }
@@ -51,6 +54,7 @@ private class FieldMetadata_Tests {
 
         FieldMetadata accountFieldMetadata = new FieldMetadata(Account.SObjectType, typeField);
         validateAttributesAreSet(String.valueOf(typeField), accountFieldMetadata);
+        validateCaseSentivityForJavascript(accountFieldMetadata);
 
         Test.stopTest();
     }
@@ -90,6 +94,48 @@ private class FieldMetadata_Tests {
         System.assertEquals(fieldDescribe.getScale(), fieldMetadata.scale);
         System.assertEquals(fieldDescribe.getScale(), fieldMetadata.scale);
         System.assertEquals(fieldDescribe.getSOAPType().name(), fieldMetadata.soapType);
+    }
+
+    private static void validateCaseSentivityForJavascript(FieldMetadata fieldMetadata) {
+        // Validate that the attributes are named exactly as expected so that javascript can rely on them
+        String jsonFieldMetadata = JSON.serialize(fieldMetadata);
+        Map<String, Object> untypedFieldMetadata = (Map<String, Object>)JSON.deserializeUntyped(jsonFieldMetadata);
+
+        // One negative to confirm that the strings in our map are case sensitive
+        System.assert(untypedFieldMetadata.containsKey('APINAME') == false);
+        // Now for the 'real' tests
+        System.assert(untypedFieldMetadata.containsKey('apiName'));
+        System.assert(untypedFieldMetadata.containsKey('byteLength'));
+        System.assert(untypedFieldMetadata.containsKey('defaultValue'));
+        System.assert(untypedFieldMetadata.containsKey('digits'));
+        System.assert(untypedFieldMetadata.containsKey('displayType'));
+        System.assert(untypedFieldMetadata.containsKey('inlineHelpText'));
+        System.assert(untypedFieldMetadata.containsKey('isAccessible'));
+        System.assert(untypedFieldMetadata.containsKey('isAutoNumber'));
+        System.assert(untypedFieldMetadata.containsKey('isCalculated'));
+        System.assert(untypedFieldMetadata.containsKey('isCaseSensitive'));
+        System.assert(untypedFieldMetadata.containsKey('isCreateable'));
+        System.assert(untypedFieldMetadata.containsKey('isCustom'));
+        System.assert(untypedFieldMetadata.containsKey('isDefaultedOnCreate'));
+        System.assert(untypedFieldMetadata.containsKey('isFilterable'));
+        System.assert(untypedFieldMetadata.containsKey('isGroupable'));
+        System.assert(untypedFieldMetadata.containsKey('isNameField'));
+        System.assert(untypedFieldMetadata.containsKey('isNillable'));
+        System.assert(untypedFieldMetadata.containsKey('isRequired'));
+        System.assert(untypedFieldMetadata.containsKey('isSortable'));
+        System.assert(untypedFieldMetadata.containsKey('isUpdateable'));
+        System.assert(untypedFieldMetadata.containsKey('label'));
+        System.assert(untypedFieldMetadata.containsKey('localApiName'));
+        System.assert(untypedFieldMetadata.containsKey('maxLength'));
+        System.assert(untypedFieldMetadata.containsKey('namespace'));
+        System.assert(untypedFieldMetadata.containsKey('picklistOptions'));
+        System.assert(untypedFieldMetadata.containsKey('precision'));
+        System.assert(untypedFieldMetadata.containsKey('relationshipName'));
+        System.assert(untypedFieldMetadata.containsKey('relationshipOrder'));
+        System.assert(untypedFieldMetadata.containsKey('relationshipReferences'));
+        System.assert(untypedFieldMetadata.containsKey('scale'));
+        System.assert(untypedFieldMetadata.containsKey('soapType'));
+        System.assert(untypedFieldMetadata.containsKey('sobjectApiName'));
     }
 
 }

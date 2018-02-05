@@ -9,12 +9,14 @@ private  class SObjectMetadata_Tests {
     static void it_should_return_metadata_for_account_sobject_token() {
         SObjectMetadata accountMetadata = new SObjectMetadata(Schema.Account.SObjectType);
         validateAttributesAreSet(accountMetadata);
+        validateCaseSentivityForJavascript(accountMetadata);
     }
 
     @isTest
     static void it_should_return_metadata_for_account_sobject_api_name() {
         SObjectMetadata accountMetadata = new SObjectMetadata('Account');
         validateAttributesAreSet(accountMetadata);
+        validateCaseSentivityForJavascript(accountMetadata);
     }
 
     private static void validateAttributesAreSet(SObjectMetadata sobjectMetadata) {
@@ -65,6 +67,42 @@ private  class SObjectMetadata_Tests {
         System.assertNotEquals(null, sobjectMetadata.labelPlural);
         System.assertNotEquals(null, sobjectMetadata.localApiName);
         System.assertNotEquals(null, sobjectMetadata.tabIcon);
+    }
+
+    private static void validateCaseSentivityForJavascript(SObjectMetadata sobjectMetadata) {
+        // Validate that the attributes are named exactly as expected so that javascript can rely on them
+        String jsonSObjectMetadata = JSON.serialize(sobjectMetadata);
+        Map<String, Object> untypedSObjectMetadata = (Map<String, Object>)JSON.deserializeUntyped(jsonSObjectMetadata);
+
+        // One negative to confirm that the strings in our map are case sensitive
+        System.assert(untypedSObjectMetadata.containsKey('APINAME') == false);
+        // Now for the 'real' tests
+        System.assert(untypedSObjectMetadata.containsKey('apiName'));
+        System.assert(untypedSObjectMetadata.containsKey('displayFieldApiName'));
+        System.assert(untypedSObjectMetadata.containsKey('hasMultiCurrency'));
+        System.assert(untypedSObjectMetadata.containsKey('hasSubtypes'));
+        System.assert(untypedSObjectMetadata.containsKey('isAccessible'));
+        System.assert(untypedSObjectMetadata.containsKey('isChatterFeedEnabled'));
+        System.assert(untypedSObjectMetadata.containsKey('isCreateable'));
+        System.assert(untypedSObjectMetadata.containsKey('isCustom'));
+        System.assert(untypedSObjectMetadata.containsKey('isCustomSetting'));
+        System.assert(untypedSObjectMetadata.containsKey('isDeletable'));
+        System.assert(untypedSObjectMetadata.containsKey('isMruEnabled'));
+        System.assert(untypedSObjectMetadata.containsKey('isMergeable'));
+        System.assert(untypedSObjectMetadata.containsKey('isQueryable'));
+        System.assert(untypedSObjectMetadata.containsKey('isSearchable'));
+        System.assert(untypedSObjectMetadata.containsKey('isUndeletable'));
+        System.assert(untypedSObjectMetadata.containsKey('isUpdateable'));
+        System.assert(untypedSObjectMetadata.containsKey('fieldApiNames'));
+        System.assert(untypedSObjectMetadata.containsKey('fieldSetApiNames'));
+        System.assert(untypedSObjectMetadata.containsKey('keyPrefix'));
+        System.assert(untypedSObjectMetadata.containsKey('label'));
+        System.assert(untypedSObjectMetadata.containsKey('labelPlural'));
+        System.assert(untypedSObjectMetadata.containsKey('listViewApiNames'));
+        System.assert(untypedSObjectMetadata.containsKey('localApiName'));
+        System.assert(untypedSObjectMetadata.containsKey('namespace'));
+        System.assert(untypedSObjectMetadata.containsKey('recordTypeApiNames'));
+        System.assert(untypedSObjectMetadata.containsKey('tabIcon'));
     }
 
 }
