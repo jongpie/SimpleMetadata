@@ -2,7 +2,7 @@
 * This file is part of the SimpleMetadata project, released under the MIT License.               *
 * See LICENSE file or go to https://github.com/jongpie/SimpleMetadata for full license details.  *
 *************************************************************************************************/
-@IsTest
+@isTest
 private class QueueMetadata_Tests {
 
     private static final String queueDeveloperName = 'queueDeveloperName';
@@ -37,25 +37,27 @@ private class QueueMetadata_Tests {
 
         QueueMetadata queueMetadata = new QueueMetadata(queue.Id);
         validateAttributesAreSet(queue, queueMetadata);
+        validateCaseSentivityForJavascript(queueMetadata);
 
         Test.stopTest();
     }
 
     @isTest
-    static void it_should_return_queue_metadata_for_developer_name() {
+    static void it_should_return_queue_metadata_for_api_name() {
         Group queue = getQueue();
 
         Test.startTest();
 
         QueueMetadata queueMetadata = new QueueMetadata(queue.DeveloperName);
         validateAttributesAreSet(queue, queueMetadata);
+        validateCaseSentivityForJavascript(queueMetadata);
 
         Test.stopTest();
     }
 
     private static Group getQueue() {
         Group queue = [
-            SELECT Id, Name, DeveloperName, DoesIncludeBosses, DoesSendEmailToMembers, Email, OwnerId
+            SELECT Id, Name, DeveloperName, DoesIncludeBosses, DoesSendEmailToMembers, Email, OwnerId, Owner.Name
             FROM Group
             WHERE Type = 'Queue'
             AND DeveloperName = :queueDeveloperName
@@ -64,13 +66,36 @@ private class QueueMetadata_Tests {
     }
 
     private static void validateAttributesAreSet(Group queue, QueueMetadata queueMetadata) {
+        System.assertEquals(queue.DeveloperName, queueMetadata.apiName);
         System.assertEquals(queue.DoesIncludeBosses, queueMetadata.doesIncludeBosses);
         System.assertEquals(queue.DoesSendEmailToMembers, queueMetadata.doesSendEmailToMembers);
         System.assertEquals(queue.Email, queueMetadata.email);
         System.assertEquals(queue.Name, queueMetadata.label);
-        System.assertEquals(queue.DeveloperName, queueMetadata.name);
         System.assertEquals(queue.OwnerId, queueMetadata.ownerId);
+        System.assertEquals(queue.Owner.Name, queueMetadata.ownerName);
+        System.assertEquals(queue.Owner.Type, queueMetadata.ownerType);
         System.assertEquals(queue.Id, queueMetadata.id);
+    }
+
+    private static void validateCaseSentivityForJavascript(QueueMetadata queueMetadata) {
+        // Validate that the attributes are named exactly as expected so that javascript can rely on them
+        String jsonQueueMetadata = JSON.serialize(queueMetadata);
+        Map<String, Object> untypedQueueMetadata = (Map<String, Object>)JSON.deserializeUntyped(jsonQueueMetadata);
+
+        // One negative to confirm that the strings in our map are case sensitive
+        System.assert(untypedQueueMetadata.containsKey('APINAME') == false);
+        // Now for the 'real' tests
+        System.assert(untypedQueueMetadata.containsKey('apiName'));
+        System.assert(untypedQueueMetadata.containsKey('doesIncludeBosses'));
+        System.assert(untypedQueueMetadata.containsKey('doesSendEmailToMembers'));
+        System.assert(untypedQueueMetadata.containsKey('email'));
+        System.assert(untypedQueueMetadata.containsKey('id'));
+        System.assert(untypedQueueMetadata.containsKey('label'));
+        System.assert(untypedQueueMetadata.containsKey('ownerId'));
+        System.assert(untypedQueueMetadata.containsKey('ownerName'));
+        System.assert(untypedQueueMetadata.containsKey('ownerType'));
+        System.assert(untypedQueueMetadata.containsKey('supportedSObjectApiNames'));
+        System.assert(untypedQueueMetadata.containsKey('queueMembers'));
     }
 
 }
