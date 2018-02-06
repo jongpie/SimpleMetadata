@@ -4,7 +4,7 @@
 *************************************************************************************************/
 global virtual class ContextMetadata {
 
-    @AuraEnabled global final Boolean isApexREST         {get; private set;}
+    @AuraEnabled global final Boolean isApexRest         {get; private set;}
     @AuraEnabled global final Boolean isBatch            {get; private set;}
     @AuraEnabled global final Boolean isExecuting        {get; private set;}
     @AuraEnabled global final Boolean isFuture           {get; private set;}
@@ -16,7 +16,7 @@ global virtual class ContextMetadata {
     @AuraEnabled global final Boolean isVisualforce      {get; private set;}
 
     global ContextMetadata() {
-        this.isApexREST         = RestContext.request != null;
+        this.isApexRest         = RestContext.request != null;
         this.isBatch            = System.isBatch();
         this.isExecuting        = Trigger.isExecuting;
         this.isFuture           = System.isFuture();
