@@ -19,6 +19,19 @@ private class ListViewMetadata_Tests {
         Test.stopTest();
     }
 
+    @isTest
+    static void it_should_return_metadata_for_list_view_id() {
+        ListView listView = [SELECT Id, IsSoqlCompatible, Name, DeveloperName, NamespacePrefix, SObjectType FROM ListView LIMIT 1];
+
+        Test.startTest();
+
+        ListViewMetadata listViewMetadata = new ListViewMetadata(listView.Id);
+        validateAttributesAreSet(listView, listViewMetadata);
+        validateCaseSentivityForJavascript(listViewMetadata);
+
+        Test.stopTest();
+    }
+
     private static void validateAttributesAreSet(ListView listView, ListViewMetadata listViewMetadata) {
         String apiName = (listView.NamespacePrefix == null ? '' : listView.NamespacePrefix + '__') + listView.DeveloperName;
 
@@ -47,4 +60,5 @@ private class ListViewMetadata_Tests {
         System.assert(untypedListViewMetadata.containsKey('namespace'));
         System.assert(untypedListViewMetadata.containsKey('sobjectApiName'));
     }
+
 }
