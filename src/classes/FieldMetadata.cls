@@ -4,6 +4,7 @@
 *************************************************************************************************/
 global virtual class FieldMetadata {
 
+    @AuraEnabled global final String apiName                               {get; private set;}
     @AuraEnabled global final Integer byteLength                           {get; private set;}
     @AuraEnabled global final Object defaultValue                          {get; private set;}
     @AuraEnabled global final Integer digits                               {get; private set;}
@@ -24,23 +25,22 @@ global virtual class FieldMetadata {
     @AuraEnabled global final Boolean isSortable                           {get; private set;}
     @AuraEnabled global final Boolean isUpdateable                         {get; private set;}
     @AuraEnabled global final String label                                 {get; private set;}
-    @AuraEnabled global final String localName                             {get; private set;}
+    @AuraEnabled global final String localApiName                          {get; private set;}
     @AuraEnabled global final Integer maxLength                            {get; private set;}
-    @AuraEnabled global final String name                                  {get; private set;}
     @AuraEnabled global final String namespace                             {get; private set;}
     @AuraEnabled global final List<PicklistEntryMetadata> picklistOptions  {get; private set;}
     @AuraEnabled global final Integer precision                            {get; private set;}
     @AuraEnabled global final String relationshipName                      {get; private set;}
     @AuraEnabled global final Integer relationshipOrder                    {get; private set;}
-    @AuraEnabled global final List<SObjectMetadata> relationshipReferences {get; private set;}
+    @AuraEnabled global final List<SObjectMetadata> relationshipReferences {get; private set;} // TODO consider changing to string[] of names instead
     @AuraEnabled global final Integer scale                                {get; private set;}
     @AuraEnabled global final String soapType                              {get; private set;}
-    @AuraEnabled global final String sobjectName                           {get; private set;}
+    @AuraEnabled global final String sobjectApiName                        {get; private set;}
 
-    global FieldMetadata(String sobjectName, String fieldName) {
+    global FieldMetadata(String sobjectApiName, String fieldApiName) {
         this(
-            Schema.getGlobalDescribe().get(sobjectName),
-            Schema.getGlobalDescribe().get(sobjectName).getDescribe().fields.getMap().get(fieldName)
+            Schema.getGlobalDescribe().get(sobjectApiName),
+            Schema.getGlobalDescribe().get(sobjectApiName).getDescribe().fields.getMap().get(fieldApiName)
         );
     }
 
@@ -48,6 +48,7 @@ global virtual class FieldMetadata {
         Schema.DescribeSObjectResult sobjectDescribe = sobjectType.getDescribe();
         Schema.DescribeFieldResult fieldDescribe     = sobjectField.getDescribe();
 
+        this.apiName                = String.valueOf(sobjectField);
         this.byteLength             = fieldDescribe.getByteLength();
         this.defaultValue           = fieldDescribe.getDefaultValue();
         this.digits                 = fieldDescribe.getDigits();
@@ -68,9 +69,8 @@ global virtual class FieldMetadata {
         this.isSortable             = fieldDescribe.isSortable();
         this.isUpdateable           = fieldDescribe.isUpdateable();
         this.label                  = fieldDescribe.getLabel();
-        this.localName              = fieldDescribe.getLocalName();
+        this.localApiName           = fieldDescribe.getLocalName();
         this.maxLength              = fieldDescribe.getLength();
-        this.name                   = String.valueOf(sobjectField);
         this.namespace              = this.getNamespace();
         this.picklistOptions        = this.getPicklistOptions(fieldDescribe);
         this.precision              = fieldDescribe.getPrecision();
@@ -79,13 +79,12 @@ global virtual class FieldMetadata {
         this.relationshipReferences = this.getRelationshipReferences(fieldDescribe);
         this.scale                  = fieldDescribe.getScale();
         this.soapType               = fieldDescribe.getSOAPType().name();
-        this.sobjectName            = String.valueOf(sobjectName);
-
+        this.sobjectApiName         = String.valueOf(sobjectApiName);
     }
 
     private String getNamespace() {
-        Integer localNameIndex = this.name.replace('__c', '').indexOf('__');
-        return localNameIndex < 0 ? null : this.name.substring(0, localNameIndex);
+        Integer localNameIndex = this.apiName.replace('__c', '').indexOf('__');
+        return localNameIndex < 0 ? null : this.apiName.substring(0, localNameIndex);
     }
 
     private List<PicklistEntryMetadata> getPicklistOptions(Schema.DescribeFieldResult fieldDescribe) {

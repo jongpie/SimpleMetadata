@@ -16,10 +16,10 @@ Each class has at least 2 contstructors
 
 Each class returns an immutable DTO with no public methods. Each member variables follows these naming conventions:
 1. Variables are named using camelCase - this is less important in Apex development since Apex is case-insensitive, but important to note for Lightning development since Javascript is case-sensitive.
-2. Variables called 'name' refer to the API name or Developer Name, including the namespace prefix. Example: sobjectName = 'MyNameSpace__MyObject__c';
-3. Variables called 'localName' refer to the API name or Developer Name, excluding the namespace prefix. Example: sobjectName = 'MyObject__c';
-4. Variables called 'label' refer to the label displayed to the user. Example: new SObjectMetadata('MyObject__c').label; // Gets the localized/translated label for your custom object
-5. Variables called 'displayFieldName' refer to the name field of an SObject - typically, the field is actually called Name, but there are exceptions, like Case.CaseNumber, Task.Subject, Order.OrderNumber, etc.
+2. Variables called 'apiName' refer to the API name or Developer Name, including the namespace prefix. Example: sobjectName = 'MyNameSpace__MyObject__c';
+3. Variables called 'localApiName' refer to the API name or Developer Name, excluding the namespace prefix. Example: sobjectName = 'MyObject__c';
+4. Variables called 'label' refer to the label displayed to the user - if translations are available, then the label is translated to the user's language. Example: new SObjectMetadata('MyObject__c').label; // Gets the localized/translated label for your custom object
+5. Variables called 'displayFieldApiName' refer to the name field of an SObject - typically, the field is actually called Name, but there are exceptions, like Case.CaseNumber, Task.Subject, Order.OrderNumber, etc.
 
 ## EnvironmentMetadata.cls
 * Contains metadata information for the current environment. No parameters are needed to construct it.
