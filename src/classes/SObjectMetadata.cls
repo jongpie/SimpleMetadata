@@ -101,6 +101,7 @@ global virtual class SObjectMetadata {
         for(Schema.SObjectField field : sobjectDescribe.fields.getMap().values()) {
             fieldApiNames.add(String.valueOf(field));
         }
+        fieldApiNames.sort();
         return fieldApiNames;
     }
 
@@ -110,6 +111,7 @@ global virtual class SObjectMetadata {
             String namespace = fieldSet.getNameSpace() == null ? '' : FieldSet.getNamespace() + '__';
             fieldSetApiNames.add(namespace + fieldSet.getName());
         }
+        fieldSetApiNames.sort();
         return fieldSetApiNames;
     }
 
