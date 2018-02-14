@@ -21,11 +21,13 @@ private class EnvironmentMetadata_Tests {
         Test.startTest();
 
         System.assertEquals(0, Limits.getQueries());
-        // Only the first initialization should use a query, multiple initializations should use cached results
+        new EnvironmentMetadata();
+        Integer initialQueryCount = Limits.getQueries();
+        // Only the first initialization should use queries, multiple initializations should use cached results
         for(Integer i = 0; i < 10; i++) {
             new EnvironmentMetadata();
         }
-        System.assertEquals(1, Limits.getQueries());
+        System.assertEquals(initialQueryCount, Limits.getQueries());
 
         Test.stopTest();
     }
