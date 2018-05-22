@@ -57,18 +57,18 @@ private class RecordTypeMetadata_Tests {
         if(recordType != null && recordType.NamespacePrefix != null) namespacePrefix = recordType.NamespacePrefix + '__';
         String recordTypeName = recordType == null ? null : namespacePrefix + recordType.DeveloperName;
 
-        System.assertEquals(recordType == null ? null : recordTypeName, recordTypeMetadata.apiName);
-        System.assertEquals(recordType == null ? null : recordType.BusinessProcessId, recordTypeMetadata.businessProcessId);
-        System.assertEquals(recordType == null ? null : recordType.Description, recordTypeMetadata.description);
-        System.assertEquals(recordTypeInfo.getRecordTypeId(), recordTypeMetadata.id);
-        System.assertEquals(recordTypeInfo.isActive(), recordTypeMetadata.isActive);
-        System.assertEquals(recordTypeInfo.isAvailable(), recordTypeMetadata.isAvailable);
-        System.assertEquals(recordTypeInfo.isDefaultRecordTypeMapping(), recordTypeMetadata.isDefault);
-        System.assertEquals(recordTypeInfo.isMaster(), recordTypeMetadata.isMaster);
-        System.assertEquals(recordTypeInfo.getName(), recordTypeMetadata.label);
-        System.assertEquals(recordType == null ? null : recordType.DeveloperName, recordTypeMetadata.localApiName);
-        System.assertEquals(recordType == null ? null : recordType.NamespacePrefix, recordTypeMetadata.namespace);
-        System.assertEquals(sobjectApiName, recordTypeMetadata.sobjectApiName);
+        System.assertEquals(recordType == null ? null : recordTypeName, recordTypeMetadata.ApiName);
+        System.assertEquals(recordType == null ? null : recordType.BusinessProcessId, recordTypeMetadata.BusinessProcessId);
+        System.assertEquals(recordType == null ? null : recordType.Description, recordTypeMetadata.Description);
+        System.assertEquals(recordTypeInfo.getRecordTypeId(), recordTypeMetadata.Id);
+        System.assertEquals(recordTypeInfo.isActive(), recordTypeMetadata.IsActive);
+        System.assertEquals(recordTypeInfo.isAvailable(), recordTypeMetadata.IsAvailable);
+        System.assertEquals(recordTypeInfo.isDefaultRecordTypeMapping(), recordTypeMetadata.IsDefault);
+        System.assertEquals(recordTypeInfo.isMaster(), recordTypeMetadata.IsMaster);
+        System.assertEquals(recordTypeInfo.getName(), recordTypeMetadata.Label);
+        System.assertEquals(recordType == null ? null : recordType.DeveloperName, recordTypeMetadata.LocalApiName);
+        System.assertEquals(recordType == null ? null : recordType.NamespacePrefix, recordTypeMetadata.Namespace);
+        System.assertEquals(sobjectApiName, recordTypeMetadata.SobjectApiName);
     }
 
     private static void validateCaseSentivityForJavascript(RecordTypeMetadata recordTypeMetadata) {
@@ -79,18 +79,18 @@ private class RecordTypeMetadata_Tests {
         // One negative to confirm that the strings in our map are case sensitive
         System.assert(untypedRecordTypeMetadata.containsKey('APINAME') == false);
         // Now for the 'real' tests
-        System.assert(untypedRecordTypeMetadata.containsKey('apiName'));
-        System.assert(untypedRecordTypeMetadata.containsKey('businessProcessId'));
-        System.assert(untypedRecordTypeMetadata.containsKey('description'));
-        System.assert(untypedRecordTypeMetadata.containsKey('id'));
-        System.assert(untypedRecordTypeMetadata.containsKey('isActive'));
-        System.assert(untypedRecordTypeMetadata.containsKey('isAvailable'));
-        System.assert(untypedRecordTypeMetadata.containsKey('isDefault'));
-        System.assert(untypedRecordTypeMetadata.containsKey('isMaster'));
-        System.assert(untypedRecordTypeMetadata.containsKey('label'));
-        System.assert(untypedRecordTypeMetadata.containsKey('localApiName'));
-        System.assert(untypedRecordTypeMetadata.containsKey('namespace'));
-        System.assert(untypedRecordTypeMetadata.containsKey('sobjectApiName'));
+        System.assert(untypedRecordTypeMetadata.containsKey('ApiName'));
+        System.assert(untypedRecordTypeMetadata.containsKey('BusinessProcessId'));
+        System.assert(untypedRecordTypeMetadata.containsKey('Description'));
+        System.assert(untypedRecordTypeMetadata.containsKey('Id'));
+        System.assert(untypedRecordTypeMetadata.containsKey('IsActive'));
+        System.assert(untypedRecordTypeMetadata.containsKey('IsAvailable'));
+        System.assert(untypedRecordTypeMetadata.containsKey('IsDefault'));
+        System.assert(untypedRecordTypeMetadata.containsKey('IsMaster'));
+        System.assert(untypedRecordTypeMetadata.containsKey('Label'));
+        System.assert(untypedRecordTypeMetadata.containsKey('LocalApiName'));
+        System.assert(untypedRecordTypeMetadata.containsKey('Namespace'));
+        System.assert(untypedRecordTypeMetadata.containsKey('SobjectApiName'));
     }
 
 }
