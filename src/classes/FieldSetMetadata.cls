@@ -2,30 +2,30 @@
 * This file is part of the SimpleMetadata project, released under the MIT License.               *
 * See LICENSE file or go to https://github.com/jongpie/SimpleMetadata for full license details.  *
 *************************************************************************************************/
-global virtual class FieldSetMetadata {
+global class FieldSetMetadata {
 
-    @AuraEnabled global final String apiName                               {get; private set;}
-    @AuraEnabled global final String description                           {get; private set;}
-    @AuraEnabled global final List<FieldSetMemberMetadata> fieldSetMembers {get; private set;}
-    @AuraEnabled global final String label                                 {get; private set;}
-    @AuraEnabled global final String localApiName                          {get; private set;}
-    @AuraEnabled global final String namespace                             {get; private set;}
-    @AuraEnabled global final String sobjectApiName                        {get; private set;}
+    @AuraEnabled global final String ApiName                               {get; private set;}
+    @AuraEnabled global final String Description                           {get; private set;}
+    @AuraEnabled global final List<FieldSetMemberMetadata> FieldSetMembers {get; private set;}
+    @AuraEnabled global final String Label                                 {get; private set;}
+    @AuraEnabled global final String LocalApiName                          {get; private set;}
+    @AuraEnabled global final String Namespace                             {get; private set;}
+    @AuraEnabled global final String SobjectApiName                        {get; private set;}
 
     global FieldSetMetadata(String sobjectApiName, String fieldSetApiName) {
         this(Schema.getGlobalDescribe().get(sobjectApiName).getDescribe().fieldSets.getMap().get(fieldSetApiName));
     }
 
     global FieldSetMetadata(Schema.FieldSet fieldSet) {
-        // SObject name & field name are used to set other values, so set them first
-        this.sobjectApiName = String.valueOf(fieldSet.getSObjectType());
-        this.apiName        = (fieldSet.getNamespace() == null ? '' : fieldSet.getNamespace() + '__') + fieldSet.getName();
+        // Sobject name & field name are used to set other values, so set them first
+        this.SobjectApiName = String.valueOf(fieldSet.getSobjectType());
+        this.ApiName        = (fieldSet.getNamespace() == null ? '' : fieldSet.getNamespace() + '__') + fieldSet.getName();
 
-        this.description     = fieldSet.getDescription();
-        this.fieldSetMembers = this.getFieldSetMembers(fieldSet);
-        this.label           = fieldSet.getLabel();
-        this.localApiName    = this.getLocalApiName();
-        this.namespace       = fieldSet.getNamespace();
+        this.Description     = fieldSet.getDescription();
+        this.FieldSetMembers = this.getFieldSetMembers(fieldSet);
+        this.Label           = fieldSet.getLabel();
+        this.LocalApiName    = this.getLocalApiName();
+        this.Namespace       = fieldSet.getNamespace();
     }
 
     private List<FieldSetMemberMetadata> getFieldSetMembers(Schema.FieldSet fieldSet) {
@@ -44,25 +44,25 @@ global virtual class FieldSetMetadata {
         return localNameIndex < 0 ? null : this.apiName.substring(localNameIndex + 2, this.apiName.length());
     }
 
-    global virtual class FieldSetMemberMetadata {
+    global class FieldSetMemberMetadata {
 
-        @AuraEnabled global final String displayType    {get; private set;}
-        @AuraEnabled global final FieldMetadata field   {get; private set;}
-        @AuraEnabled global final String fieldPath      {get; private set;}
-        @AuraEnabled global final Boolean isDbRequired  {get; private set;}
-        @AuraEnabled global final Boolean isRequired    {get; private set;}
-        @AuraEnabled global final String label          {get; private set;}
-        @AuraEnabled global final String sobjectApiName {get; private set;}
+        @AuraEnabled global final String DisplayType    {get; private set;}
+        @AuraEnabled global final FieldMetadata Field   {get; private set;}
+        @AuraEnabled global final String FieldPath      {get; private set;}
+        @AuraEnabled global final Boolean IsDbRequired  {get; private set;}
+        @AuraEnabled global final Boolean IsRequired    {get; private set;}
+        @AuraEnabled global final String Label          {get; private set;}
+        @AuraEnabled global final String SobjectApiName {get; private set;}
 
         private FieldSetMemberMetadata(String sobjectApiName, Schema.FieldSetMember fieldSetMember) {
-            this.sobjectApiName = sobjectApiName;
+            this.SobjectApiName = sobjectApiName;
 
-            this.displayType  = fieldSetMember.getType().name();
-            this.field        = this.getFieldMetadata(fieldSetMember);
-            this.fieldPath    = fieldSetMember.getFieldPath();
-            this.isDbRequired = fieldSetMember.getDbRequired();
-            this.isRequired   = fieldSetMember.getRequired();
-            this.label        = fieldSetMember.getLabel();
+            this.DisplayType  = fieldSetMember.getType().name();
+            this.Field        = this.getFieldMetadata(fieldSetMember);
+            this.FieldPath    = fieldSetMember.getFieldPath();
+            this.IsDbRequired = fieldSetMember.getDbRequired();
+            this.IsRequired   = fieldSetMember.getRequired();
+            this.Label        = fieldSetMember.getLabel();
         }
 
         private FieldMetadata getFieldMetadata(Schema.FieldSetMember fieldSetMember) {
@@ -72,19 +72,19 @@ global virtual class FieldSetMetadata {
 
             if(fieldChain.size() == 0) return fieldMetadata;
 
-            Schema.SObjectType currentFieldSObjectType = Schema.getGlobalDescribe().get(this.sobjectApiName);
-            String currentFieldSObjectApiName = this.sobjectApiName;
+            Schema.SobjectType currentFieldSobjectType = Schema.getGlobalDescribe().get(this.sobjectApiName);
+            String currentFieldSobjectApiName = this.sobjectApiName;
             String currentFieldApiName;
 
             for(Integer i = 0; i < fieldChain.size(); i++) {
                 currentFieldApiName = fieldChain[i];
 
-                for(Schema.SObjectField sobjectField : Schema.getGlobalDescribe().get(currentFieldSObjectApiName).getDescribe().fields.getMap().values()) {
+                for(Schema.SobjectField sobjectField : Schema.getGlobalDescribe().get(currentFieldSobjectApiName).getDescribe().fields.getMap().values()) {
                     DescribeFieldResult fieldDescribe = sobjectField.getDescribe();
 
                     if(fieldDescribe.getRelationshipName() == currentFieldApiName && !fieldDescribe.getReferenceTo().isEmpty()) {
-                        currentFieldSObjectType = fieldDescribe.getReferenceTo()[0];
-                        currentFieldSObjectApiName = currentFieldSObjectType.getDescribe().getName();
+                        currentFieldSobjectType = fieldDescribe.getReferenceTo()[0];
+                        currentFieldSobjectApiName = currentFieldSobjectType.getDescribe().getName();
 
                         break;
                     }
@@ -92,7 +92,7 @@ global virtual class FieldSetMetadata {
                 }
             }
 
-            return new FieldMetadata(currentFieldSObjectApiName, currentFieldApiName);
+            return new FieldMetadata(currentFieldSobjectApiName, currentFieldApiName);
         }
 
     }

@@ -7,12 +7,12 @@ private class ListViewMetadata_Tests {
 
     @isTest
     static void it_should_return_metadata_for_sobject_api_name_and_list_view_api_name() {
-        ListView listView = [SELECT Id, IsSoqlCompatible, Name, DeveloperName, NamespacePrefix, SObjectType FROM ListView LIMIT 1];
+        ListView listView = [SELECT Id, IsSoqlCompatible, Name, DeveloperName, NamespacePrefix, SobjectType FROM ListView LIMIT 1];
 
         Test.startTest();
 
         String namespace = listView.NamespacePrefix == null ? '' : listView.NamespacePrefix + '__';
-        ListViewMetadata listViewMetadata = new ListViewMetadata(listView.SObjectType, namespace + listView.DeveloperName);
+        ListViewMetadata listViewMetadata = new ListViewMetadata(listView.SobjectType, namespace + listView.DeveloperName);
         validateAttributesAreSet(listView, listViewMetadata);
         validateCaseSentivityForJavascript(listViewMetadata);
 
@@ -21,7 +21,7 @@ private class ListViewMetadata_Tests {
 
     @isTest
     static void it_should_return_metadata_for_list_view_id() {
-        ListView listView = [SELECT Id, IsSoqlCompatible, Name, DeveloperName, NamespacePrefix, SObjectType FROM ListView LIMIT 1];
+        ListView listView = [SELECT Id, IsSoqlCompatible, Name, DeveloperName, NamespacePrefix, SobjectType FROM ListView LIMIT 1];
 
         Test.startTest();
 
@@ -41,7 +41,7 @@ private class ListViewMetadata_Tests {
         System.assertEquals(listView.Name, listViewMetadata.label);
         System.assertEquals(listView.DeveloperName, listViewMetadata.localApiName);
         System.assertEquals(listView.NamespacePrefix, listViewMetadata.namespace);
-        System.assertEquals(listView.SObjectType, listViewMetadata.sobjectApiName);
+        System.assertEquals(listView.SobjectType, listViewMetadata.sobjectApiName);
     }
 
     private static void validateCaseSentivityForJavascript(ListViewMetadata listviewmetadata) {

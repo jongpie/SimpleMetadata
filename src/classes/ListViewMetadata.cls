@@ -15,17 +15,17 @@ global class ListViewMetadata {
         QUERIED_LIST_VIEWS_BY_SOBJECT_AND_DEVELOPER_NAME = new Map<String, ListView>();
         QUERIED_LIST_VIEW_NAMES_BY_SOBJECT_NAME          = new Map<String, List<String>>();
 
-        for(ListView listView : [SELECT Id, DeveloperName, IsSOQLCompatible, Name, NamespacePrefix, SObjectType FROM ListView]) {
+        for(ListView listView : [SELECT Id, DeveloperName, IsSOQLCompatible, Name, NamespacePrefix, SobjectType FROM ListView]) {
             String namespace = listView.NamespacePrefix == null ? '' : listView.NamespacePrefix + '__';
             QUERIED_LIST_VIEWS_BY_ID.put(listView.Id, listView);
-            QUERIED_LIST_VIEWS_BY_SOBJECT_AND_DEVELOPER_NAME.put(listView.SObjectType + buildFullyQualifiedName(listView), listView);
+            QUERIED_LIST_VIEWS_BY_SOBJECT_AND_DEVELOPER_NAME.put(listView.SobjectType + buildFullyQualifiedName(listView), listView);
 
-            if(!QUERIED_LIST_VIEW_NAMES_BY_SOBJECT_NAME.containsKey(listView.SObjectType)) {
-                QUERIED_LIST_VIEW_NAMES_BY_SOBJECT_NAME.put(listView.SObjectType, new List<String>{});
+            if(!QUERIED_LIST_VIEW_NAMES_BY_SOBJECT_NAME.containsKey(listView.SobjectType)) {
+                QUERIED_LIST_VIEW_NAMES_BY_SOBJECT_NAME.put(listView.SobjectType, new List<String>{});
             }
-            List<String> listViewApiNames = QUERIED_LIST_VIEW_NAMES_BY_SOBJECT_NAME.get(listView.SObjectType);
+            List<String> listViewApiNames = QUERIED_LIST_VIEW_NAMES_BY_SOBJECT_NAME.get(listView.SobjectType);
             listViewApiNames.add(namespace + listView.DeveloperName);
-            QUERIED_LIST_VIEW_NAMES_BY_SOBJECT_NAME.put(listView.SObjectType, listViewApiNames);
+            QUERIED_LIST_VIEW_NAMES_BY_SOBJECT_NAME.put(listView.SobjectType, listViewApiNames);
         }
     }
 
@@ -61,7 +61,7 @@ global class ListViewMetadata {
         this.label            = listView.Name;
         this.localApiName     = listView.DeveloperName;
         this.namespace        = listView.NamespacePrefix;
-        this.sobjectApiName   = listView.SObjectType;
+        this.sobjectApiName   = listView.SobjectType;
     }
 
 }

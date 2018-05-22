@@ -11,22 +11,22 @@ private class RecordTypeMetadata_Tests {
         // We'll keep a count and stop after 5 to keep tests quick
         Integer count = 0;
 
-        Schema.SObjectType accountSObjectType = Schema.Account.SObjectType;
-        for(Schema.RecordTypeInfo recordTypeInfo : Schema.SObjectType.Account.getRecordTypeInfos()) {
+        Schema.SobjectType accountSobjectType = Schema.Account.SobjectType;
+        for(Schema.RecordTypeInfo recordTypeInfo : Schema.SobjectType.Account.getRecordTypeInfos()) {
             if(count >= 5) break;
 
-            RecordTypeMetadata recordTypeMetadata = new RecordTypeMetadata(accountSObjectType, recordTypeInfo);
+            RecordTypeMetadata recordTypeMetadata = new RecordTypeMetadata(accountSobjectType, recordTypeInfo);
             count++;
         }
     }
 
     @isTest
     static void it_should_return_record_type_metadata_for_sobject_and_record_type_api_names() {
-        for(RecordType recordType : [SELECT Id, BusinessProcessId, Description, DeveloperName, NamespacePrefix, SObjectType FROM RecordType LIMIT 5]) {
-            Schema.RecordTypeInfo recordTypeInfo = Schema.getGlobalDescribe().get(recordType.SObjectType).getDescribe().getRecordTypeInfosById().get(recordType.Id);
+        for(RecordType recordType : [SELECT Id, BusinessProcessId, Description, DeveloperName, NamespacePrefix, SobjectType FROM RecordType LIMIT 5]) {
+            Schema.RecordTypeInfo recordTypeInfo = Schema.getGlobalDescribe().get(recordType.SobjectType).getDescribe().getRecordTypeInfosById().get(recordType.Id);
             String namespace = recordType.NamespacePrefix == null ? '' : recordType.NamespacePrefix + '__';
-            RecordTypeMetadata recordTypeMetadata = new RecordTypeMetadata(recordType.SObjectType, namespace + recordType.DeveloperName);
-            validateAttributesAreSet(recordTypeInfo, recordType, recordType.SObjectType, recordTypeMetadata);
+            RecordTypeMetadata recordTypeMetadata = new RecordTypeMetadata(recordType.SobjectType, namespace + recordType.DeveloperName);
+            validateAttributesAreSet(recordTypeInfo, recordType, recordType.SobjectType, recordTypeMetadata);
             validateCaseSentivityForJavascript(recordTypeMetadata);
         }
     }
@@ -34,7 +34,7 @@ private class RecordTypeMetadata_Tests {
     @isTest
     static void it_should_return_record_type_metadata_for_record_type_id() {
         Schema.RecordTypeInfo queryableRecordTypeInfo;
-        for(Schema.RecordTypeInfo recordTypeInfo : Schema.SObjectType.Account.getRecordTypeInfos()) {
+        for(Schema.RecordTypeInfo recordTypeInfo : Schema.SobjectType.Account.getRecordTypeInfos()) {
             if(recordTypeInfo.isMaster()) continue;
 
             queryableRecordTypeInfo = recordTypeInfo;
@@ -45,10 +45,10 @@ private class RecordTypeMetadata_Tests {
 
         RecordTypeMetadata recordTypeMetadata = new RecordTypeMetadata(queryableRecordTypeInfo.getRecordTypeId());
         RecordType recordType = [
-            SELECT Id, BusinessProcessId, Description, DeveloperName, NamespacePrefix, SObjectType
+            SELECT Id, BusinessProcessId, Description, DeveloperName, NamespacePrefix, SobjectType
             FROM RecordType WHERE Id = :queryableRecordTypeInfo.getRecordTypeId()
         ];
-        validateAttributesAreSet(queryableRecordTypeInfo, recordType, recordType.SObjectType, recordTypeMetadata);
+        validateAttributesAreSet(queryableRecordTypeInfo, recordType, recordType.SobjectType, recordTypeMetadata);
         validateCaseSentivityForJavascript(recordTypeMetadata);
     }
 
