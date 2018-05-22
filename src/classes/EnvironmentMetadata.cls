@@ -5,10 +5,10 @@
 global virtual class EnvironmentMetadata {
 
     // Some info must be queried from the Organization object, so cache the results to limit query count to 1
-    private static Organization organization;
+    private static final Organization ORGANIZATION;
 
     static {
-        organization = [SELECT Id, Name, InstanceName, NamespacePrefix, OrganizationType, IsSandbox FROM Organization LIMIT 1];
+        ORGANIZATION = [SELECT Id, Name, InstanceName, NamespacePrefix, OrganizationType, IsSandbox FROM Organization LIMIT 1];
     }
 
     @AuraEnabled global final String BaseUrl                       {get; private set;}
@@ -31,18 +31,18 @@ global virtual class EnvironmentMetadata {
         Map<String, Schema.SobjectType> sobjectTypes = Schema.getGlobalDescribe();
 
         this.BaseUrl                      = Url.getSalesforceBaseUrl().toExternalForm();
-        this.InstanceName                 = organization.InstanceName;
+        this.InstanceName                 = ORGANIZATION.InstanceName;
         this.IsChatterEnabled             = sobjectTypes.containsKey('FeedItem');
         this.IsKnowledgeEnabled           = sobjectTypes.containsKey('KnowledgeArticle');
         this.IsMultiCurrencyEnabled       = UserInfo.isMultiCurrencyOrganization();
         this.IsPersonAccountEnabled       = sobjectTypes.get('Account').getDescribe().fields.getMap().containsKey('IsPersonAccount');
-        this.IsProduction                 = organization.IsSandbox == false;
-        this.IsSandbox                    = organization.IsSandbox;
+        this.IsProduction                 = ORGANIZATION.IsSandbox == false;
+        this.IsSandbox                    = ORGANIZATION.IsSandbox;
         this.IsTerritoryManagementEnabled = sobjectTypes.containsKey('Territory');
-        this.Namespace                    = organization.NamespacePrefix;
-        this.OrganizationId               = organization.Id;
-        this.OrganizationName             = organization.Name;
-        this.OrganizationType             = organization.OrganizationType;
+        this.Namespace                    = ORGANIZATION.NamespacePrefix;
+        this.OrganizationId               = ORGANIZATION.Id;
+        this.OrganizationName             = ORGANIZATION.Name;
+        this.OrganizationType             = ORGANIZATION.OrganizationType;
         this.QueueApiNames                = QueueMetadata.getQueueApiNames();
         this.SobjectApiNames              = this.getSobjectApiNames(sobjectTypes);
     }
