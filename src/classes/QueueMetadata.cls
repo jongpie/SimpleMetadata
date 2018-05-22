@@ -82,16 +82,16 @@ global virtual class QueueMetadata {
 
     global class QueueMemberMetadata {
 
-        @AuraEnabled global final Id id            {get; private set;}
-        @AuraEnabled global final Id queueId       {get; private set;}
-        @AuraEnabled global final String type      {get; private set;}
-        @AuraEnabled global final Id userOrGroupId {get; private set;}
+        @AuraEnabled global final Id Id            {get; private set;}
+        @AuraEnabled global final Id QueueId       {get; private set;}
+        @AuraEnabled global final String Type      {get; private set;}
+        @AuraEnabled global final Id UserOrGroupId {get; private set;}
 
         private QueueMemberMetadata(GroupMember groupMember) {
-            this.id            = groupMember.Id;
-            this.queueId       = groupMember.GroupId;
-            this.type          = String.valueOf(groupMember.UserOrGroupId.getSobjectType());
-            this.userOrGroupId = groupMember.UserOrGroupId;
+            this.Id            = groupMember.Id;
+            this.QueueId       = groupMember.GroupId;
+            this.Type          = String.valueOf(groupMember.UserOrGroupId.getSobjectType());
+            this.UserOrGroupId = groupMember.UserOrGroupId;
         }
 
     }
