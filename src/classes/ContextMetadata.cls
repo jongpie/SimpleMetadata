@@ -4,28 +4,28 @@
 *************************************************************************************************/
 global virtual class ContextMetadata {
 
-    @AuraEnabled global final Boolean isApexRest         {get; private set;}
-    @AuraEnabled global final Boolean isBatch            {get; private set;}
-    @AuraEnabled global final Boolean isExecuting        {get; private set;}
-    @AuraEnabled global final Boolean isFuture           {get; private set;}
-    @AuraEnabled global final Boolean isLightning        {get; private set;}
-    @AuraEnabled global final Boolean isLightningConsole {get; private set;}
-    @AuraEnabled global final Boolean isQueueable        {get; private set;}
-    @AuraEnabled global final Boolean isSalesforce1      {get; private set;}
-    @AuraEnabled global final Boolean isScheduled        {get; private set;}
-    @AuraEnabled global final Boolean isVisualforce      {get; private set;}
+    @AuraEnabled global final Boolean IsApexRest         {get; private set;}
+    @AuraEnabled global final Boolean IsBatch            {get; private set;}
+    @AuraEnabled global final Boolean IsExecuting        {get; private set;}
+    @AuraEnabled global final Boolean IsFuture           {get; private set;}
+    @AuraEnabled global final Boolean IsLightning        {get; private set;}
+    @AuraEnabled global final Boolean IsLightningConsole {get; private set;}
+    @AuraEnabled global final Boolean IsQueueable        {get; private set;}
+    @AuraEnabled global final Boolean IsSalesforce1      {get; private set;}
+    @AuraEnabled global final Boolean IsScheduled        {get; private set;}
+    @AuraEnabled global final Boolean IsVisualforce      {get; private set;}
 
     global ContextMetadata() {
-        this.isApexRest         = RestContext.request != null;
-        this.isBatch            = System.isBatch();
-        this.isExecuting        = Trigger.isExecuting;
-        this.isFuture           = System.isFuture();
-        this.isLightning        = UserInfo.getUiThemeDisplayed() == 'Theme4d';
-        this.isLightningConsole = UserInfo.getUiThemeDisplayed() == 'Theme4u';
-        this.isQueueable        = System.isQueueable();
-        this.isSalesforce1      = UserInfo.getUiThemeDisplayed() == 'Theme4t';
-        this.isScheduled        = System.isScheduled();
-        this.isVisualforce      = ApexPages.currentPage() != null;
+        this.IsApexRest         = RestContext.request != null;
+        this.IsBatch            = System.isBatch();
+        this.IsExecuting        = Trigger.isExecuting;
+        this.IsFuture           = System.isFuture();
+        this.IsLightning        = UserInfo.getUiThemeDisplayed() == 'Theme4d';
+        this.IsLightningConsole = UserInfo.getUiThemeDisplayed() == 'Theme4u';
+        this.IsQueueable        = System.isQueueable();
+        this.IsSalesforce1      = UserInfo.getUiThemeDisplayed() == 'Theme4t';
+        this.IsScheduled        = System.isScheduled();
+        this.IsVisualforce      = ApexPages.currentPage() != null;
     }
 
 }
