@@ -25,7 +25,6 @@ global virtual class SobjectMetadata {
     @AuraEnabled global final String KeyPrefix                {get; private set;}
     @AuraEnabled global final String Label                    {get; private set;}
     @AuraEnabled global final String LabelPlural              {get; private set;}
-    @AuraEnabled global final List<String> ListViewApiNames   {get; private set;}
     @AuraEnabled global final String LocalApiName             {get; private set;}
     @AuraEnabled global final String Namespace                {get; private set;}
     @AuraEnabled global final List<String> RecordTypeApiNames {get; private set;}
@@ -59,7 +58,6 @@ global virtual class SobjectMetadata {
         this.KeyPrefix            = sobjectDescribe.getKeyPrefix();
         this.Label                = sobjectDescribe.getLabel();
         this.LabelPlural          = sobjectDescribe.getLabelPlural();
-        this.ListViewApiNames     = ListViewMetadata.getListViewApiNames(String.valueOf(sobjectType));
         this.LocalApiName         = sobjectDescribe.getLocalName();
         this.Namespace            = this.getNamespace();
         this.RecordTypeApiNames   = RecordTypeMetadata.getRecordTypeApiNames(String.valueOf(sobjectType));

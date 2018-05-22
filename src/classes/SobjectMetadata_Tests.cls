@@ -98,7 +98,6 @@ private class SobjectMetadata_Tests {
         System.assert(untypedSobjectMetadata.containsKey('KeyPrefix'));
         System.assert(untypedSobjectMetadata.containsKey('Label'));
         System.assert(untypedSobjectMetadata.containsKey('LabelPlural'));
-        System.assert(untypedSobjectMetadata.containsKey('ListViewApiNames'));
         System.assert(untypedSobjectMetadata.containsKey('LocalApiName'));
         System.assert(untypedSobjectMetadata.containsKey('Namespace'));
         System.assert(untypedSobjectMetadata.containsKey('RecordTypeApiNames'));
