@@ -40,8 +40,8 @@ global virtual class QueueMetadata {
     @AuraEnabled global final Id OwnerId                             {get; private set;}
     @AuraEnabled global final String OwnerName                       {get; private set;}
     @AuraEnabled global final String OwnerType                       {get; private set;}
-    @AuraEnabled global final List<String> SupportedSobjectApiNames  {get; private set;}
     @AuraEnabled global final List<QueueMemberMetadata> QueueMembers {get; private set;}
+    @AuraEnabled global final List<String> SupportedSobjectApiNames  {get; private set;}
 
     global QueueMetadata(String queueApiName) {
         this(QUERIED_QUEUES_BY_DEVELOPER_NAME.get(queueApiName).Id);
