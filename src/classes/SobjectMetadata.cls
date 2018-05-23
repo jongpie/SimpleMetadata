@@ -84,13 +84,6 @@ global virtual class SobjectMetadata {
             if(fieldDescribe.isNameField()) return fieldDescribe.getName();
         }
 
-        // If we still don't have the displayFieldName, then loop through all fields to find it
-        for(Schema.SobjectField field : sobjectDescribe.fields.getMap().values()) {
-            Schema.DescribeFieldResult fieldDescribe = field.getDescribe();
-
-            if(fieldDescribe.isNameField()) return fieldDescribe.getName();
-        }
-
         return null;
     }
 
