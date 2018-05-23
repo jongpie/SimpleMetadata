@@ -14,8 +14,8 @@ global virtual class QueueMetadata {
         QUERIED_QUEUES_BY_DEVELOPER_NAME = new Map<String, Group>();
 
         for(Group queue : [
-            SELECT DeveloperName, DoesIncludeBosses, DoesSendEmailToMembers, Email, Id, Name, OwnerId, Owner.Name, Owner.Type, RelatedId,
-                (SELECT Id, SobjectType FROM QueueSobjects),
+            SELECT DeveloperName, DoesIncludeBosses, DoesSendEmailToMembers, Email, Id, Name,
+                (SELECT SobjectType FROM QueueSobjects),
                 (SELECT Id, GroupId, UserOrGroupId FROM GroupMembers)
             FROM Group
             WHERE Type = 'Queue'
@@ -37,11 +37,8 @@ global virtual class QueueMetadata {
     @AuraEnabled global final String Email                           {get; private set;}
     @AuraEnabled global final Id Id                                  {get; private set;}
     @AuraEnabled global final String Label                           {get; private set;}
-    @AuraEnabled global final Id OwnerId                             {get; private set;}
-    @AuraEnabled global final String OwnerName                       {get; private set;}
-    @AuraEnabled global final String OwnerType                       {get; private set;}
     @AuraEnabled global final List<QueueMemberMetadata> QueueMembers {get; private set;}
-    @AuraEnabled global final List<String> SupportedSobjectApiNames  {get; private set;}
+    @AuraEnabled global final List<String> SobjectApiNames           {get; private set;}
 
     global QueueMetadata(String queueApiName) {
         this(QUERIED_QUEUES_BY_DEVELOPER_NAME.get(queueApiName).Id);
@@ -56,11 +53,8 @@ global virtual class QueueMetadata {
         this.Email                    = queue.Email;
         this.Id                       = queue.Id;
         this.Label                    = queue.Name;
-        this.OwnerId                  = queue.OwnerId;
-        this.OwnerName                = queue.Owner.Name;
-        this.OwnerType                = queue.Owner.Type;
         this.QueueMembers             = this.getQueueMembers(queue);
-        this.SupportedSobjectApiNames = this.getSupportedSobjectApiNames(queue);
+        this.SobjectApiNames          = this.getSobjectApiNames(queue);
     }
 
     private List<QueueMemberMetadata> getQueueMembers(Group queue) {
@@ -71,13 +65,13 @@ global virtual class QueueMetadata {
         return queueMembers;
     }
 
-    private List<String> getSupportedSobjectApiNames(Group queue) {
-        List<String> supportedSobjectApiNames = new List<String>();
+    private List<String> getSobjectApiNames(Group queue) {
+        List<String> sobjectApiNames = new List<String>();
         for(QueueSobject queueSobject : queue.QueueSobjects) {
-            supportedSobjectApiNames.add(queueSobject.SobjectType);
+            sobjectApiNames.add(queueSobject.SobjectType);
         }
-        supportedSobjectApiNames.sort();
-        return supportedSobjectApiNames;
+        sobjectApiNames.sort();
+        return sobjectApiNames;
     }
 
     global class QueueMemberMetadata {

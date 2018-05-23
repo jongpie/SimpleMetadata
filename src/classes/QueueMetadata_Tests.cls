@@ -72,9 +72,6 @@ private class QueueMetadata_Tests {
         System.assertEquals(queue.Email, queueMetadata.Email);
         System.assertEquals(queue.Id, queueMetadata.Id);
         System.assertEquals(queue.Name, queueMetadata.Label);
-        System.assertEquals(queue.OwnerId, queueMetadata.OwnerId);
-        System.assertEquals(queue.Owner.Name, queueMetadata.OwnerName);
-        System.assertEquals(queue.Owner.Type, queueMetadata.OwnerType);
     }
 
     private static void validateCaseSentivityForJavascript(QueueMetadata queueMetadata) {
@@ -91,11 +88,8 @@ private class QueueMetadata_Tests {
         System.assert(untypedQueueMetadata.containsKey('Email'));
         System.assert(untypedQueueMetadata.containsKey('Id'));
         System.assert(untypedQueueMetadata.containsKey('Label'));
-        System.assert(untypedQueueMetadata.containsKey('OwnerId'));
-        System.assert(untypedQueueMetadata.containsKey('OwnerName'));
-        System.assert(untypedQueueMetadata.containsKey('OwnerType'));
         System.assert(untypedQueueMetadata.containsKey('QueueMembers'));
-        System.assert(untypedQueueMetadata.containsKey('SupportedSobjectApiNames'));
+        System.assert(untypedQueueMetadata.containsKey('SobjectApiNames'));
     }
 
 }
