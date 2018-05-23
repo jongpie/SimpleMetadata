@@ -38,8 +38,6 @@ global virtual class RecordTypeMetadata {
     }
 
     @AuraEnabled global final String ApiName        {get; private set;}
-    @AuraEnabled global final Id BusinessProcessId  {get; private set;}
-    @AuraEnabled global final String Description    {get; private set;}
     @AuraEnabled global final Id Id                 {get; private set;}
     @AuraEnabled global final Boolean IsActive      {get; private set;}
     @AuraEnabled global final Boolean IsAvailable   {get; private set;}
@@ -66,8 +64,6 @@ global virtual class RecordTypeMetadata {
         RecordType recordType = QUERIED_RECORD_TYPES_BY_ID.get(recordTypeInfo.getRecordTypeId());
 
         this.ApiName           = this.getApiName(recordType);
-        this.BusinessProcessId = recordType == null ? null : recordType.BusinessProcessId;
-        this.Description       = recordType == null ? null : recordType.Description;
         this.Id                = recordTypeInfo.getRecordTypeId();
         this.IsActive          = recordTypeInfo.isActive();
         this.IsAvailable       = recordTypeInfo.isAvailable();

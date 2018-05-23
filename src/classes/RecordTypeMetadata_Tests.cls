@@ -58,8 +58,6 @@ private class RecordTypeMetadata_Tests {
         String recordTypeName = recordType == null ? null : namespacePrefix + recordType.DeveloperName;
 
         System.assertEquals(recordType == null ? null : recordTypeName, recordTypeMetadata.ApiName);
-        System.assertEquals(recordType == null ? null : recordType.BusinessProcessId, recordTypeMetadata.BusinessProcessId);
-        System.assertEquals(recordType == null ? null : recordType.Description, recordTypeMetadata.Description);
         System.assertEquals(recordTypeInfo.getRecordTypeId(), recordTypeMetadata.Id);
         System.assertEquals(recordTypeInfo.isActive(), recordTypeMetadata.IsActive);
         System.assertEquals(recordTypeInfo.isAvailable(), recordTypeMetadata.IsAvailable);
@@ -80,8 +78,6 @@ private class RecordTypeMetadata_Tests {
         System.assert(untypedRecordTypeMetadata.containsKey('APINAME') == false);
         // Now for the 'real' tests
         System.assert(untypedRecordTypeMetadata.containsKey('ApiName'));
-        System.assert(untypedRecordTypeMetadata.containsKey('BusinessProcessId'));
-        System.assert(untypedRecordTypeMetadata.containsKey('Description'));
         System.assert(untypedRecordTypeMetadata.containsKey('Id'));
         System.assert(untypedRecordTypeMetadata.containsKey('IsActive'));
         System.assert(untypedRecordTypeMetadata.containsKey('IsAvailable'));
