@@ -35,7 +35,6 @@ global virtual class FieldMetadata {
     @AuraEnabled global final Integer RelationshipOrder                    {get; private set;}
     @AuraEnabled global final List<SobjectMetadata> RelationshipReferences {get; private set;} // TODO consider changing to string[] of names instead
     @AuraEnabled global final Integer Scale                                {get; private set;}
-    @AuraEnabled global final String SoapType                              {get; private set;}
     @AuraEnabled global final String SobjectApiName                        {get; private set;}
 
     global FieldMetadata(String sobjectApiName, String fieldApiName) {
@@ -80,7 +79,6 @@ global virtual class FieldMetadata {
         this.RelationshipOrder      = fieldDescribe.getRelationshipOrder();
         this.RelationshipReferences = this.getRelationshipReferences(fieldDescribe);
         this.Scale                  = fieldDescribe.getScale();
-        this.SoapType               = fieldDescribe.getSOAPType().name();
         this.SobjectApiName         = String.valueOf(sobjectType);
     }
 
@@ -113,7 +111,7 @@ global virtual class FieldMetadata {
 
         @AuraEnabled global final Boolean IsDefaultValue {get; private set;}
         @AuraEnabled global final String Label           {get; private set;}
-        @AuraEnabled global final String value           {get; private set;}
+        @AuraEnabled global final String Value           {get; private set;}
 
         global PicklistEntryMetadata() {
             this.IsDefaultValue = false;

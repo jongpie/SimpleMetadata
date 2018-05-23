@@ -93,7 +93,6 @@ private class FieldMetadata_Tests {
         System.assertEquals(fieldDescribe.getRelationshipOrder(), fieldMetadata.RelationshipOrder);
         //System.assertEquals( this.getRelationshipReferences(fieldDescribe), fieldMetadata.RelationshipReferences);
         System.assertEquals(fieldDescribe.getScale(), fieldMetadata.Scale);
-        System.assertEquals(fieldDescribe.getSOAPType().name(), fieldMetadata.SoapType);
         System.assertEquals(sobjectName, fieldMetadata.SobjectApiName);
     }
 
@@ -135,7 +134,6 @@ private class FieldMetadata_Tests {
         System.assert(untypedFieldMetadata.containsKey('RelationshipOrder'));
         System.assert(untypedFieldMetadata.containsKey('RelationshipReferences'));
         System.assert(untypedFieldMetadata.containsKey('Scale'));
-        System.assert(untypedFieldMetadata.containsKey('SoapType'));
         System.assert(untypedFieldMetadata.containsKey('SobjectApiName'));
     }
 
