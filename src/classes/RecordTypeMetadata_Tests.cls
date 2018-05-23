@@ -45,7 +45,7 @@ private class RecordTypeMetadata_Tests {
 
         RecordTypeMetadata recordTypeMetadata = new RecordTypeMetadata(queryableRecordTypeInfo.getRecordTypeId());
         RecordType recordType = [
-            SELECT Id, BusinessProcessId, Description, DeveloperName, NamespacePrefix, SobjectType
+            SELECT Id, DeveloperName, NamespacePrefix, SobjectType
             FROM RecordType WHERE Id = :queryableRecordTypeInfo.getRecordTypeId()
         ];
         validateAttributesAreSet(queryableRecordTypeInfo, recordType, recordType.SobjectType, recordTypeMetadata);
