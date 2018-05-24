@@ -89,7 +89,7 @@ private class FieldMetadata_Tests {
         //System.assertEquals(this.getNamespace(), fieldMetadata.namespace);
         //System.assertEquals(this.getPicklistOptions(fieldDescribe), fieldMetadata.picklistOptions);
         System.assertEquals(fieldDescribe.getPrecision(), fieldMetadata.Precision);
-        System.assertEquals(fieldDescribe.getRelationshipName(), fieldMetadata.RelationshipName);
+        System.assertEquals(fieldDescribe.getRelationshipName(), fieldMetadata.RelationshipApiName);
         System.assertEquals(fieldDescribe.getRelationshipOrder(), fieldMetadata.RelationshipOrder);
         //System.assertEquals( this.getRelationshipReferences(fieldDescribe), fieldMetadata.RelationshipReferences);
         System.assertEquals(fieldDescribe.getScale(), fieldMetadata.Scale);
@@ -130,7 +130,7 @@ private class FieldMetadata_Tests {
         System.assert(untypedFieldMetadata.containsKey('Namespace'));
         System.assert(untypedFieldMetadata.containsKey('PicklistOptions'));
         System.assert(untypedFieldMetadata.containsKey('Precision'));
-        System.assert(untypedFieldMetadata.containsKey('RelationshipName'));
+        System.assert(untypedFieldMetadata.containsKey('RelationshipApiName'));
         System.assert(untypedFieldMetadata.containsKey('RelationshipOrder'));
         System.assert(untypedFieldMetadata.containsKey('RelationshipReferences'));
         System.assert(untypedFieldMetadata.containsKey('Scale'));

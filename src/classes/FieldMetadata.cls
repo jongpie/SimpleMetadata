@@ -31,9 +31,9 @@ global virtual class FieldMetadata {
     @AuraEnabled global final String Namespace                             {get; private set;}
     @AuraEnabled global final List<PicklistEntryMetadata> PicklistOptions  {get; private set;}
     @AuraEnabled global final Integer Precision                            {get; private set;}
-    @AuraEnabled global final String RelationshipName                      {get; private set;}
+    @AuraEnabled global final String RelationshipApiName                   {get; private set;}
     @AuraEnabled global final Integer RelationshipOrder                    {get; private set;}
-    @AuraEnabled global final List<SobjectMetadata> RelationshipReferences {get; private set;} // TODO consider changing to string[] of names instead
+    @AuraEnabled global final List<SobjectMetadata> RelationshipReferences {get; private set;}
     @AuraEnabled global final Integer Scale                                {get; private set;}
     @AuraEnabled global final String SobjectApiName                        {get; private set;}
 
@@ -75,7 +75,7 @@ global virtual class FieldMetadata {
         this.Namespace              = this.getNamespace();
         this.PicklistOptions        = this.getPicklistOptions(fieldDescribe);
         this.Precision              = fieldDescribe.getPrecision();
-        this.RelationshipName       = fieldDescribe.getRelationshipName();
+        this.RelationshipApiName    = fieldDescribe.getRelationshipName();
         this.RelationshipOrder      = fieldDescribe.getRelationshipOrder();
         this.RelationshipReferences = this.getRelationshipReferences(fieldDescribe);
         this.Scale                  = fieldDescribe.getScale();
