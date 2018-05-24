@@ -4,31 +4,32 @@
 *************************************************************************************************/
 global virtual class SobjectMetadata {
 
-    @AuraEnabled global final String ApiName                  {get; private set;}
-    @AuraEnabled global final String DisplayFieldApiName      {get; private set;}
-    @AuraEnabled global final List<String> FieldApiNames      {get; private set;}
-    @AuraEnabled global final List<String> FieldSetApiNames   {get; private set;}
-    @AuraEnabled global final Boolean HasMultiCurrency        {get; private set;}
-    @AuraEnabled global final Boolean HasSubtypes             {get; private set;}
-    @AuraEnabled global final Boolean IsAccessible            {get; private set;}
-    @AuraEnabled global final Boolean IsChatterFeedEnabled    {get; private set;}
-    @AuraEnabled global final Boolean IsCreateable            {get; private set;}
-    @AuraEnabled global final Boolean IsCustom                {get; private set;}
-    @AuraEnabled global final Boolean IsCustomSetting         {get; private set;}
-    @AuraEnabled global final Boolean IsDeletable             {get; private set;}
-    @AuraEnabled global final Boolean IsMruEnabled            {get; private set;}
-    @AuraEnabled global final Boolean IsMergeable             {get; private set;}
-    @AuraEnabled global final Boolean IsQueryable             {get; private set;}
-    @AuraEnabled global final Boolean IsSearchable            {get; private set;}
-    @AuraEnabled global final Boolean IsUndeletable           {get; private set;}
-    @AuraEnabled global final Boolean IsUpdateable            {get; private set;}
-    @AuraEnabled global final String KeyPrefix                {get; private set;}
-    @AuraEnabled global final String Label                    {get; private set;}
-    @AuraEnabled global final String LabelPlural              {get; private set;}
-    @AuraEnabled global final String LocalApiName             {get; private set;}
-    @AuraEnabled global final String Namespace                {get; private set;}
-    @AuraEnabled global final List<String> RecordTypeApiNames {get; private set;}
-    @AuraEnabled global final String TabIcon                  {get; private set;}
+    @AuraEnabled global final String ApiName                                     {get; private set;}
+    @AuraEnabled global final List<ChildRelationshipMetadata> ChildRelationships {get; private set;}
+    @AuraEnabled global final String DisplayFieldApiName                         {get; private set;}
+    @AuraEnabled global final List<String> FieldApiNames                         {get; private set;}
+    @AuraEnabled global final List<String> FieldSetApiNames                      {get; private set;}
+    @AuraEnabled global final Boolean HasMultiCurrency                           {get; private set;}
+    @AuraEnabled global final Boolean HasSubtypes                                {get; private set;}
+    @AuraEnabled global final Boolean IsAccessible                               {get; private set;}
+    @AuraEnabled global final Boolean IsChatterFeedEnabled                       {get; private set;}
+    @AuraEnabled global final Boolean IsCreateable                               {get; private set;}
+    @AuraEnabled global final Boolean IsCustom                                   {get; private set;}
+    @AuraEnabled global final Boolean IsCustomSetting                            {get; private set;}
+    @AuraEnabled global final Boolean IsDeletable                                {get; private set;}
+    @AuraEnabled global final Boolean IsMruEnabled                               {get; private set;}
+    @AuraEnabled global final Boolean IsMergeable                                {get; private set;}
+    @AuraEnabled global final Boolean IsQueryable                                {get; private set;}
+    @AuraEnabled global final Boolean IsSearchable                               {get; private set;}
+    @AuraEnabled global final Boolean IsUndeletable                              {get; private set;}
+    @AuraEnabled global final Boolean IsUpdateable                               {get; private set;}
+    @AuraEnabled global final String KeyPrefix                                   {get; private set;}
+    @AuraEnabled global final String Label                                       {get; private set;}
+    @AuraEnabled global final String LabelPlural                                 {get; private set;}
+    @AuraEnabled global final String LocalApiName                                {get; private set;}
+    @AuraEnabled global final String Namespace                                   {get; private set;}
+    @AuraEnabled global final List<String> RecordTypeApiNames                    {get; private set;}
+    @AuraEnabled global final String TabIcon                                     {get; private set;}
 
     global SobjectMetadata(String sobjectApiName) {
         this(Schema.getGlobalDescribe().get(sobjectApiName));
@@ -38,6 +39,7 @@ global virtual class SobjectMetadata {
         DescribeSobjectResult sobjectDescribe = sobjectType.getDescribe();
 
         this.ApiName              = String.valueOf(sobjectType);
+        this.ChildRelationships   = this.getChildRelationships(sobjectDescribe.getChildRelationships());
         this.DisplayFieldApiName  = this.getDisplayFieldApiName(sobjectDescribe);
         this.FieldApiNames        = this.getFieldApiNames(sobjectDescribe);
         this.FieldSetApiNames     = this.getFieldSetApiNames(sobjectDescribe);
@@ -62,6 +64,15 @@ global virtual class SobjectMetadata {
         this.Namespace            = this.getNamespace();
         this.RecordTypeApiNames   = RecordTypeMetadata.getRecordTypeApiNames(String.valueOf(sobjectType));
         this.TabIcon              = this.getTabIcon();
+    }
+
+    private List<ChildRelationshipMetadata> getChildRelationships(List<Schema.ChildRelationship> relationships) {
+        List<ChildRelationshipMetadata> childRelationships = new List<ChildRelationshipMetadata>();
+        for(Schema.ChildRelationship relationship : relationships) {
+            childRelationships.add(new ChildRelationshipMetadata(relationship));
+        }
+        childRelationships.sort();
+        return childRelationships;
     }
 
     private String getDisplayFieldApiName(Schema.DescribeSobjectResult sobjectDescribe) {
@@ -133,6 +144,36 @@ global virtual class SobjectMetadata {
         if(tabIcon == null && this.apiName == 'AssetRelationship') tabIcon = 'standard:asset_relationship';
 
         return tabIcon;
+    }
+
+    public class ChildRelationshipMetadata implements Comparable {
+
+        @AuraEnabled public String ChildSobjectApiName      {get; private set;}
+        @AuraEnabled public String FieldApiName             {get; private set;}
+        @AuraEnabled public String FieldRelationshipApiName {get; private set;}
+        @AuraEnabled public Boolean IsCascadeDelete         {get; private set;}
+        @AuraEnabled public Boolean IsRestrictedDelete      {get; private set;}
+        @AuraEnabled public String RelationshipApiName      {get; private set;}
+
+        public ChildRelationshipMetadata(Schema.ChildRelationship childRelationship) {
+            this.ChildSobjectApiName      = String.valueOf(childRelationship.getChildSobject());
+            this.FieldApiName             = String.valueOf(childRelationship.getField());
+            this.FieldRelationshipApiName = childRelationship.getField().getDescribe().getRelationshipName();
+            this.IsCascadeDelete          = childRelationship.isCascadeDelete();
+            this.IsRestrictedDelete       = childRelationship.isRestrictedDelete();
+            this.RelationshipApiName      = childRelationship.getRelationshipName();
+        }
+
+         public Integer compareTo(Object compareTo) {
+            ChildRelationshipMetadata compareToChildRelationship = (ChildRelationshipMetadata)compareTo;
+            String key          = this.ChildSobjectApiName + this.FieldApiName;
+            String compareToKey = compareToChildRelationship.ChildSobjectApiName + compareToChildRelationship.FieldApiName;
+
+            if(key == compareToKey) return 0;
+            else if(key > compareToKey) return 1;
+            else return -1;
+        }
+
     }
 
 }

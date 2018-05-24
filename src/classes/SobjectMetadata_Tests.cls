@@ -24,6 +24,7 @@ private class SobjectMetadata_Tests {
 
         System.assertEquals('Account', sobjectMetadata.ApiName);
         System.assertEquals('Name', sobjectMetadata.DisplayFieldApiName);
+        System.assertEquals(accountDescribe.getChildRelationships().size(), sobjectMetadata.ChildRelationships.size());
         System.assertEquals(accountDescribe.fields.getMap().size(), sobjectMetadata.FieldApiNames.size());
         System.assertEquals(accountDescribe.getHasSubtypes(), sobjectMetadata.HasSubtypes);
         System.assertEquals(accountDescribe.isAccessible(), sobjectMetadata.IsAccessible);
@@ -45,6 +46,7 @@ private class SobjectMetadata_Tests {
         System.assertEquals('standard:account', sobjectMetadata.TabIcon);
 
         System.assertNotEquals(null, sobjectMetadata.ApiName);
+        System.assertNotEquals(null, sobjectMetadata.ChildRelationships);
         System.assertNotEquals(null, sobjectMetadata.DisplayFieldApiName);
         System.assertNotEquals(null, sobjectMetadata.HasMultiCurrency);
         System.assertNotEquals(null, sobjectMetadata.HasSubtypes);
@@ -78,6 +80,7 @@ private class SobjectMetadata_Tests {
         System.assert(untypedSobjectMetadata.containsKey('APINAME') == false);
         // Now for the 'real' tests
         System.assert(untypedSobjectMetadata.containsKey('ApiName'));
+        System.assert(untypedSobjectMetadata.containsKey('ChildRelationships'));
         System.assert(untypedSobjectMetadata.containsKey('DisplayFieldApiName'));
         System.assert(untypedSobjectMetadata.containsKey('FieldApiNames'));
         System.assert(untypedSobjectMetadata.containsKey('FieldSetApiNames'));
