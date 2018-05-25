@@ -2,7 +2,7 @@
 * This file is part of the SimpleMetadata project, released under the MIT License.               *
 * See LICENSE file or go to https://github.com/jongpie/SimpleMetadata for full license details.  *
 *************************************************************************************************/
-global virtual class EnvironmentMetadata {
+global class EnvironmentMetadata {
 
     // Some info must be queried from the Organization object, so cache the results to limit query count to 1
     private static final Organization ORGANIZATION;

@@ -2,7 +2,7 @@
 * This file is part of the SimpleMetadata project, released under the MIT License.               *
 * See LICENSE file or go to https://github.com/jongpie/SimpleMetadata for full license details.  *
 *************************************************************************************************/
-global virtual class QueueMetadata {
+global class QueueMetadata {
 
     // Stores cached query results
     private static final Map<Id, Group> QUERIED_QUEUES_BY_ID;

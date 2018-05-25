@@ -2,7 +2,7 @@
 * This file is part of the SimpleMetadata project, released under the MIT License.               *
 * See LICENSE file or go to https://github.com/jongpie/SimpleMetadata for full license details.  *
 *************************************************************************************************/
-global virtual class RecordTypeMetadata {
+global class RecordTypeMetadata {
 
     // Stores cached query results
     private static final Map<Id, RecordType> QUERIED_RECORD_TYPES_BY_ID;
@@ -64,16 +64,16 @@ global virtual class RecordTypeMetadata {
         // recordType can be null because default master record types do not exist in the RecordType object that's queried with SOQL
         RecordType recordType = QUERIED_RECORD_TYPES_BY_ID.get(recordTypeInfo.getRecordTypeId());
 
-        this.ApiName           = this.getApiName(recordType);
-        this.Id                = recordTypeInfo.getRecordTypeId();
-        this.IsActive          = recordTypeInfo.isActive();
-        this.IsAvailable       = recordTypeInfo.isAvailable();
-        this.IsDefault         = recordTypeInfo.isDefaultRecordTypeMapping();
-        this.IsMaster          = recordTypeInfo.isMaster();
-        this.Label             = recordTypeInfo.getName();
-        this.LocalApiName      = recordType == null ? null : recordType.DeveloperName;
-        this.Namespace         = recordType == null ? null : recordType.NamespacePrefix;
-        this.SobjectApiName    = String.valueOf(sobjectType);
+        this.ApiName        = this.getApiName(recordType);
+        this.Id             = recordTypeInfo.getRecordTypeId();
+        this.IsActive       = recordTypeInfo.isActive();
+        this.IsAvailable    = recordTypeInfo.isAvailable();
+        this.IsDefault      = recordTypeInfo.isDefaultRecordTypeMapping();
+        this.IsMaster       = recordTypeInfo.isMaster();
+        this.Label          = recordTypeInfo.getName();
+        this.LocalApiName   = recordType == null ? null : recordType.DeveloperName;
+        this.Namespace      = recordType == null ? null : recordType.NamespacePrefix;
+        this.SobjectApiName = String.valueOf(sobjectType);
     }
 
     private String getApiName(RecordType recordType) {

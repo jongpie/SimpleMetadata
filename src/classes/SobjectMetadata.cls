@@ -2,7 +2,7 @@
 * This file is part of the SimpleMetadata project, released under the MIT License.               *
 * See LICENSE file or go to https://github.com/jongpie/SimpleMetadata for full license details.  *
 *************************************************************************************************/
-global virtual class SobjectMetadata {
+global class SobjectMetadata {
 
     @AuraEnabled global final String ApiName                                     {get; private set;}
     @AuraEnabled global final List<ChildRelationshipMetadata> ChildRelationships {get; private set;}
@@ -118,15 +118,15 @@ global virtual class SobjectMetadata {
     }
 
     private String getNamespace() {
-        Integer localNameIndex = this.apiName.replace('__c', '').indexOf('__');
-        return localNameIndex < 0 ? null : this.apiName.substring(0, localNameIndex);
+        Integer localNameIndex = this.ApiName.replace('__c', '').indexOf('__');
+        return localNameIndex < 0 ? null : this.ApiName.substring(0, localNameIndex);
     }
 
     private String getTabIcon() {
         String tabIcon;
         for(Schema.DescribeTabSetResult tabSetResult : Schema.describeTabs()) {
             for(Schema.DescribeTabResult tabResult : tabSetResult.getTabs()) {
-                if(tabResult.getSobjectName() != this.apiName) continue;
+                if(tabResult.getSobjectName() != this.ApiName) continue;
 
                 String iconType = tabResult.isCustom() ? 'custom' : 'standard';
                 String svgIconName;
@@ -140,22 +140,22 @@ global virtual class SobjectMetadata {
             }
         }
         // Hardcoded exceptions - Salesforce doesn't return SVGs for these objects, so hardcoding is necessary
-        if(tabIcon == null && this.apiName == 'Asset') tabIcon = 'standard:maintenance_asset';
-        if(tabIcon == null && this.apiName == 'AssetRelationship') tabIcon = 'standard:asset_relationship';
+        if(tabIcon == null && this.ApiName == 'Asset') tabIcon = 'standard:maintenance_asset';
+        if(tabIcon == null && this.ApiName == 'AssetRelationship') tabIcon = 'standard:asset_relationship';
 
         return tabIcon;
     }
 
-    public class ChildRelationshipMetadata implements Comparable {
+    global class ChildRelationshipMetadata implements Comparable {
 
-        @AuraEnabled public String ChildSobjectApiName      {get; private set;}
-        @AuraEnabled public String FieldApiName             {get; private set;}
-        @AuraEnabled public String FieldRelationshipApiName {get; private set;}
-        @AuraEnabled public Boolean IsCascadeDelete         {get; private set;}
-        @AuraEnabled public Boolean IsRestrictedDelete      {get; private set;}
-        @AuraEnabled public String RelationshipApiName      {get; private set;}
+        @AuraEnabled global String ChildSobjectApiName      {get; private set;}
+        @AuraEnabled global String FieldApiName             {get; private set;}
+        @AuraEnabled global String FieldRelationshipApiName {get; private set;}
+        @AuraEnabled global Boolean IsCascadeDelete         {get; private set;}
+        @AuraEnabled global Boolean IsRestrictedDelete      {get; private set;}
+        @AuraEnabled global String RelationshipApiName      {get; private set;}
 
-        public ChildRelationshipMetadata(Schema.ChildRelationship childRelationship) {
+        global ChildRelationshipMetadata(Schema.ChildRelationship childRelationship) {
             this.ChildSobjectApiName      = String.valueOf(childRelationship.getChildSobject());
             this.FieldApiName             = String.valueOf(childRelationship.getField());
             this.FieldRelationshipApiName = childRelationship.getField().getDescribe().getRelationshipName();
@@ -164,7 +164,7 @@ global virtual class SobjectMetadata {
             this.RelationshipApiName      = childRelationship.getRelationshipName();
         }
 
-         public Integer compareTo(Object compareTo) {
+        global Integer compareTo(Object compareTo) {
             ChildRelationshipMetadata compareToChildRelationship = (ChildRelationshipMetadata)compareTo;
             String key          = this.ChildSobjectApiName + this.FieldApiName;
             String compareToKey = compareToChildRelationship.ChildSobjectApiName + compareToChildRelationship.FieldApiName;
