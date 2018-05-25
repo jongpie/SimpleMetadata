@@ -18,8 +18,8 @@ global class FieldSetMetadata {
 
     global FieldSetMetadata(Schema.FieldSet fieldSet) {
         // Sobject name & field name are used to set other values, so set them first
-        this.SobjectApiName = String.valueOf(fieldSet.getSobjectType());
         this.ApiName        = (fieldSet.getNamespace() == null ? '' : fieldSet.getNamespace() + '__') + fieldSet.getName();
+        this.SobjectApiName = String.valueOf(fieldSet.getSobjectType());
 
         this.Description     = fieldSet.getDescription();
         this.FieldSetMembers = this.getFieldSetMembers(fieldSet);
