@@ -125,7 +125,10 @@ global class SobjectMetadata {
     private String getTabIcon() {
         String tabIcon;
         for(Schema.DescribeTabSetResult tabSetResult : Schema.describeTabs()) {
+            if(tabIcon != null) break;
+
             for(Schema.DescribeTabResult tabResult : tabSetResult.getTabs()) {
+                if(tabIcon != null) break;
                 if(tabResult.getSobjectName() != this.ApiName) continue;
 
                 String iconType = tabResult.isCustom() ? 'custom' : 'standard';
