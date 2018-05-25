@@ -17,32 +17,29 @@ global class FieldSetMetadata {
     }
 
     global FieldSetMetadata(Schema.FieldSet fieldSet) {
-        // Sobject name & field name are used to set other values, so set them first
-        this.ApiName        = (fieldSet.getNamespace() == null ? '' : fieldSet.getNamespace() + '__') + fieldSet.getName();
-        this.SobjectApiName = String.valueOf(fieldSet.getSobjectType());
-
+        this.ApiName         = this.getApiName(fieldSet);
         this.Description     = fieldSet.getDescription();
         this.FieldSetMembers = this.getFieldSetMembers(fieldSet);
         this.Label           = fieldSet.getLabel();
-        this.LocalApiName    = this.getLocalApiName();
+        this.LocalApiName    = fieldSet.getName();
         this.Namespace       = fieldSet.getNamespace();
+        this.SobjectApiName  = String.valueOf(fieldSet.getSobjectType());
+    }
+
+    private String getApiName(Schema.FieldSet fieldSet) {
+        String namespace = fieldSet.getNamespace() == null ? '' : fieldSet.getNamespace() + '__';
+        return namespace + fieldSet.getName();
     }
 
     private List<FieldSetMemberMetadata> getFieldSetMembers(Schema.FieldSet fieldSet) {
         List<FieldSetMemberMetadata> fieldSetMembers = new List<FieldSetMemberMetadata>();
         for(Schema.FieldSetMember fieldSetMember : fieldSet.getFields()) {
-            FieldSetMemberMetadata fieldSetMemberMetadata = new FieldSetMemberMetadata(this.sobjectApiName, fieldSetMember);
+            FieldSetMemberMetadata fieldSetMemberMetadata = new FieldSetMemberMetadata(fieldSet.getSobjectType(), fieldSetMember);
 
             fieldSetMembers.add(fieldSetMemberMetadata);
         }
         fieldSetMembers.sort();
         return fieldSetMembers;
-    }
-
-    private String getLocalApiName() {
-        Integer localNameIndex = this.apiName.replace('__c', '').indexOf('__');
-        // Add to to the localNameIndex to compensate for the '__' part of the namespace
-        return localNameIndex < 0 ? null : this.apiName.substring(localNameIndex + 2, this.apiName.length());
     }
 
     global class FieldSetMemberMetadata implements Comparable {
@@ -63,18 +60,17 @@ global class FieldSetMetadata {
             else return -1;
         }
 
-        private FieldSetMemberMetadata(String sobjectApiName, Schema.FieldSetMember fieldSetMember) {
-            this.SobjectApiName = sobjectApiName;
-
-            this.DisplayType  = fieldSetMember.getType().name();
-            this.Field        = this.getFieldMetadata(fieldSetMember);
-            this.FieldPath    = fieldSetMember.getFieldPath();
-            this.IsDbRequired = fieldSetMember.getDbRequired();
-            this.IsRequired   = fieldSetMember.getRequired();
-            this.Label        = fieldSetMember.getLabel();
+        private FieldSetMemberMetadata(Schema.SobjectType sobjectType, Schema.FieldSetMember fieldSetMember) {
+            this.DisplayType    = fieldSetMember.getType().name();
+            this.Field          = this.getFieldMetadata(sobjectType, fieldSetMember);
+            this.FieldPath      = fieldSetMember.getFieldPath();
+            this.IsDbRequired   = fieldSetMember.getDbRequired();
+            this.IsRequired     = fieldSetMember.getRequired();
+            this.Label          = fieldSetMember.getLabel();
+            this.SobjectApiName = String.valueOf(sobjectType);
         }
 
-        private FieldMetadata getFieldMetadata(Schema.FieldSetMember fieldSetMember) {
+        private FieldMetadata getFieldMetadata(Schema.SobjectType sobjectType, Schema.FieldSetMember fieldSetMember) {
             FieldMetadata fieldMetadata;
 
             List<String> fieldChain = fieldSetMember.getFieldPath().split('\\.');
@@ -82,7 +78,7 @@ global class FieldSetMetadata {
             if(fieldChain.size() == 0) return fieldMetadata;
 
             Schema.SobjectType currentFieldSobjectType = Schema.getGlobalDescribe().get(this.sobjectApiName);
-            String currentFieldSobjectApiName = this.sobjectApiName;
+            String currentFieldSobjectApiName = String.valueOf(sobjectType);
             String currentFieldApiName;
 
             for(Integer i = 0; i < fieldChain.size(); i++) {
@@ -91,13 +87,12 @@ global class FieldSetMetadata {
                 for(Schema.SobjectField sobjectField : Schema.getGlobalDescribe().get(currentFieldSobjectApiName).getDescribe().fields.getMap().values()) {
                     DescribeFieldResult fieldDescribe = sobjectField.getDescribe();
 
-                    if(fieldDescribe.getRelationshipName() == currentFieldApiName && !fieldDescribe.getReferenceTo().isEmpty()) {
-                        currentFieldSobjectType = fieldDescribe.getReferenceTo()[0];
-                        currentFieldSobjectApiName = currentFieldSobjectType.getDescribe().getName();
+                    if(fieldDescribe.getRelationshipName() != currentFieldApiName) continue;
+                    if(fieldDescribe.getReferenceTo().isEmpty()) continue;
 
-                        break;
-                    }
-
+                    currentFieldSobjectType = fieldDescribe.getReferenceTo()[0];
+                    currentFieldSobjectApiName = currentFieldSobjectType.getDescribe().getName();
+                    break;
                 }
             }
 
