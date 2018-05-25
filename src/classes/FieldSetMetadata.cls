@@ -35,6 +35,7 @@ global class FieldSetMetadata {
 
             fieldSetMembers.add(fieldSetMemberMetadata);
         }
+        fieldSetMembers.sort();
         return fieldSetMembers;
     }
 
@@ -44,7 +45,7 @@ global class FieldSetMetadata {
         return localNameIndex < 0 ? null : this.apiName.substring(localNameIndex + 2, this.apiName.length());
     }
 
-    global class FieldSetMemberMetadata {
+    global class FieldSetMemberMetadata implements Comparable {
 
         @AuraEnabled global final String DisplayType    {get; private set;}
         @AuraEnabled global final FieldMetadata Field   {get; private set;}
@@ -53,6 +54,14 @@ global class FieldSetMetadata {
         @AuraEnabled global final Boolean IsRequired    {get; private set;}
         @AuraEnabled global final String Label          {get; private set;}
         @AuraEnabled global final String SobjectApiName {get; private set;}
+
+        global Integer compareTo(Object compareTo) {
+            FieldSetMemberMetadata compareToFieldSetMember = (FieldSetMemberMetadata)compareTo;
+
+            if(this.FieldPath == compareToFieldSetMember.FieldPath) return 0;
+            else if(this.FieldPath > compareToFieldSetMember.FieldPath) return 1;
+            else return -1;
+        }
 
         private FieldSetMemberMetadata(String sobjectApiName, Schema.FieldSetMember fieldSetMember) {
             this.SobjectApiName = sobjectApiName;

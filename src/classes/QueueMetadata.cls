@@ -62,6 +62,7 @@ global class QueueMetadata {
         for(GroupMember queueMember : queue.GroupMembers) {
             queueMembers.add(new QueueMemberMetadata(queueMember));
         }
+        queueMembers.sort();
         return queueMembers;
     }
 
@@ -74,12 +75,20 @@ global class QueueMetadata {
         return sobjectApiNames;
     }
 
-    global class QueueMemberMetadata {
+    global class QueueMemberMetadata implements Comparable {
 
         @AuraEnabled global final Id Id            {get; private set;}
         @AuraEnabled global final Id QueueId       {get; private set;}
         @AuraEnabled global final String Type      {get; private set;}
         @AuraEnabled global final Id UserOrGroupId {get; private set;}
+
+        global Integer compareTo(Object compareTo) {
+            QueueMemberMetadata compareToQueueMember = (QueueMemberMetadata)compareTo;
+
+            if(this.UserOrGroupId == compareToQueueMember.UserOrGroupId) return 0;
+            else if(this.UserOrGroupId > compareToQueueMember.UserOrGroupId) return 1;
+            else return -1;
+        }
 
         private QueueMemberMetadata(GroupMember groupMember) {
             this.Id            = groupMember.Id;
