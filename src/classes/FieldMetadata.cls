@@ -115,7 +115,7 @@ global class FieldMetadata {
 
         global PicklistEntryMetadata() {
             this.IsDefaultValue = false;
-            this.Label          = '--None--';
+            this.Label          = '';
             this.Value          = '';
         }
 
