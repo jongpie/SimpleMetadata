@@ -33,16 +33,16 @@ private class LimitsMetadata_Tests {
         System.assertEquals(Limits.getLimitHeapSize(), limitsMetadata.HeapSize.Max);
         System.assertEquals(Limits.getMobilePushApexCalls(), limitsMetadata.MobilePushApexCalls.Used);
         System.assertEquals(Limits.getLimitMobilePushApexCalls(), limitsMetadata.MobilePushApexCalls.Max);
-        System.assertEquals(Limits.getQueries(), limitsMetadata.Queries.Used);
-        System.assertEquals(Limits.getLimitQueries(), limitsMetadata.Queries.Max);
-        System.assertEquals(Limits.getQueryLocatorRows(), limitsMetadata.QueryLocatorRows.Used);
-        System.assertEquals(Limits.getLimitQueryLocatorRows(), limitsMetadata.QueryLocatorRows.Max);
-        System.assertEquals(Limits.getQueryRows(), limitsMetadata.QueryRows.Used);
-        System.assertEquals(Limits.getLimitQueryRows(), limitsMetadata.QueryRows.Max);
         System.assertEquals(Limits.getQueueableJobs(), limitsMetadata.QueueableJobs.Used);
         System.assertEquals(Limits.getLimitQueueableJobs(), limitsMetadata.QueueableJobs.Max);
-        System.assertEquals(Limits.getSOSLQueries(), limitsMetadata.SoslQueries.Used);
-        System.assertEquals(Limits.getLimitSOSLQueries(), limitsMetadata.SoslQueries.Max);
+        System.assertEquals(Limits.getQueries(), limitsMetadata.SoqlQueries.Used);
+        System.assertEquals(Limits.getLimitQueries(), limitsMetadata.SoqlQueries.Max);
+        System.assertEquals(Limits.getQueryLocatorRows(), limitsMetadata.SoqlQueryLocatorRows.Used);
+        System.assertEquals(Limits.getLimitQueryLocatorRows(), limitsMetadata.SoqlQueryLocatorRows.Max);
+        System.assertEquals(Limits.getQueryRows(), limitsMetadata.SoqlQueryRows.Used);
+        System.assertEquals(Limits.getLimitQueryRows(), limitsMetadata.SoqlQueryRows.Max);
+        System.assertEquals(Limits.getSOSLQueries(), limitsMetadata.SoslSearches.Used);
+        System.assertEquals(Limits.getLimitSoslQueries(), limitsMetadata.SoslSearches.Max);
     }
 
     private static void validateCaseSentivityForJavascript(LimitsMetadata limitsMetadata) {
@@ -63,11 +63,11 @@ private class LimitsMetadata_Tests {
         System.assert(untypedLimitsMetadata.containsKey('FutureCalls'));
         System.assert(untypedLimitsMetadata.containsKey('HeapSize'));
         System.assert(untypedLimitsMetadata.containsKey('MobilePushApexCalls'));
-        System.assert(untypedLimitsMetadata.containsKey('Queries'));
-        System.assert(untypedLimitsMetadata.containsKey('QueryLocatorRows'));
-        System.assert(untypedLimitsMetadata.containsKey('QueryRows'));
         System.assert(untypedLimitsMetadata.containsKey('QueueableJobs'));
-        System.assert(untypedLimitsMetadata.containsKey('SoslQueries'));
+        System.assert(untypedLimitsMetadata.containsKey('SoqlQueries'));
+        System.assert(untypedLimitsMetadata.containsKey('SoqlQueryLocatorRows'));
+        System.assert(untypedLimitsMetadata.containsKey('SoqlQueryRows'));
+        System.assert(untypedLimitsMetadata.containsKey('SoslSearches'));
     }
 
 }

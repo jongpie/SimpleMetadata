@@ -4,38 +4,38 @@
 *************************************************************************************************/
 global class LimitsMetadata {
 
-    @AuraEnabled global final LimitUsageMetadata AggregateQueries    {get; private set;}
-    @AuraEnabled global final LimitUsageMetadata AsyncCalls          {get; private set;}
-    @AuraEnabled global final LimitUsageMetadata Callouts            {get; private set;}
-    @AuraEnabled global final LimitUsageMetadata CpuTime             {get; private set;}
-    @AuraEnabled global final LimitUsageMetadata DmlRows             {get; private set;}
-    @AuraEnabled global final LimitUsageMetadata DmlStatements       {get; private set;}
-    @AuraEnabled global final LimitUsageMetadata EmailInvocations    {get; private set;}
-    @AuraEnabled global final LimitUsageMetadata FutureCalls         {get; private set;}
-    @AuraEnabled global final LimitUsageMetadata HeapSize            {get; private set;}
-    @AuraEnabled global final LimitUsageMetadata MobilePushApexCalls {get; private set;}
-    @AuraEnabled global final LimitUsageMetadata Queries             {get; private set;}
-    @AuraEnabled global final LimitUsageMetadata QueryLocatorRows    {get; private set;}
-    @AuraEnabled global final LimitUsageMetadata QueryRows           {get; private set;}
-    @AuraEnabled global final LimitUsageMetadata QueueableJobs       {get; private set;}
-    @AuraEnabled global final LimitUsageMetadata SoslQueries         {get; private set;}
+    @AuraEnabled global final LimitUsageMetadata AggregateQueries     {get; private set;}
+    @AuraEnabled global final LimitUsageMetadata AsyncCalls           {get; private set;}
+    @AuraEnabled global final LimitUsageMetadata Callouts             {get; private set;}
+    @AuraEnabled global final LimitUsageMetadata CpuTime              {get; private set;}
+    @AuraEnabled global final LimitUsageMetadata DmlRows              {get; private set;}
+    @AuraEnabled global final LimitUsageMetadata DmlStatements        {get; private set;}
+    @AuraEnabled global final LimitUsageMetadata EmailInvocations     {get; private set;}
+    @AuraEnabled global final LimitUsageMetadata FutureCalls          {get; private set;}
+    @AuraEnabled global final LimitUsageMetadata HeapSize             {get; private set;}
+    @AuraEnabled global final LimitUsageMetadata MobilePushApexCalls  {get; private set;}
+    @AuraEnabled global final LimitUsageMetadata QueueableJobs        {get; private set;}
+    @AuraEnabled global final LimitUsageMetadata SoqlQueryLocatorRows {get; private set;}
+    @AuraEnabled global final LimitUsageMetadata SoqlQueryRows        {get; private set;}
+    @AuraEnabled global final LimitUsageMetadata SoqlQueries          {get; private set;}
+    @AuraEnabled global final LimitUsageMetadata SoslSearches         {get; private set;}
 
     global LimitsMetadata() {
-        this.AggregateQueries    = new LimitUsageMetadata(Limits.getAggregateQueries(), Limits.getLimitAggregateQueries());
-        this.AsyncCalls          = new LimitUsageMetadata(Limits.getAsyncCalls(), Limits.getLimitAsyncCalls());
-        this.Callouts            = new LimitUsageMetadata(Limits.getCallouts(), Limits.getLimitCallouts());
-        this.CpuTime             = new LimitUsageMetadata(Limits.getCPUTime(), Limits.getLimitCPUTime());
-        this.DmlRows             = new LimitUsageMetadata(Limits.getDMLRows(), Limits.getLimitDMLRows());
-        this.DmlStatements       = new LimitUsageMetadata(Limits.getDMLStatements(), Limits.getLimitDMLStatements());
-        this.EmailInvocations    = new LimitUsageMetadata(Limits.getEmailInvocations(), Limits.getLimitEmailInvocations());
-        this.FutureCalls         = new LimitUsageMetadata(Limits.getFutureCalls(), Limits.getLimitFutureCalls());
-        this.HeapSize            = new LimitUsageMetadata(Limits.getHeapSize(), Limits.getLimitHeapSize());
-        this.MobilePushApexCalls = new LimitUsageMetadata(Limits.getMobilePushApexCalls(), Limits.getLimitMobilePushApexCalls());
-        this.Queries             = new LimitUsageMetadata(Limits.getQueries(), Limits.getLimitQueries());
-        this.QueryLocatorRows    = new LimitUsageMetadata(Limits.getQueryLocatorRows(), Limits.getLimitQueryLocatorRows());
-        this.QueryRows           = new LimitUsageMetadata(Limits.getQueryRows(), Limits.getLimitQueryRows());
-        this.QueueableJobs       = new LimitUsageMetadata(Limits.getQueueableJobs(), Limits.getLimitQueueableJobs());
-        this.SoslQueries         = new LimitUsageMetadata(Limits.getSOSLQueries(), Limits.getLimitSOSLQueries());
+        this.AggregateQueries     = new LimitUsageMetadata(Limits.getAggregateQueries(), Limits.getLimitAggregateQueries());
+        this.AsyncCalls           = new LimitUsageMetadata(Limits.getAsyncCalls(), Limits.getLimitAsyncCalls());
+        this.Callouts             = new LimitUsageMetadata(Limits.getCallouts(), Limits.getLimitCallouts());
+        this.CpuTime              = new LimitUsageMetadata(Limits.getCPUTime(), Limits.getLimitCPUTime());
+        this.DmlRows              = new LimitUsageMetadata(Limits.getDmlRows(), Limits.getLimitDmlRows());
+        this.DmlStatements        = new LimitUsageMetadata(Limits.getDmlStatements(), Limits.getLimitDmlStatements());
+        this.EmailInvocations     = new LimitUsageMetadata(Limits.getEmailInvocations(), Limits.getLimitEmailInvocations());
+        this.FutureCalls          = new LimitUsageMetadata(Limits.getFutureCalls(), Limits.getLimitFutureCalls());
+        this.HeapSize             = new LimitUsageMetadata(Limits.getHeapSize(), Limits.getLimitHeapSize());
+        this.MobilePushApexCalls  = new LimitUsageMetadata(Limits.getMobilePushApexCalls(), Limits.getLimitMobilePushApexCalls());
+        this.QueueableJobs        = new LimitUsageMetadata(Limits.getQueueableJobs(), Limits.getLimitQueueableJobs());
+        this.SoqlQueries          = new LimitUsageMetadata(Limits.getQueries(), Limits.getLimitQueries());
+        this.SoqlQueryLocatorRows = new LimitUsageMetadata(Limits.getQueryLocatorRows(), Limits.getLimitQueryLocatorRows());
+        this.SoqlQueryRows        = new LimitUsageMetadata(Limits.getQueryRows(), Limits.getLimitQueryRows());
+        this.SoslSearches         = new LimitUsageMetadata(Limits.getSoslQueries(), Limits.getLimitSoslQueries());
     }
 
     global class LimitUsageMetadata {
