@@ -13,16 +13,16 @@ private class ContextMetadata_Tests {
     }
 
     private static void validateAttributesAreSet(ContextMetadata contextMetadata) {
-        System.assertEquals(RestContext.request != null, contextMetadata.isApexRest);
-        System.assertEquals(System.isBatch(), contextMetadata.isBatch);
-        System.assertEquals(Trigger.isExecuting, contextMetadata.isExecuting);
-        System.assertEquals(System.isFuture(), contextMetadata.isFuture);
-        System.assertEquals(UserInfo.getUiThemeDisplayed() == 'Theme4d', contextMetadata.isLightning);
-        System.assertEquals(UserInfo.getUiThemeDisplayed() == 'Theme4u', contextMetadata.isLightningConsole);
-        System.assertEquals(System.isQueueable(), contextMetadata.isQueueable);
-        System.assertEquals(UserInfo.getUiThemeDisplayed() == 'Theme4t', contextMetadata.isSalesforce1);
-        System.assertEquals(System.isScheduled(), contextMetadata.isScheduled);
-        System.assertEquals(ApexPages.currentPage() != null, contextMetadata.isVisualforce);
+        System.assertEquals(RestContext.request != null, contextMetadata.IsApexRest);
+        System.assertEquals(System.isBatch(), contextMetadata.IsBatch);
+        System.assertEquals(Trigger.isExecuting, contextMetadata.IsExecuting);
+        System.assertEquals(System.isFuture(), contextMetadata.IsFuture);
+        System.assertEquals(UserInfo.getUiThemeDisplayed() == 'Theme4d', contextMetadata.IsLightning);
+        System.assertEquals(UserInfo.getUiThemeDisplayed() == 'Theme4u', contextMetadata.IsLightningConsole);
+        System.assertEquals(System.isQueueable(), contextMetadata.IsQueueable);
+        System.assertEquals(UserInfo.getUiThemeDisplayed() == 'Theme4t', contextMetadata.IsSalesforce1);
+        System.assertEquals(System.isScheduled(), contextMetadata.IsScheduled);
+        System.assertEquals(ApexPages.currentPage() != null, contextMetadata.IsVisualforce);
     }
 
     private static void validateCaseSentivityForJavascript(ContextMetadata contextMetadata) {
@@ -33,16 +33,16 @@ private class ContextMetadata_Tests {
         // One negative to confirm that the strings in our map are case sensitive
         System.assert(untypedContextMetadata.containsKey('ISAPEXREST') == false);
         // Now for the 'real' tests
-        System.assert(untypedContextMetadata.containsKey('isApexRest'));
-        System.assert(untypedContextMetadata.containsKey('isBatch'));
-        System.assert(untypedContextMetadata.containsKey('isExecuting'));
-        System.assert(untypedContextMetadata.containsKey('isFuture'));
-        System.assert(untypedContextMetadata.containsKey('isLightning'));
-        System.assert(untypedContextMetadata.containsKey('isLightningConsole'));
-        System.assert(untypedContextMetadata.containsKey('isQueueable'));
-        System.assert(untypedContextMetadata.containsKey('isSalesforce1'));
-        System.assert(untypedContextMetadata.containsKey('isScheduled'));
-        System.assert(untypedContextMetadata.containsKey('isVisualforce'));
+        System.assert(untypedContextMetadata.containsKey('IsApexRest'));
+        System.assert(untypedContextMetadata.containsKey('IsBatch'));
+        System.assert(untypedContextMetadata.containsKey('IsExecuting'));
+        System.assert(untypedContextMetadata.containsKey('IsFuture'));
+        System.assert(untypedContextMetadata.containsKey('IsLightning'));
+        System.assert(untypedContextMetadata.containsKey('IsLightningConsole'));
+        System.assert(untypedContextMetadata.containsKey('IsQueueable'));
+        System.assert(untypedContextMetadata.containsKey('IsSalesforce1'));
+        System.assert(untypedContextMetadata.containsKey('IsScheduled'));
+        System.assert(untypedContextMetadata.containsKey('IsVisualforce'));
     }
 
 }

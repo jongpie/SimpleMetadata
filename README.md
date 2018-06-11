@@ -18,7 +18,7 @@ Each class returns an immutable DTO with no public methods. Each member variable
 1. Variables are named using camelCase - this is less important in Apex development since Apex is case-insensitive, but important to note for Lightning development since Javascript is case-sensitive.
 2. Variables called 'apiName' refer to the API name or Developer Name, including the namespace prefix. Example: sobjectName = 'MyNameSpace__MyObject__c';
 3. Variables called 'localApiName' refer to the API name or Developer Name, excluding the namespace prefix. Example: sobjectName = 'MyObject__c';
-4. Variables called 'label' refer to the label displayed to the user - if translations are available, then the label is translated to the user's language. Example: new SObjectMetadata('MyObject__c').label; // Gets the localized/translated label for your custom object
+4. Variables called 'label' refer to the label displayed to the user - if translations are available, then the label is translated to the user's language. Example: new SobjectMetadata('MyObject__c').label; // Gets the localized/translated label for your custom object
 5. Variables called 'displayFieldApiName' refer to the name field of an SObject - typically, the field is actually called Name, but there are exceptions, like Case.CaseNumber, Task.Subject, Order.OrderNumber, etc.
 
 ## EnvironmentMetadata.cls
@@ -31,19 +31,22 @@ Each class returns an immutable DTO with no public methods. Each member variable
     <details><summary>See Sample JSON</summary>
 
         {
-            "baseURL": "https://mydomain.my.salesforce.com",
-            "instanceName": "EU11",
-            "isChatterEnabled": true,
-            "isKnowledgeEnabled": false,
-            "isMultiCurrencyEnabled": false,
-            "isPersonAccountEnabled": false,
-            "isProduction": true,
-            "isSandbox": false,
-            "isTerritoryManagementEnabled": false,
-            "name": "Jonathan Gillespie's Org",
-            "organizationId": "00D0Y0000019999999",
-            "organizationType": "Developer Edition",
-            "sobjectTypeNames": [
+            "BaseUrl": "https://mydomain.my.salesforce.com",
+            "InstanceName": "EU11",
+            "IsChatterEnabled": true,
+            "IsKnowledgeEnabled": false,
+            "IsMultiCurrencyEnabled": false,
+            "IsPersonAccountEnabled": false,
+            "IsProduction": true,
+            "IsSandbox": false,
+            "IsTerritoryManagementEnabled": false,
+            "Name": "Jonathan Gillespie's Org",
+            "OrganizationId": "00D0Y0000019999999",
+            "OrganizationType": "Developer Edition",
+            "QueueApiNames": [
+                "My_Queue"
+            ]
+            "SobjectApiNames": [
                 "AcceptedEventRelation",
                 "Account",
                 "AccountCleanInfo",
@@ -455,17 +458,17 @@ Each class returns an immutable DTO with no public methods. Each member variable
 
     </details>
 
-## SObjectMetadata.cls
-* Contains metadata information for the specified SObject. There are 2 ways to create an instance of SObjectMetadata
+## SobjectMetadata.cls
+* Contains metadata information for the specified SObject. There are 2 ways to create an instance of SobjectMetadata
 
     1. By passing the SObject's API name as a string in the constructor
     ```
-    new SObjectMetadata('Account')
+    new SobjectMetadata('Account')
     ```
 
     2. By passing the SObject Type in the constructor
     ```
-    new SObjectMetadata(Schema.Account.SObjectType)
+    new SobjectMetadata(Schema.Account.SObjectType)
     ```
 
     ### Sample Usage
@@ -476,7 +479,7 @@ Each class returns an immutable DTO with no public methods. Each member variable
 
         public void deleteRecord(MyCustomObject__c myRecord) {
             // If the user does not have access to delete, then stop
-            if(new SObjectMetadata('MyCustomObject__c').isDeletable == false) return;
+            if(new SobjectMetadata('MyCustomObject__c').isDeletable == false) return;
 
             //Otherwise, delete the record
             delete myRecord.MyCustomField__c;
@@ -551,18 +554,16 @@ Each class returns an immutable DTO with no public methods. Each member variable
     <details><summary>See Sample JSON</summary>
 
         {
-          "businessProcessId": null,
-          "description": "This is my example record type",
-          "isActive": true,
-          "isAvailable": true,
-          "isDefaultRecordTypeMapping": true,
-          "isMaster": false,
-          "label": "My Record Type",
-          "localName": "My_RecordType_Developer_Name"
-          "name": "MyNamespace__My_RecordType_Developer_Name"
-          "namespace": "MyNamespace",
-          "recordTypeId": "0120Y000000EEEEE",
-          "sobjectName": "Account"
+          "ApiName": "MyNamespace__My_RecordType_Developer_Name"
+          "Id": "0120Y000000EEEEE",
+          "IsActive": true,
+          "IsAvailable": true,
+          "IsDefaultRecordTypeMapping": true,
+          "IsMaster": false,
+          "Label": "My Record Type",
+          "LocalName": "My_RecordType_Developer_Name"
+          "Namespace": "MyNamespace",
+          "SobjectApiName": "Account"
         }
 
     </details>
@@ -584,34 +585,33 @@ Each class returns an immutable DTO with no public methods. Each member variable
     <details><summary>See Sample JSON</summary>
 
         {
-            "doesIncludeBosses": true,
-            "doesSendEmailToMembers": true,
-            "email": "fake@test.com",
-            "label": "My Queue",
-            "name": "My_Queue",
-            "ownerId": "0050Y0000000000000",
-            "queueId": "00G0Y0000011111111",
-            "queueMembers": [
+            "ApiName": "My_Queue",
+            "DoesIncludeBosses": true,
+            "DoesSendEmailToMembers": true,
+            "Email": "fake@test.com",
+            "Label": "My Queue",
+            "Id": "00G0Y0000011111111",
+            "QueueMembers": [
                 {
-                    "queueId": "00G0Y0000011111111",
-                    "queueMemberId": "0110Y000000fHUyQAM",
-                    "type": "User",
-                    "userOrGroupId": "0050Y000001LrM3QAK"
+                    "QueueId": "00G0Y0000011111111",
+                    "QueueMemberId": "0110Y000000fHUyQAM",
+                    "Type": "User",
+                    "UserOrGroupId": "0050Y000001LrM3QAK"
                 },
                 {
-                    "queueId": "00G0Y0000011111111",
-                    "queueMemberId": "0110Y0000000000000",
-                    "type": "User",
-                    "userOrGroupId": "0050Y0000000000000"
+                    "QueueId": "00G0Y0000011111111",
+                    "QueueMemberId": "0110Y0000000000000",
+                    "Type": "User",
+                    "UserOrGroupId": "0050Y0000000000000"
                 },
                 {
-                    "queueId": "00G0Y0000011111111",
-                    "queueMemberId": "0110Y000001q5sUQAQ",
-                    "type": "Group",
-                    "userOrGroupId": "00G0Y000001inOQUAY"
+                    "QueueId": "00G0Y0000011111111",
+                    "QueueMemberId": "0110Y000001q5sUQAQ",
+                    "Type": "Group",
+                    "UserOrGroupId": "00G0Y000001inOQUAY"
                 }
             ],
-            "supportedSObjectNames": [
+            "SobjectApiNames": [
                 "Case",
                 "Lead"
             ]
