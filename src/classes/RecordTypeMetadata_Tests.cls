@@ -5,6 +5,12 @@
 @isTest
 private class RecordTypeMetadata_Tests {
 
+    private static final String ORG_NAMESPACE_PREFIX;
+
+    static {
+        ORG_NAMESPACE_PREFIX = [SELECT NamespacePrefix FROM Organization].NamespacePrefix;
+    }
+
     @isTest
     static void it_should_return_record_type_metadata_for_record_type_info() {
         // For larger orgs with a lot of record types, we don't need to test every record type
@@ -24,7 +30,7 @@ private class RecordTypeMetadata_Tests {
     static void it_should_return_record_type_metadata_for_sobject_and_record_type_api_names() {
         for(RecordType recordType : [SELECT Id, BusinessProcessId, Description, DeveloperName, NamespacePrefix, SobjectType FROM RecordType LIMIT 5]) {
             Schema.RecordTypeInfo recordTypeInfo = Schema.getGlobalDescribe().get(recordType.SobjectType).getDescribe().getRecordTypeInfosById().get(recordType.Id);
-            String namespace = recordType.NamespacePrefix == null ? '' : recordType.NamespacePrefix + '__';
+            String namespace = recordType.NamespacePrefix == null || recordType.NamespacePrefix == ORG_NAMESPACE_PREFIX ? '' : recordType.NamespacePrefix + '__';
             RecordTypeMetadata recordTypeMetadata = new RecordTypeMetadata(recordType.SobjectType, namespace + recordType.DeveloperName);
             validateAttributesAreSet(recordTypeInfo, recordType, recordType.SobjectType, recordTypeMetadata);
             validateCaseSentivityForJavascript(recordTypeMetadata);
@@ -43,7 +49,7 @@ private class RecordTypeMetadata_Tests {
 
         if(queryableRecordTypeInfo == null) return; // This will be null in orgs with no record types, so the test can't finish
 
-        RecordTypeMetadata recordTypeMetadata = new RecordTypeMetadata(queryableRecordTypeInfo.getRecordTypeId());
+        RecordTypeMetadata recordTypeMetadata = new RecordTypeMetadata(Schema.Account.SobjectType, queryableRecordTypeInfo.getRecordTypeId());
         RecordType recordType = [
             SELECT Id, DeveloperName, NamespacePrefix, SobjectType
             FROM RecordType WHERE Id = :queryableRecordTypeInfo.getRecordTypeId()
@@ -53,8 +59,12 @@ private class RecordTypeMetadata_Tests {
     }
 
     private static void validateAttributesAreSet(RecordTypeInfo recordTypeInfo, RecordType recordType, String sobjectApiName, RecordTypeMetadata recordTypeMetadata) {
+        String namespace;
         String namespacePrefix = '';
-        if(recordType != null && recordType.NamespacePrefix != null) namespacePrefix = recordType.NamespacePrefix + '__';
+        if(recordType != null && recordType.NamespacePrefix != null && recordType.NamespacePrefix != ORG_NAMESPACE_PREFIX) {
+            namespace = recordType.NamespacePrefix;
+            namespacePrefix = recordType.NamespacePrefix + '__';
+        }
         String recordTypeName = recordType == null ? null : namespacePrefix + recordType.DeveloperName;
 
         System.assertEquals(recordType == null ? null : recordTypeName, recordTypeMetadata.ApiName);
@@ -65,7 +75,7 @@ private class RecordTypeMetadata_Tests {
         System.assertEquals(recordTypeInfo.isMaster(), recordTypeMetadata.IsMaster);
         System.assertEquals(recordTypeInfo.getName(), recordTypeMetadata.Label);
         System.assertEquals(recordType == null ? null : recordType.DeveloperName, recordTypeMetadata.LocalApiName);
-        System.assertEquals(recordType == null ? null : recordType.NamespacePrefix, recordTypeMetadata.Namespace);
+        System.assertEquals(recordType == null ? null : namespace, recordTypeMetadata.Namespace);
         System.assertEquals(sobjectApiName, recordTypeMetadata.SobjectApiName);
     }
 
