@@ -28,7 +28,7 @@ global class SobjectMetadata {
     @AuraEnabled global final String LabelPlural                                 {get; private set;}
     @AuraEnabled global final String LocalApiName                                {get; private set;}
     @AuraEnabled global final String Namespace                                   {get; private set;}
-    @AuraEnabled global final List<String> RecordTypeApiNames                    {get; private set;}
+    @AuraEnabled global final List<RecordTypeMetadata> RecordTypes               {get; private set;}
     @AuraEnabled global final String TabIcon                                     {get; private set;}
 
     global SobjectMetadata(String sobjectApiName) {
@@ -62,7 +62,7 @@ global class SobjectMetadata {
         this.LabelPlural          = sobjectDescribe.getLabelPlural();
         this.LocalApiName         = sobjectDescribe.getLocalName();
         this.Namespace            = this.getNamespace();
-        this.RecordTypeApiNames   = RecordTypeMetadata.getRecordTypeApiNames(String.valueOf(sobjectType));
+        this.RecordTypes          = this.getRecordTypes(sobjectType, sobjectDescribe.getRecordTypeInfos());
         this.TabIcon              = this.getTabIcon();
     }
 
@@ -120,6 +120,15 @@ global class SobjectMetadata {
     private String getNamespace() {
         Integer localNameIndex = this.ApiName.replace('__c', '').indexOf('__');
         return localNameIndex < 0 ? null : this.ApiName.substring(0, localNameIndex);
+    }
+
+    private List<RecordTypeMetadata> getRecordTypes(Schema.SobjectType sobjectType, List<Schema.RecordTypeInfo> recordTypeInfos) {
+        List<RecordTypeMetadata> recordTypes = new List<RecordTypeMetadata>();
+        for(Schema.RecordTypeInfo recordTypeInfo : recordTypeInfos) {
+            recordTypes.add(new RecordTypeMetadata(sobjectType, recordTypeInfo));
+        }
+        recordTypes.sort();
+        return recordTypes;
     }
 
     private String getTabIcon() {

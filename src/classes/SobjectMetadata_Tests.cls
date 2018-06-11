@@ -43,6 +43,7 @@ private class SobjectMetadata_Tests {
         System.assertEquals(accountDescribe.getLabel(), sobjectMetadata.Label);
         System.assertEquals(accountDescribe.getLabelPlural(), sobjectMetadata.LabelPlural);
         System.assertEquals(accountDescribe.getLocalName(), sobjectMetadata.LocalApiName);
+        System.assertEquals(accountDescribe.getRecordTypeInfos().size(), sobjectMetadata.RecordTypes.size());
         System.assertEquals('standard:account', sobjectMetadata.TabIcon);
 
         System.assertNotEquals(null, sobjectMetadata.ApiName);
@@ -68,6 +69,7 @@ private class SobjectMetadata_Tests {
         System.assertNotEquals(null, sobjectMetadata.Label);
         System.assertNotEquals(null, sobjectMetadata.LabelPlural);
         System.assertNotEquals(null, sobjectMetadata.LocalApiName);
+        System.assertNotEquals(null, sobjectMetadata.RecordTypes);
         System.assertNotEquals(null, sobjectMetadata.TabIcon);
     }
 
@@ -103,7 +105,7 @@ private class SobjectMetadata_Tests {
         System.assert(untypedSobjectMetadata.containsKey('LabelPlural'));
         System.assert(untypedSobjectMetadata.containsKey('LocalApiName'));
         System.assert(untypedSobjectMetadata.containsKey('Namespace'));
-        System.assert(untypedSobjectMetadata.containsKey('RecordTypeApiNames'));
+        System.assert(untypedSobjectMetadata.containsKey('RecordTypes'));
         System.assert(untypedSobjectMetadata.containsKey('TabIcon'));
     }
 
